@@ -1,0 +1,20 @@
+{
+  "Input":{
+    "id_name": {"text":"Input"},
+    "input_shape":{"text":""},
+    "attribute": {"text":""}
+	},
+  "Output":{
+    "id_name": {"text":"Output"},
+    "encoder": {"select" : ["One Hot", "None"]},
+    "loss_function": {"select" : ["Categorical Cross-Entropy", "Binary Cross-Entropy", "Mean Squared Error", "Mean Absolute Error", "Mean Squared Logarithmic Error"]},
+    "target_attribute": {"text":""}
+	},
+
+  "Dense":{
+    "id_name": {"text":"Dense"},
+    "units":{"text":""},
+    "activation": {"select" : ["relu","tanh","sigmoid","softmax","linear"]}
+  }
+
+}

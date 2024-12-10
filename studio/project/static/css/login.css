@@ -1,0 +1,213 @@
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+body {
+    overflow: hidden;
+    background-image: url('../../static/img/AI-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.left-container {
+    width: 415px;
+    height: 100%;
+}
+
+.middle-container {
+    position: absolute;
+    right: 150px;
+    top: 0;
+    height: 100%;
+    width: 60%;
+}
+
+.iframes-container {
+    display: flex;
+    position: absolute;
+    top: 153px;
+}
+
+.iframe-div {
+    height: 330px;
+    width: 310px;
+    display: inline-block;
+    position: relative;
+    margin-left: 5px;
+    visibility: hidden;
+    margin-right: 20px;
+}
+
+iframe {
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    overflow: hidden;
+    bottom: 0;
+    position: absolute;
+}
+
+.videos-label {
+    font-family: 'Open Sans', sans-serif;
+    color: #FFF;
+    display: block;
+    position: absolute;
+    top: -5px;
+    font-size: 20px;
+    font-weight: 600;
+    white-space: normal;
+    width: 100%;
+}
+
+.somma_logo_wrapper {
+    display: block;
+    position: absolute;
+    width: 400px;
+    top: 0;
+    right: 0;
+}
+
+.somma_logo_wrapper img {
+    width: 100%;
+    height: auto;
+}
+
+.button {
+    width: 150px;
+    background: #1C1C1C;
+    display: block;
+    margin: 0 auto;
+    margin-top: 1%;
+    padding: 7px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    position: fixed;
+}
+/*Botão de run*/
+.button-register {
+  background-color: #1C1C1C;
+  border: transparent;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  width: 165px;
+  height: 35px;
+  position: fixed;
+}
+.button-register:hover {
+  background-color: #E23B3E;
+  color: white;
+}
+.button-register:active {
+  background-color: #E23B3E;
+  color: grey;
+}
+.button-register:disabled {
+  background-color: grey;
+  color: black;
+  cursor: not-allowed;
+}
+
+#login {
+    width: 280px;
+    margin: 0 auto;
+    margin-top: 5px;
+    margin-bottom: 2%;
+    position: fixed;
+    left: 70px;
+    top: 140px;
+}
+
+#triangle {
+    width: 0;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #1C1C1C;
+    border-left: 8px solid transparent;
+    margin: 0 auto;
+}
+
+#login h1 {
+    background: #1C1C1C;
+    padding: 14px 0;
+    font-size: 140%;
+    font-weight: 300;
+    text-align: center;
+    color: #fff;
+}
+
+form {
+    background: #f0f0f0;
+    padding: 6% 4%;
+}
+
+input[type="username"], input[type="email"], input[type="password"], input[type="text"] {
+    width: 92%;
+    background: #fff;
+    margin-bottom: 4%;
+    border: 0px solid #ccc;
+    padding: 4%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 95%;
+    color: #555;
+}
+
+.eye_slash{
+    width: 25px;
+    position: absolute;
+    height: 25px;
+    right: 5px;
+    top: 5px;
+    opacity: 0.5;
+}
+
+.eye_slash:hover{
+    opacity: 1;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background: #1C1C1C;
+    border: 0;
+    padding: 4%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 100%;
+    color: #fff;
+    cursor: pointer;
+    transition: background .3s;
+    -webkit-transition: background .3s;
+}
+
+input[type="submit"]:hover {
+    background: #E23B3E;
+}
+
+@media (max-width: 1440px){
+    .iframe-div {
+        height: 223px;
+        width: 230px;
+        margin-right: 40px;
+    }
+   iframe {
+       width: 260px;
+       height: 200px;
+   }
+
+   .videos-label {
+        font-size: 16px;
+   }
+}

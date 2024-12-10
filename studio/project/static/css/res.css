@@ -1,0 +1,47 @@
+@media screen and (max-width: 956px) and (max-height: 537px) {
+			 body {
+				position: fixed;
+				width: 1344px;
+				height: 756px;
+				background-color: #333333;
+				zoom:70%;
+				}
+		}
+	@media screen and (max-width: 806px) and (max-height: 604px) {
+			 body {
+				position: fixed;
+				width: 1344px;
+				height: 756px;
+				background-color: #333333;
+				zoom:60%;
+				}
+		}
+	@media screen and (max-width: 716px) and (max-height: 537px) {
+			 body {
+				position: fixed;
+				width: 1344px;
+				height: 756px;
+				background-color: #333333;
+				zoom:60%;
+				}
+		}
+	@media screen and (max-width: 896px) and (max-height: 503px) {
+			 body {
+				position: fixed;
+				width: 1344px;
+				height: 756px;
+				background-color: #333333;
+				zoom:70%;
+				}
+		}
+	@media screen and (max-width: 2,33px) {
+			 body {
+				position: fixed;
+				width: 1344px;
+				height: 756px;
+				background-color: #333333;
+				zoom:106%;
+				}
+		}
+
+

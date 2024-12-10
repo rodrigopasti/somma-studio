@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+  .tab_content_custom_components_narrow {
+    width: 155px;
+    height: 93%;
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow-y: scroll;
+  }
+
+  .close_window {
+    color: black;
+    font-size: 30px;
+    position: relative;
+    top: -8px;
+    left: 5px;
+    font-weight: bold;
+  }
+
+  .close_window:hover,
+  .close_window:focus {
+    color: grey;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .options_labels_link_cc {
+    text-decoration: none;
+    font-size: 14px;
+    color: white !important;
+    display: inline-block;
+    position: relative;
+  }
+
+  .options_labels_link_cc:hover {
+    text-decoration: none;
+    color: #1e628c !important;
+  }
+
+  .options_labels_link_cc:active {
+    text-decoration: none;
+    color: #0e631f !important;
+  }
+
+  .options_checkbox_cc {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    width: 15px !important;
+    height: 15px !important;
+    top: 8px;
+    margin: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: white;
+    border-radius: 3px;
+    position: relative;
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+  .options_checkbox_cc:checked {
+    background-color: red;
+  }
+
+  .options_checkbox_cc:disabled {
+    border: none;
+  }
+
+  .gptButtonsWrapper {}
+
+
+  .gptButtonsWrapper button {
+    margin: 15px;
+    height: max-content;
+    cursor: pointer;
+    color: #212121;
+    padding-top: 5px;
+    background-color: #E9E9E9;
+    width: 200px;
+    height: 55px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+  }
+
+  .gptButtonsWrapper button:hover {
+    background-color: #212121;
+    color: #FFFFFF;
+  }
+
+  #menu_components {
+    margin-left: 60px;
+    height: 100%;
+    display: block;
+  }
+
+  #menu_components a {
+    width: 25px;
+    height: 25px;
+    margin-top: 13px;
+    margin-left: 5px;
+
+    display: inline-block;
+    background-repeat: no-repeat;
+
+  }
+
+  .labels_in_window {
+    font-size: 12px;
+  }
+
+  .upload-component {
+    display: none;
+  }
+
+  .upload-json {
+    display: none;
+  }
+
+  /*--------------------------------------------------*/
+
+  /* Switch Slide
+  ==========================*/
+  .switch {
+    position: relative;
+    display: block;
+    vertical-align: top;
+    width: 50px;
+    height: 21px;
+    padding: 2px;
+    margin: 0 7px 7px 0;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF 17px);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 17px);
+    border-radius: 12px;
+    box-shadow: inset 0 -0px white, inset 0 0px 0px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    box-sizing: content-box;
+  }
+
+  .switch-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    box-sizing: content-box;
+  }
+
+  .switch-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: 10px;
+    text-transform: uppercase;
+    background: #eceeef;
+    border-radius: inherit;
+    box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.12), inset 0 0 1px rgba(0, 0, 0, 0.15);
+    box-sizing: content-box;
+  }
+
+  .switch-label:before,
+  .switch-label:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -.5em;
+    line-height: 1;
+    -webkit-transition: inherit;
+    -moz-transition: inherit;
+    -o-transition: inherit;
+    transition: inherit;
+    box-sizing: content-box;
+  }
+
+  .switch-label:before {
+    content: attr(data-off);
+    right: 7px;
+    color: #000000;
+    /*text-shadow: 0 0px rgba(255, 255, 255, 0.5);*/
+  }
+
+  .switch-label:after {
+    content: attr(data-on);
+    left: 7px;
+    color: #000000;
+    /*text-shadow: 0 0px rgba(0, 0, 0, 0.2);*/
+    /*opacity: 0;*/
+  }
+
+  .switch-input:checked~.switch-label {
+    background: #E1B42B;
+    box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.15), inset 0 0 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .switch-input:checked~.switch-label:before {
+    opacity: 0;
+  }
+
+  .switch-input:checked~.switch-label:after {
+    opacity: 1;
+  }
+
+  .switch-handle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 19px;
+    height: 19px;
+    background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+    background-image: -webkit-linear-gradient(top, #FFFFFF 40%, #f0f0f0);
+    border-radius: 100%;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .switch-handle:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -4px 0 0 -4px;
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+    background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+    border-radius: 4px;
+    box-shadow: inset 0 0px rgba(0, 0, 0, 0.02);
+  }
+
+  .switch-input:checked~.switch-handle {
+    left: 51px;
+    box-shadow: -0px 0px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Transition
+  ========================== */
+  .switch-label,
+  .switch-handle {
+    transition: All 0.3s ease;
+    -webkit-transition: All 0.3s ease;
+    -moz-transition: All 0.3s ease;
+    -o-transition: All 0.3s ease;
+  }
+
+  .switch-slide {
+    padding: 0;
+    margin: 10px 0 0;
+    background: #FFF;
+    border-radius: 0;
+    background-image: none;
+  }
+
+  .switch-slide .switch-label {
+    box-shadow: none;
+    background: none;
+    overflow: hidden;
+  }
+
+  .switch-slide .switch-label:after,
+  .switch-slide .switch-label:before {
+    width: 100%;
+    height: 65%;
+    top: 3px;
+    left: 0;
+    text-align: center;
+    padding-top: 10%;
+    box-shadow: inset 0 0px 2px rgba(0, 0, 0, 0.2), inset 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .switch-slide .switch-label:after {
+    color: #000000;
+    background: #87CEEB;
+    left: -70px;
+  }
+
+  .switch-slide .switch-label:before {
+    background: #eceeef;
+  }
+
+  .switch-slide .switch-handle {
+    display: none;
+  }
+
+  .switch-slide .switch-input:checked~.switch-label {
+    background: #FFF;
+    border-color: #0088cc;
+  }
+
+  .switch-slide .switch-input:checked~.switch-label:before {
+    left: 70px;
+  }
+
+  .switch-slide .switch-input:checked~.switch-label:after {
+    left: 0;
+  }
+
+  #gpt-prompt-box {
+    min-width: 1000px;
+    min-height: 700px;
+    display: none;
+    z-index: 100;
+  }
+
+  .ace_scrollbar-h {
+    height: 8px !important;
+  }
+
+  .inputs-container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #inputs-container .textarea1 {
+    flex: 1;
+    resize: both;
+    overflow: auto;
+    padding: 5px;
+    margin: 5px;
+  }
+
+  #inputs-container .textarea2 {
+    flex: 2;
+  }
+
+  /* FIM DO ESTILO DO BOTÃO SWITCH */
+</style>
+
+<script>
+  $SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
+  ace.require("../../static/js/ace/ext/language_tools");
+
+</script>
+
+
+<script src="../../static/js/customComponents.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+
+
+
+<body onload="initializeCustomComponents()">
+  <form id="upload-form" action="/upload-components" method="POST" enctype="multipart/form-data">
+  </form>
+  <div id="modal_components" onmousedown="setFocus('false', 'modal_components')"
+    style="background-color: #272822; border-radius: 13px; display: none; left: 2%; top:10%; width:1250px; height: 500px; position: absolute; z-index: 100; overflow-x: hidden; overflow-y: hidden; -webkit-animation: fadein 0.2s; animation: fadein 0.2s;">
+
+    <div id="modal_components_header"
+      style="display: block; z-index: 1; resize: none; overflow:none; background-color: #4c4c4c; position: absolute; height: 45px; width: 100%; top: 0px; right: 0px;">
+      <span id="close_custom_components" title="Close Window" onclick="closeCustomComponents()" class="close-messagebar"
+        style="top: 8px; left: 10px;"></span>
+
+      <div id="menu_components">
+        <a href="#" title="Create Component" style="background-image: url('../../static/icons/cc_plus_icon.svg')"
+          onclick="addComponent('', false)"></a>
+
+        <a href="#" title="Generate GPT Prompt"
+          style="position: relative; left: -3px; top: -4px; background-image: url('../../static/icons/cc_robot_icon.svg')"
+          onclick=" toggleOpenGPTPrompt()"></a>
+        <a href="#" title="Delete Selected Component"
+          style="position: relative; top: -2px; left: -3px; background-image: url('../../static/icons/cc_trash_icon.svg')"
+          onclick=" deleteComponent()"></a>
+        </a>
+        <a href="#" title="Save All Components" style="background-image: url('../../static/icons/cc_save_icon.svg')"
+          onclick=" saveComponents()"></a>
+
+        <label id="switch_slide_code" class="switch switch-slide"
+          style="position: absolute; display: none; left: 215px; top: 5px;">
+          <input id="checkbox_code_config" class="switch-input" type="checkbox" onclick="switchCodeConfig()" />
+          <span class="switch-label" data-on="Code" data-off="Config"></span>
+          <span class="switch-handle"></span>
+        </label>
+      </div>
+
+      <p id="module_name" class="labels_in_window"
+        style="color: white; font-size: 15px; font-weight: normal; right: 55px; top: 15px; position: absolute; display: none;">
+        my_component.py </p>
+      <img id="language_logo" style="right: 8px; top: 5px; width:35px; height:35px; position: absolute;"
+        src="../../static/img/python.png"> </img>
+    </div>
+
+    <div id="components_tab" style="top: 45px; height: 100%; width: 100%; position:relative">
+      <!--class="tabcontent" style="display: inherit;">-->
+      <!--
+          <div id="menu_components" style="width: 20%;">
+            <a href = "#" style="color: white; font-size: 27px; font-weight: bold; left: 3px; top:-7px; position: relative;" onclick="addComponent('')"> + </a>
+            <a href = "#" style="color: white; font-size: 17px; left: 3px; top:-10px; position: relative;" onclick="editMode()"> 📝</a>
+            <a href = "#" style="color: white; font-size: 17px; left: 5px; top:-10px; position: relative;" onclick="deleteComponent()"> 🗑️ </a>
+            <a href = "#" style="color: white; font-size: 27px; left: 5px; top:-7px; position: relative;" onclick="document.getElementById('upload-'+currentCustomComponent).click()"> ⤴️ </a>
+            <a href = "#" style="color: white; font-size: 17px; left: 5px; top:-10px; position: relative;" onclick="saveComponents()"> 💾 </a>
+
+            <label id ="switch_slide_code" class="switch switch-slide" style="position: absolute; display: none; left: 135px; top:-5px;">
+            	<input id="checkbox_code_config" class="switch-input" type="checkbox" onclick="switchCodeConfig()" />
+            	<span class="switch-label" data-on="Code" data-off="Config"></span>
+            	<span class="switch-handle"></span>
+            </label>
+          </div>
+           -->
+      <div class="tab_content_custom_components_narrow" style="overflow-y: auto">
+        <table id="components_names" style="overflow-y: auto"> </table>
+      </div>
+
+      <p id="tag_component_config" class="labels_in_window"
+        style="font-weight: bold; font-size: 15px; color: white; left: 20%; top:0px; position: absolute; display: none;">
+      </p>
+      <p id="tag_component_template" class="labels_in_window"
+        style="display: none; font-weight: bold; font-size: 15px; color: white; left: 60%; top:0px; position: absolute; display: none;">
+        Studio Template</p>
+
+      <div id="box_component_config"
+        style="width: calc(100% - 205px); left: 200px; height: calc(100% - 80px); position: absolute; display: none;">
+        <div style="display: flex;"
+          title="Configuration values, please use commas to separate each value or option and do not use spaces">
+          <label class="inputs-config-label" title="awarf">Map options</label>
+          <input type="text" class="inputs-config" id="map_options"> <br>
+          <label class="inputs-config-label">Somma data types</label>
+          <input type="text" class="inputs-config" id="somma_data_types">
+        </div>
+        <textarea rows="50" cols="100" id="template_textarea" spellcheck="false" autocomplete="off"
+          style="right: 0; font-size: 15px; color: white; margin-top: unset; background-color: #272822; height: 100%; width: 100%; resize: none;"> </textarea>
+      </div>
+
+      <div id="box_component_code"
+        style="right: 0px; top:-15px; width: 85%; height: 93%; position: absolute; display: none;">
+      </div>
+    </div>
+  </div>
+  <div onclick="setFocus('false', 'gpt-prompt-box')" id="gpt-prompt-box" class="parametersMenu"
+    onresize="resizeGptEditor()">
+    <span class="close-messagebar" onclick="document.getElementById('gpt-prompt-box').style.display='none'"></span>
+    <h3 style="text-align: center; padding: 10px; padding-top: 20px;"> 
+      <img title="To write a prompt you must define the function of your component and the class that function belongs. For example:
+      &quot;Write a Pandas function that calculates the mean of all columns of a dataframe. This function belongs to a class named Average.&quot;
+      Note that you can define the Python package that you want to use. The returned type of the component must be a PySpark dataframe. If you use the Pandas Package, the Somma.ai prompt will return the conversion statement. Otherwise, you can specify this statement in the prompt. 
+      The returned code is already in the Custom Component pattern. See the Somma.ai help for more details." style="padding-bottom: 9px; position: absolute; left: 40px;" src='../../static/icons/help_icon_black.svg'/>Somma.ai Assistant
+      <img style="padding-bottom: 9px;" src='../../static/icons/cc_robot_icon_black.svg'/>
+    </h3>
+    <div class="inputs-container">
+      <div style="flex: 1;">
+        <div class="input-field" style="position: relative; width: 80%;">
+          <label>Message</label>
+          <textarea id="gpt-prompt-input" class="textarea_input" ;
+            style="font-size: 18px; height: 350px; padding: 10px;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 15px;">
+          <div class="gptButtonsWrapper">
+            <button style="width: 120px;" onclick="clearInput()">Clear</button>
+          </div>
+          <div class="gptButtonsWrapper">
+            <button style="width: 120px;" id='send-prompt-btn' onclick="generateGPTPrompt()">Send</button>
+          </div>
+          <p style="position: absolute; bottom: 30px;" id="prompt-counter"></p>
+
+        </div>
+      </div>
+      <div id="spinner-prompt" class="running_spinner" style="bottom: 20px; left: 20px; top: unset;">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div style="flex: 2;">
+        <div class="input-field" style="position: relative; width: 80%; display: block;">
+          <label>Response</label>
+          <div id="gpt-output"
+            style="border-radius: 13px; padding: 10px; margin-bottom: 10px; width: 100%; height: 500px;"></div>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 15px;">
+          <div class="gptButtonsWrapper">
+            <button id="create-gpt-component-button" style="pointer-events: none; opacity: 0.5; height: max-content;"
+              title=" Create a custom component using the output code." onclick="addComponent('', true)">Create Custom
+              Component</button>
+          </div>
+          <div class="gptButtonsWrapper">
+            <button title="Close Window" onclick="toggleOpenGPTPrompt()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

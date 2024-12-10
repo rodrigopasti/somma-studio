@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+  /* NOVO MENU DE COMPONENTES */
+
+  /*----- MENU PRINCPIPAL -------------------*/
+  /* The side navigation menu */
+
+  @font-face {
+    font-family: 'sofia';
+    src: url('../../static/font/Sofia Pro Light Az.otf');
+  }
+
+  .components-menu-left-arrow {
+    transform: rotate(32deg);
+    width: 24px;
+    height: 22px;
+    left: 84px;
+    position: fixed;
+    bottom: 75px;
+    z-index: 12;
+    display: none;
+  }
+
+  .submenu-left-arrow {
+    width: 24px;
+    height: 22px;
+    position: absolute;
+    transform: rotate(32deg);
+    z-index: 13;
+    top: 3px;
+    right: -27px;
+    display: block;
+  }
+
+  .sidenav {
+    overflow: visible;
+    width: max-content;
+    height: max-content;
+    border-radius: 13px;
+    position: fixed;
+    z-index: 12;
+    bottom: 40px;
+    left: 90px;
+    background-color: #212121;
+
+  }
+
+  .rounded-div {
+    border: 1px;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    background: #FFF url("../../../static/img/hamburger-menu.png") no-repeat center center;
+  }
+
+  /* The navigation menu links */
+  .sidenav a {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    position: relative;
+    display: block;
+    padding: 5px 40px 7px 20px;
+    transition: 0.01s;
+  }
+
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #C11C3F !important;
+    background-color: #312024 !important;
+  }
+
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 17px;
+    font-size: 25px;
+    margin-left: 35px;
+  }
+
+  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+  #main {
+    transition: margin-left .5s;
+    padding: 14px;
+  }
+
+  /* On smaller screens, where height is less than 315px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 315px) {
+    .sidenav {
+      padding-top: 10px;
+    }
+
+    .sidenav a {
+      font-size: 12px;
+    }
+  }
+
+  /*----- sub_menu -------------------*/
+  /* The side navigation menu */
+  .sidenav_sub {
+    height: max-content;
+    border-radius: 13px;
+    width: 180px;
+    max-width: 200px;
+    /* 0 width - change this with JavaScript */
+    max-height: 540px;
+    overflow-y: auto;
+    display: none;
+    position: absolute;
+    /* Stay in place */
+    z-index: 13;
+    /* Stay on top */
+    bottom: 40px;
+    left: 215px;
+    background-color: #212121;
+    /* Black*/
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    transition: 0.02s;
+    /* 0.5 second transition effect to slide in the sidenav */
+  }
+  .sidenav_sub::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 5px;
+  }
+  /* The navigation menu links */
+  .sidenav_sub a {
+    padding: 5px 5px 5px 22px;
+    border-radius: 13px;
+    text-decoration: none;
+    font-size: 12px;
+    color: white;
+    /*#4c4c4c  #818181*/
+    display: block;
+    transition: 0.01s;
+  }
+
+  .component_type_icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+  }
+
+  .sidenav_sub a:first-child {
+    margin-top: 15px;
+  }
+
+  .sidenav_sub a:last-child {
+    margin-bottom: 15px;
+  }
+
+  /* When you mouse over the navigation links, change their color */
+  .sidenav_sub a:hover {
+    color: #C11C3F;
+    background-color: #312024;
+  }
+
+  /* Position and style the close button (top right corner) */
+  .sidenav_sub .closebtn {
+    position: absolute;
+    top: 0;
+    right: 17px;
+    font-size: 25px;
+    margin-left: 35px;
+  }
+
+  #components_menu_wrapper {
+    display: none;
+    overflow: visible;
+    width: max-content;
+    height: max-content;
+    border-radius: 13px;
+    position: absolute;
+    z-index: 12;
+    bottom: 40px;
+    left: 90px;
+    display: none;
+  }
+
+
+  @media (max-height: 810px) {
+    .components-menu-left-arrow {
+      bottom: 50px;
+    }
+  }
+
+  /* On smaller screens, where height is less than 315px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 315px) {
+    .sidenav_sub {
+      padding-top: 10px;
+    }
+
+    .sidenav_sub a {
+      font-size: 12px;
+    }
+  }
+
+  /* FIM DO NOVO MENU DE COMPONENTES */
+</style>
+
+
+
+<body>
+
+  <!-- NOVO MENU LATERAL DE COMPONENTES -->
+  <div id="components_menu_wrapper">
+    <img id="components_menu_left_arrow" class="components-menu-left-arrow"
+      src="../../static/icons/left_arrow_comp_menu.svg" />
+    <div id="components_menu" class="sidenav">
+      <a id="sub_menu_sticker_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_sticker')" style="margin-top: 15px;"> <img class="component_type_icon"
+          src="../../static/icons/components_types/sticker.svg" />Sticker
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_data_input_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_data_input')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/data_input.svg" />Data Input
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_data_output_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_data_output')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/data_output.svg" />Data Output
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_dataset_operations_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_dataset_operations')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/datasets_operation.svg" />Dataset Operations
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_data_transformation_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_data_transformation')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/data_transformation.svg" />Data Transformation
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_data_visualization_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_data_visualization')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/data_visualization.svg" />Data Visualization
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_descriptive_analysis_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_descriptive_analysis')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/descriptive_analysis.svg" />Descriptive Analysis
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" /></a>
+      <a id="sub_menu_machine_learning_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_machine_learning')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/machine_learning.svg" />Machine Learning
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+      <a id="sub_menu_text_analysis_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_text_analysis')"> <img class="component_type_icon"
+          src="../../static/icons/components_types/text_analysis.svg" />Text Analysis
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+
+      <!--<a href="javascript:void(0)" draggable = "false" class = "menu_text" onclick="openCloseSubMenu('sub_menu_deep_learning')">Deep Learning </a>-->
+      <a id="sub_menu_custom_components_label" href="javascript:void(0)" draggable="false" class="menu_text"
+        onclick="openCloseSubMenu('sub_menu_custom_components')" style="margin-bottom: 15px;"> <img
+          class="component_type_icon" src="../../static/icons/components_types/custom_components.svg" />My Components
+        <img class="submenu-left-arrow" style="display: none" src="../../static/icons/left_arrow_comp_menu.svg" />
+      </a>
+
+    </div>
+
+    <div id="sub_menu_sticker" class="sidenav_sub" style="bottom: 283px;">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" id="sticker_orange"
+        class="menu_text_sub" onclick="createSticker(schema, 'none', '#FB8500')"> Orange </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" id="sticker_blue"
+        class="menu_text_sub" onclick="createSticker(schema, 'none', '#219EBC')"> Blue </a>
+    </div>
+    <div id="sub_menu_data_input" class="sidenav_sub" style="bottom: 130px;">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="User Input"
+        onclick="createComponent('User Input', schema, 'none')"> User Input </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" id="Load Data Objects"
+        class="menu_text_sub" onclick="createComponent('Load Data Objects', schema, 'none')"> Load Data Objects </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Big Query Input" onclick="createComponent('Big Query Input', schema, 'none')"> Big Query </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Database Input" onclick="createComponent('Database Input', schema, 'none')"> Database </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="AWS S3 Input" onclick="createComponent('AWS S3 Input', schema, 'none')"> AWS S3 </a>
+      <!--<a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class = "menu_text_sub" id = "Google Drive Input" onclick ="createComponent('Google Drive Input', schema, 'none')"> Google Drive Input </a>-->
+
+      <!--<a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class = "menu_text_sub" id = "Web API Input" onclick ="createComponent('Web API Input', schema, 'none')"> Web API </a>-->
+      <!--
+      <a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class = "menu_text_sub" id = "Kafka Input" onclick ="createComponent('Kafka Input', schema, 'none')"> Kafka </a>
+      -->
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Twitter"
+        onclick="createComponent('Twitter', schema, 'none')"> Twitter </a>
+    </div>
+
+
+    <div id="sub_menu_data_output" class="sidenav_sub" style="bottom: 160px">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" id="Save Data Objects"
+        class="menu_text_sub" onclick="createComponent('Save Data Objects', schema, 'none')"> Save Data Objects </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Database Output" onclick="createComponent('Database Output', schema, 'none')"> Database </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="AWS S3 Output" onclick="createComponent('AWS S3 Output', schema, 'none')"> AWS S3 </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Big Query Output" onclick="createComponent('Big Query Output', schema, 'none')"> Big Query </a>
+      <!--<a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class="menu_text_sub" id = "Google Drive Output" onclick="createComponent('Google Drive Output', schema, 'none')"> Google Drive </a>-->
+      <!--<a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class = "menu_text_sub" id = "Web API Output" onclick ="createComponent('Web API Output', schema, 'none')"> Web API </a>-->
+      <!--
+      <a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class = "menu_text_sub" id = "Kafka Output" onclick ="createComponent('Kafka Output', schema, 'none')"> Kafka </a>
+      -->
+    </div>
+
+
+
+    <div id="sub_menu_dataset_operations" class="sidenav_sub" style="bottom: 0;">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Join"
+        onclick="createComponent('Join', schema, 'none')"> Join </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Group By"
+        onclick="createComponent('Group By', schema, 'none')"> Group By </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Sort"
+        onclick="createComponent('Sort', schema, 'none')"> Sort </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Attributes Union" onclick="createComponent('Attributes Union', schema, 'none')"> Attributes Union </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Union"
+        onclick="createComponent('Union', schema, 'none')"> Union </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Delete Attributes" onclick="createComponent('Delete Attributes', schema, 'none')"> Delete Attributes </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Select Attributes" onclick="createComponent('Select Attributes', schema, 'none')"> Select Attributes </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Copy Attributes" onclick="createComponent('Copy Attributes', schema, 'none')"> Copy Attributes </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Add Attributes" onclick="createComponent('Add Attributes', schema, 'none')"> Add Attributes </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Rename Attributes" onclick="createComponent('Rename Attributes', schema, 'none')"> Rename Attributes </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Concatenate Attributes" onclick="createComponent('Concatenate Attributes', schema, 'none')"> Concatenate
+        Attributes </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Filter"
+        onclick="createComponent('Filter', schema, 'none')"> Filter </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Sampling"
+        onclick="createComponent('Sampling', schema, 'none')"> Sampling </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Limit"
+        onclick="createComponent('Limit', schema, 'none')"> Limit </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="SQL Query"
+        onclick="createComponent('SQL Query', schema, 'none')"> SQL Query </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="State Router" onclick="createComponent('State Router', schema, 'none')"> State Router </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="One To Many"
+        onclick="createComponent('One To Many', schema, 'none')"> One To Many </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Flow Breaker" onclick="createComponent('Flow Breaker', schema, 'none')"> Flow Breaker </a>
+
+    </div>
+
+    <div id="sub_menu_data_transformation" class="sidenav_sub" style="bottom: 0;">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Replace"
+        onclick="createComponent('Replace', schema, 'none')"> Replace </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Missing Values" onclick="createComponent('Missing Values', schema, 'none')"> Missing Values </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Type Inference" onclick="createComponent('Type Inference', schema, 'none')"> Type Inference </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Geo Conversion" onclick="createComponent('Geo Conversion', schema, 'none')"> Geo Conversion </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Lat Long Conversion" onclick="createComponent('Lat Long Conversion', schema, 'none')"> Lat Long Conversion
+      </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Geo Distance" onclick="createComponent('Geo Distance', schema, 'none')"> Geo Distance </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Numeric Conversion" onclick="createComponent('Numeric Conversion', schema, 'none')"> Numeric Conversion </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="String Conversion" onclick="createComponent('String Conversion', schema, 'none')"> String Conversion </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="DateTime Conversion" onclick="createComponent('DateTime Conversion', schema, 'none')"> DateTime Conversion
+      </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Features Assembly" onclick="createComponent('Features Assembly', schema, 'none')"> Features Assembly </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Categorical Encoder" onclick="createComponent('Categorical Encoder', schema, 'none')"> Categorical Encoder
+      </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Normalizer"
+        onclick="createComponent('Normalizer', schema, 'none')"> Normalizer </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Extract Image" onclick="createComponent('Extract Image', schema, 'none')"> Extract Image </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Extract Text" onclick="createComponent('Extract Text', schema, 'none')"> Extract Text </a>
+      <!--<a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class = "menu_text_sub" id = "AES Encrypt Decrypt" onclick ="createComponent('AES Encrypt Decrypt', schema, 'none')"> AES Encrypt Decrypt </a>-->
+    </div>
+
+    <div id="sub_menu_data_visualization" class="sidenav_sub" style="bottom: 95px">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Print Data"
+        onclick="createComponent('Print Data', schema, 'none')"> Print Data </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Simple Graphs" onclick="createComponent('Simple Graphs', schema, 'none')"> Simple Graphs </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Geo Plot"
+        onclick="createComponent('Geo Plot', schema, 'none')"> Geo Plot </a>
+    </div>
+
+    <div id="sub_menu_descriptive_analysis" class="sidenav_sub" style="bottom: 35px">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Correlation"
+        onclick="createComponent('Correlation', schema, 'none')"> Correlation </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Grouped Summary" onclick="createComponent('Grouped Summary', schema, 'none')"> Grouped Summary </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Summary"
+        onclick="createComponent('Summary', schema, 'none')"> Summary </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Custom Expression" onclick="createComponent('Custom Expression', schema, 'none')"> Custom Expression </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Count Data Objects" onclick="createComponent('Count Data Objects', schema, 'none')"> Count Data Objects </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Statistical Filter" onclick="createComponent('Statistical Filter', schema, 'none')"> Statistical Filter </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Histogram"
+        onclick="createComponent('Histogram', schema, 'none')"> Histogram </a>
+    </div>
+
+    <div id="sub_menu_text_analysis" class="sidenav_sub" style="bottom: 0;">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="POS Tagger"
+        onclick="createComponent('POS Tagger', schema, 'none')"> POS Tagger </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Text Processing" onclick="createComponent('Text Processing', schema, 'none')"> Text Processing </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Tokenizer"
+        onclick="createComponent('Tokenizer', schema, 'none')"> Tokenizer </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Stop Words"
+        onclick="createComponent('Stop Words', schema, 'none')"> Stop Words </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Sentence Tokenizer" onclick="createComponent('Sentence Tokenizer', schema, 'none')"> Sentence Tokenizer </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Vectorize Words" onclick="createComponent('Vectorize Words', schema, 'none')"> Vectorize Words </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Sentiment"
+        onclick="createComponent('Sentiment', schema, 'none')"> Sentiment </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Word Counter" onclick="createComponent('Word Counter', schema, 'none')"> Word Counter </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Topic Modeling" onclick="createComponent('Topic Modeling', schema, 'none')"> Topic Modeling </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Bag of Words" onclick="createComponent('Bag of Words', schema, 'none')"> Bag of Words </a>
+      <!--<a href="javascript:void(0)" draggable = "true" ondragstart = "dragComp(event)" class="menu_text_sub" id="Context Analysis" onclick="createComponent('Context Analysis', schema, 'none')"> Context Analysis </a>-->
+    </div>
+
+    <div id="sub_menu_machine_learning" class="sidenav_sub" style="bottom: 0;">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Clustering"
+        onclick="createComponent('Clustering', schema, 'none')"> Clustering </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Classification" onclick="createComponent('Classification', schema, 'none')"> Classification </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Regression"
+        onclick="createComponent('Regression', schema, 'none')"> Regression </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Collaborative Filtering" onclick="createComponent('Collaborative Filtering', schema, 'none')"> Collaborative
+        Filtering </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Association Rules" onclick="createComponent('Association Rules', schema, 'none')"> Association Rules </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Nearest Neighbors" onclick="createComponent('Nearest Neighbors', schema, 'none')"> Nearest Neighbors </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Geo Nearest Neighbors" onclick="createComponent('Geo Nearest Neighbors', schema, 'none')"> Geo Nearest
+        Neighbors </a>
+
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Deep Neural Network" onclick="createComponent('Deep Neural Network', schema, 'none')"> Deep Neural Network
+      </a>
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub" id="Evaluation"
+        onclick="createComponent('Evaluation', schema, 'none')"> Evaluation </a>
+    </div>
+
+    <div id="sub_menu_deep_learning" class="sidenav_sub">
+      <a href="javascript:void(0)" draggable="true" ondragstart="dragComp(event)" class="menu_text_sub"
+        id="Simple Convolution Network" onclick="createComponent('Simple Convolution Network', schema, 'none')"> Simple
+        Convolution Network </a>
+    </div>
+
+    <div id="sub_menu_custom_components" class="sidenav_sub" style="bottom: 0;">
+      <a href="javascript:void(0)" id="components_library_link" class="menu_text_sub" onclick="openCustomComponents()">
+        Library... </a>
+
+      <a href="javascript:void(0)" id="sommaai-assistant-link" class="menu_text_sub" onclick="toggleOpenGPTPrompt()">
+        Somma.ai Assistant
+        <img style="position: relative; top: -5px; right: -5px;" src="../../static/icons/cc_robot_icon.svg">
+      </a>
+    </div>
+  </div>
+
+
+</body>
+
+<script src="../../static/js/componentsMenu.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+
+</html>

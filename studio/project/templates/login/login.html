@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../../static/css/login.css">
+    <title>Somma.ai Login</title>
+    <link rel="icon" type="image/x-icon" href="../../static/icons/favicon.png">
+
+</head>
+
+<body>
+
+<div class="left-container">
+  <button id="button-reg" class="button-register" onclick="openCloseR()" style="left: 120px; top:30px; position: fixed;">Create Account > </button>
+  <span href="#" class="button" id="toggle-login" style="left:122px; top:77px;"> release - {{data["version"]}} </span>
+  <div id="login";>
+    <div id="triangle"></div>
+    <h1>Somma.ai Login</h1>
+    <form action="/" method="post">
+        <input id= "email-field" name="email" type="email" placeholder="Username"/>
+        <div id="password-wrapper" style="position: relative;">
+          <img class="eye_slash" src = "../../static/img/eye_slash_icon.png" onclick="togglePasswordVisibility();" title="Show/Hide password"/>
+          <input id="password-field" name="password" type="password" placeholder="Password"/>
+        </div>
+        <input type="submit" value="login"/>
+    </form>
+    <span href="#" class="button" id="label_status_login" style="display: none; left: 122px;"> </span>
+</div>
+</div>
+
+<div id="somma_logo_wrapper" class="somma_logo_wrapper">
+  <img src="../../static/img/Logo_branco.png"/>
+
+</div>
+
+
+<div id="register" style="display: none;">
+  {% include "register/register.html" %}
+</div>
+
+</body>
+</html>
+
+<script>
+
+var isValidCredentials = '{{isValidCredentials}}'
+if(isValidCredentials == "False"){
+  showLabelStatus();
+}
+
+registerOpen = false;
+function openCloseR(){
+  if (registerOpen == false){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("register").style.display = "block";
+    document.getElementById("button-reg").textContent = "< Login"
+    registerOpen = true;
+  }
+  else{
+    document.getElementById("login").style.display = "block";
+    document.getElementById("register").style.display = "none";
+    document.getElementById("button-reg").textContent = "Create Account > "
+    registerOpen = false;
+  }
+}
+
+function togglePasswordVisibility () {
+  var passwd = document.getElementById("password-field")
+  if(passwd.type === "text"){
+    passwd.type = "password"
+  }
+  else{
+    passwd.type = "text"
+  }
+}
+
+function showLabelStatus(){
+  document.getElementById("label_status_login").style.display = "block";
+  document.getElementById("label_status_login").style.backgroundColor = "#E23B3E";
+  document.getElementById("label_status_login").textContent = "E-mail or password incorrect";
+}
+</script>

@@ -1,0 +1,258 @@
+{
+    "POS Tagger": {
+        "id_name": "POS Tagger",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "language": {
+            "select": ["pt-br", "en"],
+            "help": "POS Tagger language."
+        },
+        "attribute": {
+            "text": "text",
+            "help": "Input attribute.",
+            "required": true
+        },
+        "help": "Part-of-speech tagger. Input type: tokenized text. Output type: POS tags with same order of input tokens.",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191430675/POS+Tagger"
+    },
+
+    "Stop Words": {
+        "id_name": "Stop Words",
+        "icon_type": "Text Analysis",
+        "grid_config": " \"attribute attribute\" \" language language \" \"id_name name \" ",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Input attribute.",
+            "required": true
+        },
+        "language": {
+            "select": ["pt-br", "en"]
+        },
+        "help": "Remove stop words.",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191135947/Stop+Words"
+    },
+
+    "Text Processing": {
+        "id_name": "Text Processing",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "grid_config": " \"attributes attributes\" \" to_lower remove_accents \" \" remove_symbols remove_symbols \" \" id_name name \" ",
+        "to_lower": {
+            "select": [true, false],
+            "help": "To lowercase if true."
+        },
+        "remove_accents": {
+            "select": [true, false],
+            "help": "Remove accents if true."
+        },
+        "remove_symbols": {
+            "select": [true, false],
+            "help": "Remove symbols if true."
+        },
+        "attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Input attributes.",
+            "required": true
+        },
+        "help": "Processes the text removing accents, symbols and converts it to lowercase.",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191168600/Text+Processing"
+    },
+
+    "Tokenizer": {
+        "id_name": "Tokenizer",
+        "icon_type": "Text Analysis",
+        "grid_config": "\"attributes attributes\" \" type type \" \" id_name name \" ",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "type": {
+            "textlist": "2",
+            "help": "Tokenizer type: 2gram, 3gram, ..., Ngram."
+        },
+        "attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Input attributes."
+        },
+        "help": "Tolenizes text in n-gram. Input type: text. Output type: tokens (lists of words).",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191365163/Tokenizer"
+    },
+
+    "Sentence Tokenizer": {
+        "id_name": "Sentence Tokenizer",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "attribute": {
+            "text": "",
+            "help": "Input attribute.",
+            "required": true
+        },
+        "help": "Tokenizes text in sentences. Input type: text. Output type: sentences in text format. ",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/744423425/Sentence+Tokenizer"
+    },
+
+    "Vectorize Words": {
+        "id_name": "Vectorize Words",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "n_dim": { "text": 30, "required": true },
+        "window": { "text": 2, "required": true },
+        "min_word_count": { "text": 10, "required": true },
+        "return_mode": {
+            "select": ["vectors", "word_vectors"]
+        },
+        "attribute": {
+            "text": "",
+            "help": "Input attribute.",
+            "required": true
+        },
+
+        "state": {
+            "select": ["from stream", "learning", "apply"]
+        },
+        "help": "Word2Vector algorithm for words Embeddings. Input type: tokenized text. Output type: lists of vectors.",
+        "component_type": "model",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191332386/Vectorize+Words"
+    },
+
+    "Sentiment": {
+        "id_name": "Sentiment",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "neutral_category": {
+            "select": [true, false]
+        },
+        "attribute": {
+            "text": "",
+            "help": "Input attribute.",
+            "required": true
+        },
+        "help": "Classifies sentiment based on a sentiment dictionary.",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191397907/Sentiment"
+    },
+
+    "Word Counter": {
+        "id_name": "Word Counter",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "grid_config": " \"attribute attribute\" \"id_name name \" ",
+        "attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Input attribute.",
+            "required": true
+        },
+        "help": "Word Frequency based on n-gram tokens. Input type: n-gram tokens. Output type: tokens with frequency values.",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191234217/Word+Counter"
+    },
+
+    "Topic Modeling": {
+        "id_name": "Topic Modeling",
+        "icon_type": "Text Analysis",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "attribute": {
+            "text": "text",
+            "help": "Input attribute.",
+            "required": true
+        },
+        "nr_topics": {
+            "textlist": "2",
+            "help": "List of number of topics, separated by commas.",
+            "required": true
+        },
+        "nr_words": {
+            "text": 10,
+            "help": "Number of words in topics.",
+            "required": true
+        },
+        "help": "Topic Modeling with Latent Dirichlet Allocation. Input type: n-gram tokens. Output type: topics and words.",
+        "component_type": "process",
+        "input_dim": 1,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201499/Topic+Modelling"
+    },
+
+    "Bag of Words": {
+        "id_name": "Bag of Words",
+        "icon_type": "Text Analysis",
+        "input_dim": 1,
+        "help": "Applies one of the algorithms defined in the type parameter.",
+        "component_type": "model",
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "attributes": {
+            "textlist": "text",
+            "help": "Input attributes.",
+            "required": true
+        },
+        "type": {
+            "select": ["count", "tf-idf", "binary"]
+        },
+        "concatenate_features": {
+            "select": [true, false]
+        },
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/698712065/Bag+of+Words"
+    },
+
+    "Context Analysis": {
+        "component_type": "",
+        "icon_type": "Text Analysis",
+        "help": "",
+        "id_name": "Context Analysis",
+        "input_dim": 1,
+        "name": {
+            "text": "",
+            "help": "User defined name."
+        },
+        "target_words": {
+            "help": "List of Words to analyze",
+            "textlist": "",
+            "required": true
+        },
+        "max_words": { "text": 10, "required": true }
+    }
+}

@@ -1,0 +1,136 @@
+{
+    "Simple Graphs": {
+        "id_name": "Simple Graphs",
+        "icon_type": "Data Visualization",
+        "name": "",
+        "component_type": "",
+        "grid_config": " \"x x\" \" y y \" \" color color \" \" information_attributes information_attributes \" \" title_attribute plot_type \" \" multiline_plot boxplot_scatter_points \" \"title y_label \"  \"trendline trendline \" \" log_scale_y_axis use_plotly_api \" \" plotly_api_key plotly_user \" \" name id_name \" ",
+        "use_plotly_api": { "select": [false, true] },
+        "multiline_plot": { "select": [false, true] },
+        "log_scale_y_axis": { "select": [false, true] },
+        "plotly_api_key": "",
+        "plotly_user": "",
+        "trendline": {
+            "select": ["none", "ols", "lowess"],
+            "help": "Plots a linear (ols) or non-linear (lowess) trendline on scatter plot."
+        },
+        "color": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Columns to group data, if required."
+        },
+        "x": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Columns corresponding X-Axis of graph."
+        },
+        "y": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Columns corresponding Y-Axis of graph. If Line Plot, it will plot one line for each column",
+            "required": true
+        },
+        "help": "Plots line, bar, box and scatter graphs.",
+        "plot_type": {
+            "select": ["bar", "line", "scatter", "boxplot"]
+        },
+        "boxplot_scatter_points": {
+            "select": ["outliers", "suspectedoutliers", "all", "none"]
+        },
+        "title": {
+          "text": "",
+          "help": "Graph title. Only if there are multiple graphs in a single plot, or when there is only 1 graph.",
+          "required": false
+        },
+        "y_label": {
+            "text": "",
+            "help": "Graph y label. Only if there are multiple graphs in a single plot, or when there is only 1 graph.",
+            "required": false
+        },
+        "information_attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Attributes that will be used as additional informations of each point on the map"
+        },
+        "title_attribute": {
+            "text": "",
+            "help": "Attribute that will be used as title of each point on the map"
+        },
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909719222/Simple+Graphs"
+    },
+
+    "Geo Plot": {
+        "color_attribute": {
+            "text": "",
+            "help": "Attribute to color each point on the map"
+        },
+        "component_type": "",
+        "icon_type": "Data Visualization",
+        "id_name": "Geo Plot",
+        "input_dim": 1,
+        "latitude_attribute": {
+            "required": true,
+            "text": "latitude"
+        },
+        "longitude_attribute": {
+            "required": true,
+            "text": "longitude"
+        },
+        "name": "",
+        "plotly_api_key": "",
+        "plotly_user": "",
+        "size_attribute": {
+            "text": "",
+            "help": "Attribute to define the size of each point on the map"
+        },
+        "use_plotly_api": {
+            "select": ["false", "true"]
+        },
+        "country": { "select": ["Brazil"] },
+        "choropleth_granularity": {
+            "select": ["city", "state_abbreviation", "state_name"],
+            "help": "Defines the granularity of location_attribute."
+        },
+        "plot_type": { "select": ["scatter", "choropleth"] },
+        "location_attribute": {
+            "text": "",
+            "help": "When using choropleth, defines which attribute contains city or state name."
+        },
+        "information_attributes": {
+            "textlist": "",
+            "help": "Attributes that will be used as additional informations of each point on the map."
+        },
+        "title_attribute": {
+            "text": "",
+            "help": "Attribute that will be used as title of each point on the map."
+        },
+        "help": "Plots a geographic graph from a data stream.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909653781/Geo+Plot"
+    },
+
+    "Print Data": {
+        "id_name": "Print Data",
+        "icon_type": "Data Visualization",
+        "name": "",
+        "grid_config": " \" limit_data print_data_schema \" \" sort_attributes sort_attributes \" \" sort_conditions sort_conditions \" \" id_name name \" ",
+
+        "component_type": "",
+        "limit_data": {
+            "text": 10,
+            "help": "Defines how much records will be displayed, up to 50 records."
+        },
+        "input_dim": 1,
+        "sort_attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Attributes which your sample will be sorted."
+        },
+        "sort_conditions": {
+            "textlist": "",
+            "help": "Conditions to sort (ASC for ascending and DESC for descending). You can have one global condition or one condition to each sort_attributes."
+        },
+        "print_data_schema": { "select": [false, true] },
+        "help": "Prints current data on stream.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/741474323/Print+Data"
+    }
+}

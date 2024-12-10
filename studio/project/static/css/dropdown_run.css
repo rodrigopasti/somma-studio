@@ -1,0 +1,91 @@
+/*----- MENU DROP DOWN DE RUN -------------------*/
+
+.dropdown_run {
+  position: absolute;
+  z-index: 2;
+  background-color: #212121;
+  padding-top: 0px;
+  transition: 0.05s;
+}
+
+.dropdown_run_nn {
+  position: absolute;
+  z-index: 2;
+  background-color: #4c4c4c;
+  overflow-x: hidden;
+  padding-top: 0px;
+  transition: 0.05s;
+}
+
+.dropwdown_nn {
+  display: inline-block;
+  color: white !important;
+  text-align: center; 
+  cursor: pointer;
+  font-size: 13px; 
+  width: 75px; 
+  height: 30px;
+  padding-top: 5px;
+}
+
+.dropwdown_nn:hover {
+  background-color: gray;
+}
+
+.dropwdown_nn_first{
+  margin-left: 30px;
+}
+.dropdown_run a {
+  -webkit-transition: color 0.15s ease-in;
+  transition: color 0.15s ease-in;
+  padding: 5px 5px 5px 22px;
+  text-decoration: none;
+  font-size: 12px;
+  color: white !important;
+  display: block;
+  position: relative;
+  /*transition: 0.01s;*/
+}
+
+.dropdown_run_nn a {
+  -webkit-transition: color 0.15s ease-in;
+  transition: color 0.15s ease-in;
+  padding: 5px 5px 5px 22px;
+  text-decoration: none;
+  font-size: 12px;
+  color: white !important;
+  display: block;
+  position: relative;
+  /*transition: 0.01s;*/
+}
+
+/* When you mouse over the navigation links, change their color*/
+.dropdown_run a:hover, .dropdown_run_nn a:hover {
+  color: #C11C3F !important;
+  
+}
+
+.run-menu-buttons {
+  width: 25px; 
+  height: 32px; 
+  display: inline-block;
+  background-repeat: no-repeat;
+  margin-right: 20px;
+  position: relative;
+  top: 14px;
+}
+
+.run-menu-buttons:hover {
+  opacity: 0.5 !important;
+}
+
+.dropdown-run-uparrow{
+  margin-bottom: -12px;
+  width: 24px; 
+  height: 22px; 
+  top: -8px;
+  left: 11px; 
+  position: relative; 
+  z-index: 12;
+  display: none;
+}

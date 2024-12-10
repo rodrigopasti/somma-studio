@@ -1,0 +1,323 @@
+.sidebar {
+    height: 100%;
+    width: 80px;
+    position: fixed;
+    z-index: 11;
+    top: 0;
+    left: 0;
+    background-color: #212121;
+    overflow-x: hidden;
+    padding-top: 16px;
+    overflow-y: hidden;
+    display: block;
+}
+
+.sidebar .icon-wrapper {
+    width: 100%;
+    height: 60px;
+    display: block;
+    position: relative;
+    margin-bottom: 50px;
+    cursor: pointer;
+}
+
+.no-app-msg {
+    position: absolute;
+    left: calc(50% - 80px);
+    font-size: 23px;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.selected-label {
+    display: none;
+    position: absolute;
+    height: 50px;
+    top: 3px;
+    left: 0;
+}
+.somma-logo-wrapper {
+    width: 45px;
+    height: 45px;
+    margin: auto;
+    top: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.sidebar-icons-wrapper {
+    height: 500px;
+    width: 100%;
+    margin-top: 80px;
+}
+
+.sidebar-components-menu {
+    pointer-events: none;
+    opacity: 0.5;
+    width: 100%;
+    height: 60px;
+    display: block;
+    bottom: 60px;
+    position: absolute;
+}
+
+.svg-icon {
+    width: 30px;
+    height: 33px;
+    margin: auto;
+    position: relative;
+    top: 13px;
+    display: block;
+}
+@media (max-height: 780px) {
+    .sidebar-icons {
+        height: 400px;
+    }
+    .sidebar-icons-wrapper {
+        margin-top: 30px;
+        height: 400px;
+    }
+    .sidebar .icon-wrapper {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-height: 810px) {
+    .sidebar-components-menu {
+        bottom: 15px;
+    }
+}
+
+.tab_schemas {
+    height: 31px;
+    overflow-y: hidden;
+    display: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border: 0px solid #ccc;
+    background-color: #212121;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    z-index: 11;
+    position: absolute;
+    margin-left: 80px;
+    width: 100%;
+    bottom: 0;
+}
+
+.tab_schemas::-webkit-scrollbar {
+    display: none;
+}
+
+/* Style the buttons that are used to open the tab_schemas content */
+
+.tab_schemas div {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 7px 28px;
+    font-size: 10px;
+    white-space: nowrap;
+    color: #ffffff;
+}
+
+.tablinks_schemas {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Change background color of buttons on hover */
+
+.tab_schemas div:hover {
+    background-color: #4c4c4c;
+}
+
+/* Create an active/current tablink class */
+
+.tab_schemas div.active {
+    background-color: #4c4c4c;
+}
+
+/* Style the tab_schemas content */
+
+.tabcontent_schemas {
+    overflow-y: hidden;
+    display: none;
+    overflow-x: hidden;
+    border: 0px solid #ccc;
+    border-top: none;
+    background-color: #f2f2f2;
+    width: 100%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+
+.change_schema_name {
+    border: 1px solid black !important;
+}
+
+.box_item {
+    top: 0%;
+    z-index: 10;
+    width: 5250px;
+    height: 1800px;
+    float: left;
+    position: absolute;
+    background-color: #f8f8f8;
+    border-style: dashed;
+    border-width: 0.5px;
+    background-image: url(../img/canvas_background.svg);
+}
+
+.close {
+    display: flex;
+    margin-left: 14px;
+    margin-top: -1px;
+}
+.schema_navigation {
+    display: inline;
+    z-index: 12;
+}
+
+.right_top_app_menu {
+    display: block;
+    position: absolute;
+    width: max-content;
+    font-weight: 600;
+    cursor: pointer;
+    top: 30px;
+    right: 110px;
+    z-index: 12;
+}
+.schema_navigation .icon {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+    background-repeat: no-repeat;
+}
+
+.schema_navigation .icon:hover {
+    opacity: 0.5 !important;
+}
+.previous:hover {
+    background-color: #ccc;
+    color: black;
+}
+
+.next:hover {
+    background-color: #ccc;
+    color: black;
+}
+
+.close_button {
+    background-color: #d61818;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px 11px;
+}
+
+.next {
+    background-color: #9b9898;
+    color: black;
+    text-decoration: none !important;
+    display: inline-block;
+    padding: 5px 11px;
+    font-size: 10px;
+}
+
+.round {
+    border-radius: 50%;
+}
+
+.tablinks {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.admin_side_menu {
+    position: absolute;
+    height: 40%;
+    width: max-content;
+    top: 100px;
+    display: block;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #f1f1f1;
+}
+.admin_side_menu a {
+    text-transform: capitalize;
+    color: black;
+    display: block;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: max-content;
+}
+
+.admin_option_content {
+    display: none;
+    width: 80%;
+    height: 75%;
+    background-color: #f1f1f1;
+    position: absolute;
+    top: 100px;
+    margin-left: 10%;
+    border-radius: 5px;
+}
+
+@media (max-width: 1380px) {
+    .admin_option_content {
+        margin-left: 12%;
+    }
+}
+
+.admin_buttons {
+    display: inline-block;
+    margin-right: 20px;
+    width: 100px;
+    height: 40px;
+    background-color: white;
+}
+
+.new_server_button {
+    left: 30px;
+    top: 30px;
+    z-index: 2;
+}
+.dropdown_content_admin {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 102%;
+    left: -1px;
+    z-index: 1;
+    border: 1px solid black;
+    top: 38px;
+}
+.admin_dropdown_option {
+    display: block;
+    border-bottom: 1px solid black;
+}
+.admin_dropdown_option:hover {
+    background-color: #bdbdbd;
+}
+
+.admin_select_box {
+    padding: 8px 12px;
+    color: #333333;
+    background-color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    width: 50%;
+    border: 1px solid black;
+    height: 40px;
+}

@@ -1,0 +1,65 @@
+#welcome_step_1 {
+    width: 450px;
+    height: max-content;
+    border-radius: 5px;
+    position: relative;
+    top: 50%;
+    margin: 0 auto;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#welcome_step_1 p {
+    text-align: justify;
+    padding: 15px;
+    text-align: left;
+}
+
+#welcome_step_1 ul {
+    margin-left: 30px;
+}
+#welcome_step_1 li {
+    list-style: circle;
+}
+
+
+#welcome_p {
+    position: absolute;
+    top: 165px;
+    left: 20px;
+    color: white;
+    font-size: 30px;
+}
+
+.welcome-balloons {
+    z-index: 100;
+    width: 250px;
+    height: max-content;
+    background-color: #212121;
+    color: white;
+    position: absolute;
+    display: none;
+    border-radius: 5px;
+}
+
+.welcome-balloons p {
+    padding: 10px;
+}
+
+.advance-tutorial {
+}
+
+.advance-tutorial:hover{
+    background-color: #C11C3F !important;
+    color: white !important;
+}
+
+/* @media (max-height: 768px) {
+    #welcome_step_1 {
+        max-height: 500px;
+        overflow: auto;
+        overflow-x: hidden;
+    }
+
+} */

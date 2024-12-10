@@ -1,0 +1,9 @@
+{
+  "LSTM":{
+    "id_name": {"text":"LSTM"},
+    "activation": {"select" : ["relu","tanh", "softmax","linear"]},
+    "return_sequences":{"select" : [true, false]},
+    "units":{"text":""}
+	}
+
+}

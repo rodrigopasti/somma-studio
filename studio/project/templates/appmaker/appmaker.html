@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+
+
+<head>
+    <style>
+        @font-face {
+            font-family: 'sofia';
+            src: url('../../static/font/Sofia Pro Light Az.otf');
+        }
+
+        body {
+            font-family: sofia !important;
+        }
+
+        .somma-icon {
+            background-image: url('../../static/img/icone_menu_superior_35px.png');
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+
+        .database-icon {
+            background-image: url('../../static/img/database_component_40px.png');
+            background-repeat: no-repeat;
+            background-position: 1px;
+        }
+
+        .somma-icon:hover {
+            opacity: .5;
+        }
+
+        .database-icon:hover {
+            opacity: .5;
+        }
+
+        .loader_app {
+            border: 4px solid #f3f3f3;
+            /* Light grey */
+            outline: none;
+            border-top: 4px solid #E23B3E;
+            /* Blue */
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 2s linear infinite;
+        }
+
+        .chat-circle {
+            width: 45px;
+            height: 45px;
+            background-image: url('../../static/img/discord-new.svg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        #chat-container {
+            position: fixed;
+            right: 0;
+            bottom: 55px;
+            border: none;
+            background: transparent;
+            z-index: 0;
+            padding: 15px;
+        }
+
+        .hide-loader {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        body {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #333333 !important;
+            zoom: 100%;
+            font-size: 12px;
+        }
+
+        [class*="col-"],
+        header,
+        footer,
+        nav,
+        aside,
+        section,
+        div[role="main"] {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        div[role="main"] {
+            background-color: #fff;
+        }
+
+        div[role="main"],
+        nav,
+        aside {
+            height: 420px;
+        }
+
+
+        .applicationsDropdown {
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            font-size: 12px;
+            padding-top: 20px;
+        }
+
+        .applicationsDropdown .active {
+            padding-bottom: 4px;
+            color: #C11C3F;
+            border-bottom: 2px solid #C11C3F;
+        }
+
+        .applicationsDropdown li {
+            display: inline;
+            margin: 8px;
+            color: white;
+        }
+    </style>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../static/icons/favicon.png">
+
+    <title>Somma.ai</title>
+
+    <!-- TODOS OS IMPORTS DE CSS -->
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="../../static/css/window_modal.css" rel="stylesheet">
+    <link href="../../static/css/dropdown_run.css" rel="stylesheet">
+    <link href="../../static/css/forms.css" rel="stylesheet">
+    <link href="../../static/css/appmaker.css" rel="stylesheet">
+    <link href="../../static/css/welcome_window.css" rel="stylesheet">
+    <link href="../../static/css/stickers.css" rel="stylesheet">
+    <link href="../../static/css/select2.min.css" rel="stylesheet">
+    <!-- Estilos do JQuery UI -->
+    <link rel="stylesheet" href="../../static/css/jquery-ui.min.css">
+
+    <style>
+        [class*="col-"],
+        header,
+        footer,
+        nav,
+        section,
+        div[role="main"] {
+            text-align: center;
+        }
+
+        header,
+        footer {
+            background-color: #474747;
+            border: 0px solid #474747;
+        }
+
+        div[role="main"] {
+            background-color: #fff;
+        }
+
+        div[role="main"],
+        nav,
+        aside {
+            height: 14px;
+        }
+
+
+        label {
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 7px;
+            padding: 4px 14px
+        }
+
+        .somma-table {
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+        .somma-table td th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        
+        .somma-table tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+        .inputs-config {
+            font-size: 12px;
+            height: 22px;
+            margin-top: 4px;
+        }
+
+        .inputs-config-label {
+            color: #FFFFFF;
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: default;
+            font-size: 12px;
+            margin: 5px;
+            padding: 0;
+        }
+
+        .images_1 {
+            border: 1px;
+            height: 45px;
+            width: 45px;
+            margin-right: 10px;
+            border-radius: 23px 23px;
+            background-color: #ffffff;
+        }
+
+        .images_2 {
+            border: 1px;
+            height: 45px;
+            width: 45px;
+            border-radius: 23px 23px;
+            background-color: #adadad;
+        }
+
+        .newAppIcon {
+            width: 30px;
+            display: inline-block;
+            height: 30px;
+            position: absolute;
+            top: 9px;
+            right: 10px;
+            background: #c11c3f2b;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 8px;
+            background-image: url(../../static/icons/add_new_app_icon.svg);
+        }
+
+        .application_item {
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .application_item:hover {
+            color: #C11C3F;
+        }
+
+        .applicationsActionsBtnWrapper {}
+
+        .applicationsActionsBtnWrapper button {
+            cursor: pointer;
+            color: #212121;
+            padding-top: 5px;
+            background-color: #E9E9E9;
+            width: 200px;
+            height: 40px;
+            display: block;
+            border-radius: 10px;
+            outline: none;
+            margin: 10px auto;
+            border: none;
+        }
+
+        .applicationsActionsBtnWrapper button:hover {
+            background-color: #212121;
+            color: #FFFFFF;
+        }
+
+        .refresh_loader_app {
+            z-index: 100;
+            border: 4px solid #f3f3f3;
+            display: none;
+            outline: none;
+            border-top: 4px solid #C11C3F;
+            border-radius: 50%;
+            width: 48px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transform: -webkit-translate(-50%, -50%);
+            transform: -moz-translate(-50%, -50%);
+            transform: -ms-translate(-50%, -50%);
+            height: 48px;
+            animation: spin 1.2s linear infinite;
+        }
+    </style>
+
+
+</head>
+
+<body style="background-color: #333333" data-demo-id="home" data-library="dom">
+
+    <!-- IMPORTS CORRETOS -->
+    <script src="../../static/js/panzoom.min.js"></script>
+    <script src="../../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../../static/js/jsplumb.min.js"></script>
+    <script src="../../static/js/lodash.min.js"></script>
+    <script src="../../static/js/ace/ace.js"></script>
+    <script src="../../static/js/ace/ext-language_tools.js"></script>
+    <script src="../../static/js/renderBlock.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/welcomeWindow.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/stickers.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/renderNeuralNetwork.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/Util.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/applicationsControl.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/usersControl.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/run.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/schemas.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/navBar.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/applicationAnalysis.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/showdown.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../static/js/jquery-ui.min.js"></script>
+    <script src="../../static/js/select2.full.min.js"></script>
+    <script src="../../static/js/select2.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../../static/js/jsencrypt.min.js?v=0.11"></script>
+
+    <!-- ESTÁ INFLUENCIANDO EM GRANDE PARTE DO ESTILO -->
+    <link rel="stylesheet" href="../../static/css/jsplumb.css">
+
+
+    <div id="sidebar" class="sidebar">
+
+        <!-- <div id="applications_def" class="somma-logo-wrapper somma-icon">
+            <div id="loader-app" class="loader_app"></div>
+        </div> -->
+
+        <div id="sidebar_icons" class="sidebar-icons-wrapper ">
+            <div id="sidebar_application_option" class="icon-wrapper" onclick="openApplicationTab('false')">
+                <img id="application_option_icon" src="../../static/icons/selected_option_icon.svg"
+                    class="selected-label">
+                <img src="../../static/icons/fluxogram_icon.svg" class="svg-icon" />
+            </div>
+
+            <div id="sidebar_datasets_option" class="icon-wrapper" onclick="openDatasets(null, 0)">
+                <img id="datasets_option_icon" src="../../static/icons/selected_option_icon.svg" class="selected-label">
+                <img src="../../static/icons/datasets_icon.svg" class="svg-icon" />
+            </div>
+
+            <a href="https://axondata.atlassian.net/wiki/spaces/wiki/overview" target="_blank" id="sidebar_help_option"
+                class="icon-wrapper">
+                <!-- <img id="help_option_icon" src="../../static/icons/selected_option_icon.svg" class="selected-label"> -->
+                <img src="../../static/icons/help_icon.svg" class="svg-icon" />
+            </a>
+
+            <hr style="border: 1px solid #646464; width: 50px; margin-right: 15px;">
+
+        </div>
+
+        <div id="sidebar_components_menu_option" class="sidebar-components-menu" onclick="openCloseMenu()">
+            <img id="components_menu_option_icon" src="../../static/icons/selected_option_icon.svg"
+                class="selected-label">
+            <img src="../../static/icons/components_menu_icon.svg" class="svg-icon" />
+        </div>
+
+
+    </div>
+
+
+    <!-- Inicialização de dados -->
+    <script>
+        var currentDropdownOption = ''
+        var shouldShowTutorial = true
+        user_plans = "{{data["planos"]}}" == '' ? [] : JSON.parse("{{data["planos"]}}".replace(/&#34;/g, '"'))
+        chat_id = "{{session["channel_id"]}}"
+        readComponentsTemplates(); //Faz a leitura dos templates de componentes
+        readComponentsAliases();
+        readParametersAliases();
+        readLayersTemplates(); //Faz a leitura de layers de redes neurais
+        getUserInstances();
+
+        function toggleOpenDropdown() {
+
+            let dropdown = document.getElementById("applications_dropdown")
+            if (dropdown.style.display == "none") {
+                handleDropdownOption(document.getElementById('applications_option'), 'applications')
+                document.getElementById("dropdown_arrow").style.transform = "rotate(180deg)"
+                $(dropdown).fadeIn(300)
+            }
+            else {
+                document.getElementById("dropdown_arrow").style.transform = "none"
+                currentDropdownOption = ''
+                $(dropdown).fadeOut(300)
+            }
+        }
+
+        function renderApplicationInfo(applicationName, isShared) {
+            const email = document.getElementById("my_account_email").value
+            document.getElementById("actions_buttons_wrapper").style.display = 'block'
+            document.getElementById("new_app_button_wrapper").style.display = 'none'
+            clickedApplication = applicationName
+            let application = isShared == true ? sharedApplicationsInfo[applicationName] : applicationsInfo[applicationName]
+
+            if (isShared) {
+                var buttonsWrapper = document.getElementById("shared_app_actions_buttons_wrapper")
+
+                var deleteBtn = document.getElementById("button_delete_shared_application")
+                if (email == sharedApplicationsInfo[applicationName]["author"]) {
+                    deleteBtn.style.display = 'block'
+                    deleteBtn.setAttribute("onclick", "deleteSharedApplication('" + applicationName + "')")
+                }
+                else deleteBtn.style.display = 'none'
+
+
+                document.getElementById("shared_application_info").style.display = 'block'
+                document.getElementById("input_shared_application_author").value = application["author"]
+                document.getElementById("input_shared_application_name").value = application["application_name"]
+                document.getElementById("input_shared_application_create_date").value = application["creation_date"]
+            }
+            else {
+                document.getElementById("application_info").style.display = 'block'
+                document.getElementById("input_application_name").value = application["application_name"]
+                document.getElementById("input_application_create_date").value = application["creation_date"]
+            }
+        }
+
+        function handleDropdownOption(element, option) {
+            document.getElementById("my_account_dropdown_content").style.display = 'none'
+            document.getElementById("shared_applications_dropdown_content").style.display = 'none'
+            document.getElementsByClassName('applicationsDropdown active')[0].classList.remove('active')
+            element.classList.add('applicationsDropdown', 'active')
+
+            document.getElementById(option + "_dropdown_content").style.display = "block"
+
+            var applicationsList = document.getElementById('applications_list').querySelectorAll('li')
+            for (let app of applicationsList) {
+                app.remove()
+            }
+
+            var sharedApplicationsList = document.getElementById('shared_applications_list').querySelectorAll('li')
+            for (let app of sharedApplicationsList) {
+                app.remove()
+            }
+
+            if (currentDropdownOption !== '' && currentDropdownOption !== option) {
+                document.getElementById(currentDropdownOption + "_dropdown_content").style.display = "none"
+            }
+            if (option == 'applications') {
+                let applicationsNames = Object.keys(applicationsInfo)
+                for (let name of applicationsNames) {
+                    let applicationItem = document.createElement('li')
+                    applicationItem.setAttribute("id", "app___" + name)
+                    applicationItem.textContent = name
+                    applicationItem.setAttribute("onclick", "renderApplicationInfo('" + name + "', false)")
+                    applicationItem.setAttribute("class", "application_item")
+                    document.getElementById('applications_list').appendChild(applicationItem)
+                }
+            }
+
+            else if (option == 'shared_applications') {
+
+                document.getElementById("screen-app-loader-app").style.display = "block";
+                sleep(500).then(() => {
+                    readSharedApplications(true);
+                    let applicationsNames = Object.keys(sharedApplicationsInfo)
+
+                    for (let name of applicationsNames) {
+                        let applicationItem = document.createElement('li')
+                        applicationItem.setAttribute("id", "shared_app___" + name)
+
+                        applicationItem.textContent = name
+                        applicationItem.setAttribute("onclick", "renderApplicationInfo('" + name + "', true)")
+                        applicationItem.setAttribute("class", "application_item")
+                        document.getElementById('shared_applications_list').appendChild(applicationItem)
+                    }
+                });
+
+
+            }
+
+            currentDropdownOption = option
+
+        }
+
+        function setShouldShowTutorial(shouldShow, balloonId) {
+            shouldShowTutorial = shouldShow
+            $("#" + balloonId).fadeOut()
+        }
+    </script>
+
+
+
+
+    <div id="main-page"
+        style="overflow-x: hidden; background-color: white; width: 100%; height: 100%; position: relative; overflow-y: hidden;">
+        <div id="screen-app-loader-app" class="refresh_loader_app"></div>
+        <div id="message_bar_wrapper" class="message-bar-wrapper">
+            <span class="close-messagebar" id="close_span_message_bar" onclick="closeMessageBar()"></span>
+            <div class="message-bar" id="message_bar"></div>
+        </div>
+
+
+        <div id="schemas" style="width: 100%; height: 100%; top: 3%; z-index: 0; overflow-y: hidden; display: block;">
+            <div id="welcome_step_1" class="welcome_window">
+                <img style="width: 100%; background-color: #212121; border-top-left-radius: 5px; border-top-right-radius: 5px;"
+                    src="../../static/img/Logo_branco.png">
+                </img>
+                <div
+                    style="background-color: lightgray; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
+                    <p>Primeira vez na Somma.ai? Clique em "Next" e navegue em suas funcionalidades básicas.
+                        Precisa de ajuda? Clique no ícone "?" do menu lateral e acesse a ajuda da Somma.ai. 
+                        Você encontrará uma série de tutoriais para construir suas aplicações, como utilizar componentes da Somma.ai, e como construir seu próprio componente utilizando Python.</p>
+                    <div class="applicationsActionsBtnWrapper" style="padding-bottom: 1px;">
+                        <button class="advance-tutorial" onclick="nextStep('step_1')">Next</button>
+                        <button class="advance-tutorial" onclick="closeOrSkip('welcome_step_1')">Skip
+                            tutorial</button>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="right_top_app_menu">
+                <div onclick="toggleOpenDropdown()">
+                    <span style=" user-select: none;">
+                        My Somma.ai
+                    </span>
+                    <span id="dropdown_arrow" style=" width: 15px; height: 15px; transition: 0.3s; position: relative; top: 2px; background-repeat: no-repeat; margin-left:
+                        10px; margin-top: 3px; display: inline-block; background-image:
+                        url('../../static/icons/dropdownArrow.svg');">
+                    </span>
+                </div>
+
+
+
+                <div id="applications_dropdown" style="background-color: white; user-select: none; display: none; width: 600px; right: -25px; height: 480px; box-shadow: 5px 5px 35px 0px #0000000D;
+                    border-radius: 5px; position: absolute ">
+                    <div
+                        style="background-color: #212121; height: 60px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                        <ul class="applicationsDropdown">
+                            <li id="applications_option" onclick="handleDropdownOption(this, 'applications')"
+                                class="applicationsDropdown active">
+                                Applications</li>
+                            <li id="shared_applications_option"
+                                onclick="handleDropdownOption(this, 'shared_applications')">Shared Applications</li>
+                            <li onclick="handleDropdownOption(this, 'my_account')">My Account</li>
+                        </ul>
+
+                    </div>
+
+                    <div id="applications_dropdown_content" style="display: block;">
+
+                        <div onclick="newApplication()"
+                            style="cursor: pointer; font-weight: 400; width: 150px; color:#C11C3F; position: absolute; top: 60px; right: 10px; height: 50px; padding-top: 15px; padding-left: 30px;">
+                            New App
+
+                            <span class="newAppIcon">
+                            </span>
+                        </div>
+                        <ul style="margin-top: 40px; max-height: 300px; overflow-y: scroll; width: 200px;"
+                            id="applications_list">
+
+                        </ul>
+                        <div style="width: 400px; position: absolute; right: 0; height: 270px; top: 100px; display: none;"
+                            id="application_info">
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Application Name
+                                </label>
+
+                                <input type="text" style="z-index: unset;" id="input_application_name" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Creation Date
+                                </label>
+
+                                <input type="text" style="z-index: unset;" readonly
+                                    id="input_application_create_date" />
+                            </div>
+                            <div id="actions_buttons_wrapper" class="applicationsActionsBtnWrapper">
+                                <button style="cursor: pointer; pointer-events: none; opacity: 0.5;"
+                                    id="action_open_button" onclick="openApp()">Open</button>
+                                <button onclick="updateInfo()">Save</button>
+                                <button onclick="deleteApp()">Delete</button>
+                                <button onclick="shareApplication()">Share</button>
+                            </div>
+
+                            <div id="new_app_button_wrapper" style="display: none;"
+                                class="applicationsActionsBtnWrapper">
+                                <button onclick="createOpen()">Create And Open</button>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                    <div id="shared_applications_dropdown_content" style="display: none;">
+
+                        <ul style="margin-top: 40px; max-height: 300px; overflow-y: scroll; width: 200px;"
+                            id="shared_applications_list">
+
+                        </ul>
+
+
+                        <div style="position: absolute;" class=" applicationsActionsBtnWrapper">
+                            <button onclick="refreshSharedApplications()">Refresh list</button>
+                        </div>
+                        <div style="width: 400px; position: absolute; right: 0; height: 270px; top: 100px; display: none;"
+                            id="shared_application_info">
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Author
+                                </label>
+
+                                <input type="text" readonly style="z-index: unset;"
+                                    id="input_shared_application_author" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Application Name
+                                </label>
+
+                                <input type="text" style="z-index: unset;" id="input_shared_application_name" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Creation Date
+                                </label>
+
+                                <input type="text" style="z-index: unset;" readonly
+                                    id="input_shared_application_create_date" />
+                            </div>
+                            <div id="shared_app_actions_buttons_wrapper" class="applicationsActionsBtnWrapper">
+                                <button onclick="cloneApplication()">Clone</button>
+                                <button onclick="cloneOpen()">Clone and Open</button>
+                                <button id="button_delete_shared_application" style="display: none;">Delete
+                                    Application</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="my_account_dropdown_content" style="display: none;">
+
+                        <div style="position: absolute; left: 50px;">
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Company
+                                </label>
+
+                                <input readonly id="my_account_company" type="text" style="z-index: unset;" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Email
+                                </label>
+
+                                <input readonly id="my_account_email" type="text" style="z-index: unset;" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Phone
+                                </label>
+
+                                <input id="my_account_phone" type="text" style="z-index: unset;" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Name
+                                </label>
+
+                                <input id="my_account_name" type="text" style="z-index: unset;" />
+                            </div>
+
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Role
+                                </label>
+
+                                <select id="my_account_role" style="z-index: unset;">
+                                    <option value="data_scientist">Cientista de Dados</option>
+                                    <option value="developer">Desenvolvedor</option>
+                                    <option value="it_director">Diretor de TI</option>
+                                </select>
+                            </div>
+
+                            <div class="applicationsActionsBtnWrapper">
+                                <button onclick="updateUserInfo()">
+                                    Save changes
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="position: absolute; right: 50px;">
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    Current password
+                                </label>
+
+                                <input type="password" id="my_account_current_password" type="text"
+                                    style="z-index: unset;" />
+                            </div>
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    New password
+                                </label>
+
+                                <input type="password" id="my_account_new_password" type="text"
+                                    style="z-index: unset;" />
+                            </div>
+
+                            <div class="input-field">
+                                <label style="font-weight: 400;" class="label-style">
+                                    New password
+                                </label>
+
+                                <input type="password" id="my_account_new_password2" type="text"
+                                    style="z-index: unset;" />
+                            </div>
+
+                            <div class="applicationsActionsBtnWrapper">
+                                <button onclick="updatePassword()">
+                                    Change password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- <div class="no-app-msg" style="text-align: center;" id="no_applications_msg">No Open Application</div> -->
+            <!--menu de components -->
+            {% include "appmaker/components_menu.html" %}
+
+            <div id="schema_navigation_wrapper"
+                style="position: fixed; width: 700px; height: 50px; z-index: 12; bottom: 0; right: 70px; top: calc(100vh - 85px); display: none;">
+                <div id="components_actions" class="schema_navigation" style="margin-right: 13px;">
+
+                    <a href="#" id="copy_components_icon" draggable="false" class="icon" title="Copy components"
+                        style="background-image: url('../../static/icons/copy_components_icon.svg');"
+                        onclick="componentsKeyboardEvt(event, schema)"></a>
+                    <a href="#" id="paste_components_icon" draggable="false" class="icon" title="Paste components"
+                        style="background-image: url('../../static/icons/paste_components_icon.svg');"
+                        onclick="componentsKeyboardEvt(event, schema)"></a>
+                    <a href="#" id="cut_components_icon" draggable="false" class="icon" title="Cut components"
+                        style="background-image: url('../../static/icons/cut_components_icon.svg');"
+                        onclick="componentsKeyboardEvt(event, schema)"></a>
+                    <a href="#" id="undo_actions_icon" draggable="false" class="icon" title="Undo"
+                        style="background-image: url('../../static/icons/undo_icon.svg');"
+                        onclick="componentsKeyboardEvt(event, schema)"></a>
+                    <a href="#" id="redo_actions_icon" draggable="false" class="icon" title="Redo"
+                        style="background-image: url('../../static/icons/redo_icon.svg');"
+                        onclick="componentsKeyboardEvt(event, schema)"></a>
+
+                </div>
+
+                <div id="schema_navigation" class="schema_navigation">
+                    <a id="change_schema_name_button" title="Edit Schema Name" href="#" draggable="false" class="icon"
+                        style="background-image: url('../../static/icons/edit_schema_icon.svg');"></a>
+                    <a href="#" draggable="false" class="icon"
+                        style="background-image: url('../../static/icons/previous_schema_icon.svg');"
+                        onclick="sideScroll('buttons', 'left', 1, Object.keys(jsInstances).length * 200, 50);"></a>
+                    <a href="#" draggable="false" class="icon"
+                        style="background-image: url('../../static/icons/previous2_schema_icon.svg');"
+                        onclick="sideScroll('buttons', 'left', 25, 200, 50);"></a>
+                    <a href="#" draggable="false" class="icon"
+                        style="background-image: url('../../static/icons/next2_schema_icon.svg');"
+                        onclick="sideScroll('buttons', 'right', 25, 200, 50);"></a>
+                    <a href="#" draggable="false" class="icon"
+                        style="background-image: url('../../static/icons/next_schema_icon.svg');"
+                        onclick="sideScroll('buttons', 'right', 1, Object.keys(jsInstances).length * 200, 50);"></a>
+
+                </div>
+                <div id="schema_actions" class="schema_navigation" style="right: 0; position: absolute;">
+                    <a href="#" draggable="false" title="Create Schema" class="icon"
+                        style="background-image: url('../../static/icons/create_schema_icon.svg');"
+                        onclick="createNewSchema();"></a>
+                    <a href="#" draggable="false" title="Delete Schema" class="icon"
+                        style="background-image: url('../../static/icons/delete_schema_icon.svg');"
+                        onclick="deleteSchema(schema);"></a>
+                    <a href="#" draggable="false" id="application_analysis_button" title="Application Analysis"
+                        class="icon" style="background-image: url('../../static/icons/app_analysis_icon.svg');"
+                        onclick="openCloseAppAnalysis(this);"></a>
+                </div>
+            </div>
+
+
+            <div id="buttons" class="tab_schemas">
+
+                <div id="btn_plus" class="tablinks_schemas active"> + </div>
+
+            </div>
+
+            <!--janela de análise da aplicação -->
+            {% include "appmaker/app_analysis.html" %}
+
+            <!-- janela de custom components  -->
+            {% include "custom_components/custom_components.html" %}
+
+        </div>
+
+        <div id="datasets" style="width: 100%; height: 100%; z-index: 1; display: none;"> </div>
+
+        <!-- Barra de mensagens  -->
+        {% include "appmaker/message_bar.html" %}
+        <!-- janela de gerenciamento de aplicações -->
+        {% include "applications/applications.html" %}
+        <!-- Tela de admin -->
+
+
+    </div>
+
+    <script>
+
+    </script>
+    <script>
+        openApplicationTab(true); //Ao carregar o studio, a janela de aplicações já vem aberta
+        readApplications(); //Faz a leitura de dados das aplicações do usuário (apenas depois de carregar a página)
+        renderSommaWiki();
+        renderDiscordButton();
+        getUserInfo(); //Faz a leitura dos dados do usuário (tela de My Account)
+
+
+    </script>
+
+</body>
+
+</html>

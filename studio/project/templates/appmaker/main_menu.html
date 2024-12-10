@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+/*----- MENU PRINCPIPAL -------------------*/
+/* The side navigation menu */
+.main_menu_nav {
+  height:0px; /* 100% Full-height */
+  width: 175px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 10000; /* Stay on top */
+  top: 49px; /* Stay at the top */
+  left: 35px;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 0px; /* Place content 42px from the top */
+  transition: 0.1s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.main_menu_nav a {
+  padding: 5px 5px 5px 22px;
+  text-decoration: none;
+  font-size: 12px;
+  color: #818181; /*#4c4c4c  #818181*/
+  display: none;
+  transition: 0.01s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.main_menu_nav a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.main_menu_nav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 17px;
+  font-size: 25px;
+  margin-left: 35px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 14px;
+}
+
+/* On smaller screens, where height is less than 315px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 315px) {
+  .main_menu_nav {padding-top: 10px;}
+  .main_menu_nav a {font-size: 12px;}
+}
+
+
+</style>
+
+
+
+
+<body>
+  <!-- INÍCIO DO MENU PRINCIPAL -->
+  <div id="main_menu_somma" class="main_menu_nav">
+    <a id= "applications_def" href="javascript:void(0)" class="main_menu_text"> My Applications </a>
+    <a href="javascript:void(0)" class = "main_menu_text"> My Account </a>
+    <a href="javascript:void(0)" class = "main_menu_text"> Studio Configurations </a>
+    <a href="javascript:void(0)" class = "main_menu_text"> Core Configurations </a>
+    <a href="javascript:void(0)" class = "main_menu_text"> Logout from SOMMA </a>
+  </div>
+
+</body>
+
+
+<script>
+  mainMenuClosed = true;
+  function openCloseMainMenu(){
+    if (mainMenuClosed == true){
+      document.getElementById("main_menu_somma").style.height = "175px";
+      mainMenuClosed = false;
+    }
+    else{
+      document.getElementById("main_menu_somma").style.height = "0px";
+      mainMenuClosed = true;
+      var menuTextElements = document.getElementsByClassName("main_menu_text")
+      for (var i = 0; i < menuTextElements.length; i++) {
+        menuTextElements[i].style.display = "none";
+      }
+    }
+  }
+
+  function closeMainMenu(){
+      document.getElementById("main_menu_somma").style.height = "0px";
+      mainMenuClosed = true;
+      var menuTextElements = document.getElementsByClassName("main_menu_text")
+      for (var i = 0; i < menuTextElements.length; i++) {
+        menuTextElements[i].style.display = "none";
+      }
+  }
+
+  /*
+  Fechar janela ao clicar fora
+  */
+  /*
+  $("#main_menu_somma").focusout(function(){
+    document.getElementById("main_menu_somma").style.height = "0px";
+    mainMenuClosed = true;
+    var menuTextElements = document.getElementsByClassName("main_menu_text")
+    for (var i = 0; i < menuTextElements.length; i++) {
+      menuTextElements[i].style.display = "none";
+    }
+  });
+  */
+  /*
+  FUNÇÕES PARA MANIPULAR O APARECIMENTO DOS TEXTOS QUANDO ABERTO POR COMPLETO
+  O MENU E SUBMENU
+  */
+
+  function showMainMenu(){
+    if (mainMenuClosed == false){
+      var menuTextElements = document.getElementsByClassName("main_menu_text")
+      for (var i = 0; i < menuTextElements.length; i++) {
+        menuTextElements[i].style.display = "block";
+      }
+    }
+  }
+
+  document.getElementById("main_menu_somma").addEventListener("transitionend", showMainMenu);
+  //Fechar menu quando clica em alguma opção
+  document.getElementById("main_menu_somma").addEventListener("click", openCloseMainMenu);
+  document.getElementById("main_menu_somma").addEventListener("mouseleave", closeMainMenu);
+
+</script>
+
+
+</html>

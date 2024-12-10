@@ -1,0 +1,367 @@
+{
+    "Union": {
+        "id_name": "Union",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "component_type": "process",
+        "input_dim": 200,
+        "help": "Two or more datasets union (vertical union).",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191234092/Union"
+    },
+
+    "Attributes Union": {
+        "id_name": "Attributes Union",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "component_type": "process",
+        "input_dim": 200,
+        "help": "Performs the union of two or more datasets in their attributes (horizontal union).",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201324/Attributes+Union"
+    },
+
+    "Concatenate Attributes": {
+        "id_name": "Concatenate Attributes",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"attributes attributes\" \" separator separator \" \" name id_name \" ",
+        "attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "List of attributes, separated by commas."
+        },
+        "separator": {
+            "select": [" ", "-", "_"],
+            "help": "Separator for the new attribute name and value."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Concatenates two or more attributes values into a single attribute.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201379/Concatenate+Attributes"
+    },
+
+    "Filter": {
+        "id_name": "Filter",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"attributes attributes\" \" values values \" \" condition contains_logic \" \" attribute_logic attribute_logic \" \" name id_name \" ",
+        "attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Attribute to apply the filter."
+        },
+        "values": {
+            "textlist": "",
+            "required": true,
+            "help": "List of values ​​to filter, separated by comma. Special filters: _null, _today, _yesterday, _this_week, _last_week, _this_month, _last_month, _this_year, _last_year, _sunday, _monday, _tuesday, _wednesday, _thursday, _friday and _saturday"
+        },
+        "condition": {
+            "select": [
+                "contains",
+                "not_contains",
+                "greater_than",
+                "greater_equal",
+                "less_than",
+                "less_equal",
+                "not_equal_to",
+                "equal_to"
+            ],
+            "help": ""
+        },
+        "contains_logic": {
+            "select": ["or", "and"],
+            "help": "If the filter is of type contains or not_contains, the input values ​​can be tied to an OR / AND logic."
+        },
+        "attribute_logic": {
+            "select": ["or", "and"],
+            "help": "Logic to tie the filter with multiple attributes."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Performs filters on tabular data and text.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201404/Filter"
+    },
+
+    "Add Attributes": {
+        "id_name": "Add Attributes",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "component_type": "process",
+        "input_dim": 1,
+        "attributes_set": {
+            "subform": [{ "attribute": "", "value": "" }],
+            "max_entries": 10,
+            "help": "Set of values ​​to be defined in the sub-parameters attribute and value."
+        },
+        "help": "Adds attributes with constant values ​​to all data objects.",
+        "grid_config": " \"attributes_set attributes_set\" \" id_name name \"",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191135835/Add+Attributes"
+    },
+
+    "Rename Attributes": {
+        "id_name": "Rename Attributes",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"attributes_set attributes_set\" \" id_name name \"",
+        "attributes_set": {
+            "subform": [{ "original": "", "new": "" }],
+            "max_entries": 10,
+            "help": "Set of values ​​to be defined in the subparameters original (original value) and new (new value)."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Renames attributes of a dataset.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191135844/Rename+Attributes"
+    },
+
+    "Copy Attributes": {
+        "id_name": "Copy Attributes",
+        "grid_config": " \"attributes_set attributes_set\" \" id_name name \"",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "attributes_set": {
+            "subform": [{ "original": "", "copy": "" }],
+            "max_entries": 10,
+            "help": "Set of values ​​to be defined in the sub parameters original (original attribute) and copy (copy)."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Copies attributes in a dataset.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201362/Copy+Attributes"
+    },
+
+    "Delete Attributes": {
+        "id_name": "Delete Attributes",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"attributes attributes\" \" match_type match_type \" \" id_name name \" ",
+        "attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "List of attributes, separated by comma."
+        },
+        "match_type": {
+            "select": ["equals", "contains"],
+            "help": "Attribute name match type"
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Generates a dataset containing the original attributes, except for the deleted one(s).",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201339/Delete+Attributes"
+    },
+
+    "Select Attributes": {
+        "id_name": "Select Attributes",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"attributes attributes\" \" match_type match_type \" \"id_name name \" ",
+        "attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "List of attributes, separated by comma."
+        },
+        "match_type": {
+            "select": ["equals", "contains"],
+            "help": "Attribute name match type"
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Generates a dataset containing only the selected attributes of a dataset.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201355/Select+Attributes"
+    },
+
+    "Join": {
+        "id_name": "Join",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"right_attribute right_attribute\" \"left_attribute left_attribute\" \"join_condition join_type\" \"id_name name \" ",
+        "right_attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Attribute coming from the first dataset."
+        },
+        "left_attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Attribute coming from the second dataset."
+        },
+        "join_condition": {
+            "select": [
+                "contains",
+                "greater_than",
+                "greater_equal",
+                "less_than",
+                "less_equal",
+                "not_equal_to",
+                "equal_to"
+            ],
+            "help": "Join condition."
+        },
+        "join_type": {
+            "select": [
+                "inner",
+                "cross",
+                "outer",
+                "full",
+                "full_outer",
+                "left",
+                "left_outer",
+                "right",
+                "right_outer",
+                "semi",
+                "left_semi",
+                "anti",
+                "left_anti"
+            ],
+            "help": "Join type."
+        },
+        "component_type": "process",
+        "input_dim": 2,
+        "help": "Performs Join between two datasets with tabular data, and between a dataset containing text and another with tabular data",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191168535/Join"
+    },
+
+    "Group By": {
+        "id_name": "Group By",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"aggregated_attributes aggregated_attributes\" \"group_attributes group_attributes\" \"mean_attributes mean_attributes\" \"sum_attributes sum_attributes\" \"count_attributes count_attributes\" \"id_name name \" ",
+        "aggregated_attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Attributes to output as list."
+        },
+        "group_attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Attributes to group."
+        },
+        "mean_attributes": {
+            "textlist": "",
+            "help": "Attributes to output as average of its group."
+        },
+        "sum_attributes": {
+            "show_attributes": true,
+            "textlist": "",
+            "help": "Attributes to output as sum of its group."
+        },
+        "count_attributes": {
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Attributes to output as count of its groupe."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Performs grouping of data.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/623083527/Group+Join"
+    },
+
+    "Sort": {
+        "id_name": "Sort",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Performs sort of data.",
+        "grid_config": " \"sort_attributes sort_attributes\" \" sort_conditions sort_conditions \" \"id_name name \" ",
+        "sort_attributes": {
+            "required": true,
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Attributes which your data will be sorted"
+        },
+        "sort_conditions": {
+            "required": true,
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Conditions to sort (ASC for ascending and DESC for descending). You can have one global condition or one condition to each sort_attributes."
+        },
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909653801/Sort"
+    },
+
+    "SQL Query": {
+        "id_name": "SQL Query",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "query": { "textarea": "", "help": "Query." },
+        "component_type": "process",
+        "input_dim": 200,
+        "grid_config": " \" id_name name \" \" query query \" ",
+        "help": "Performs an SQL query on N input datasets.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201430/SQL+Query"
+    },
+
+    "Sampling": {
+        "id_name": "Sampling",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "grid_config": " \"attribute attribute\" \" fraction random_seed \" \"id_name name \" ",
+        "attribute": {
+            "required": true,
+            "textlist": "",
+            "show_attributes": true,
+            "help": "Stratification attribute. If left blank Sampling just makes a random split."
+        },
+        "fraction": {
+            "text": 0.5,
+            "required": true,
+            "help": "Fraction of the first output dataset. The remainder is assigned to the second output dataset."
+        },
+        "random_seed": { "text": 5, "required": true, "help": "Random seed." },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Divides a dataset into two other datasets. Division is performed randomly only or stratified if an attribute is specified.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201411/Sampling"
+    },
+
+    "Limit": {
+        "id_name": "Limit",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "limit_quantity": 100,
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Limits the output by the given parameter",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909752073/Limit"
+    },
+
+    "State Router": {
+        "id_name": "State Router",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "output_state": {
+            "select": ["1-apply / 2-learning", "1-learning / 2-apply"],
+            "help": "Output-state relation."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Routes a stream according to the current state of the application (learning or apply). It has as input a dataset and routing in two outputs, one for each state.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201420/State+Router"
+    },
+
+    "Flow Breaker": {
+        "id_name": "Flow Breaker",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "break_flow": { "select": [true, false], "help": "" },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "",
+        "help_link": ""
+    },
+
+    "One To Many": {
+        "id_name": "One To Many",
+        "icon_type": "Dataset Operations",
+        "name": "",
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Copy a input to several outputs.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/685703641/One+to+Many"
+    }
+}

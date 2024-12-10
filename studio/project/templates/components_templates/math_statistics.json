@@ -1,0 +1,84 @@
+{
+  "Correlation":{
+    "id_name": "Correlation",
+    "icon_type": "Descriptive Analysis",
+    "name":"",
+    "input_dim": 1,
+    "help":"Performs Pearson Correlation between all attributes.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191234180/Correlation"
+  },
+  "Grouped Summary":{
+    "id_name": "Grouped Summary",
+    "icon_type": "Descriptive Analysis",
+    "name":"",
+    "grid_config": " \"attribute attribute\" \"granularity window\" \"id_name name \" ",
+    "attribute":{"textlist":"", "show_attributes": true, "required": true, "help":"Attribute to be grouped."},
+    "granularity":{"select" : ["week", "day", "hour", "minute", "second", "millisecond", "microsecond"], "help":"Time granularity."},
+    "window":{"text":1, "required": true, "help":"Observation window in integer number."},
+    "input_dim": 1,
+    "help":"Generates statistics from data objects grouped by some attribute. If this attribute is a DateTime type, then it is possible to choose the granularity and an observation window. The resultant are time series for each attribute.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201492/Grouped+Summary"
+  },
+
+  "Summary":{
+    "id_name": "Summary",
+    "icon_type": "Descriptive Analysis",
+    "name":"",
+    "input_dim": 1,
+    "help":"Generates statistics about a dataset.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191430660/Summary"
+  },
+
+  "Custom Expression":{
+    "id_name": "Custom Expression",
+    "icon_type": "Descriptive Analysis",
+    "name":"",
+    "grid_config": " \"expression expression\" \"id_name name \" ",
+    "expression":{"textarea":"", "help":"Input Equation."},
+    "input_dim": 1,
+    "help":"Performs calculation on attributes of a dataset. The calculation is defined by an input equation. Supports all mathematical operators and trigonometric functions.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191365147/Custom+Math"
+  },
+
+  "Count Data Objects": {
+    "id_name": "Count Data Objects",
+    "icon_type": "Descriptive Analysis",
+    "name": "",
+    "grid_config": " \"attributes attributes\" \" suffix prefix \" \" count_type show_percentage \" \" group_by group_by \" \" name id_name \" ",
+    "attributes" : {"textlist" : "", "show_attributes": true},
+    "input_dim": 1,
+    "help": "Counts the number of Data Objects given a stream",
+    "help_link": "",
+    "suffix" : "",
+    "prefix" : "count",
+    "count_type" : {"select" : ["all_records", "unique", "both"]},
+    "show_percentage" : {"select" : [false, true]},
+    "group_by" : ""
+  },
+
+  "Statistical Filter": {
+    "id_name": "Statistical Filter",
+    "icon_type": "Descriptive Analysis",
+    "name": "",
+    "grid_config": " \"attribute attribute\" \"analysis_type show_statistics\" \"output_pareto output_iqr\" \"id_name name \" ",
+    "attribute" : {"show_attributes": true, "required" : true, "textlist" : ""},
+    "input_dim": 1,
+    "help": "Filters a dataset by Pareto or Interquartile Range given an attribute",
+    "help_link": "",
+    "analysis_type" : {"select" : ["Interquartile Range", "Pareto"]},
+    "output_pareto" : {"select" : ["Class A", "Class B", "Class C"]},
+    "output_iqr" : {"select" : ["Not Outliers", "Outliers", "First Quarter", "Second Quarter", "Third Quarter", "Fourth Quarter"]},
+    "show_statistics" : {"select" : [false, true]}
+  },
+
+  "Histogram": {  
+    "id_name": "Histogram",
+    "icon_type": "Descriptive Analysis",
+    "name": "",
+    "grid_config": " \"attribute attribute\" \"number_of_bins number_of_bins\" \"id_name name \" ",
+    "attribute": {"show_attributes": true, "required": true, "textlist": ""},
+    "number_of_bins": {"required": true, "text": 10, "help" : "Number of bins to segment the attribute"},
+    "input_dim": 1,
+    "help": "Makes a histogram of given attribute."
+  }
+}

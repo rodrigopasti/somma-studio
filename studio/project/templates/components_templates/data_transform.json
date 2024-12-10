@@ -1,0 +1,228 @@
+{
+  "Replace":{
+    "id_name": "Replace",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "attributes_set":{"subform": [{"attributes":"", "new":"", "original":""}], "max_entries":10, "help": "Set of values ​​to be defined in the sub-parameters attribute (attribute), value (value to be replaced) and replace (new value)."},
+    "input_dim": 1,
+    "grid_config": " \"attributes_set attributes_set\" \" id_name name \"",
+    "help":"Replaces attribute values.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191332360/Replace"
+  },
+
+  "Missing Values":{
+    "id_name": "Missing Values",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"attributes attributes\" \" num_strategy str_strategy \" \" name id_name \" ",
+    "attributes":{"textlist":"", "show_attributes": true, "help":"List of attributes."},
+    "num_strategy": {"select" : ["mean", "median", "none"], "help":"Strategy for numerical values: mean or median."},
+    "str_strategy": {"select" : ["mode", "?", "none"], "help":"Strategy for categorical values: complete with mode or with “?”."},
+    "input_dim": 1,
+    "help":"Complete values ​​missing in numeric or categorical attributes.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191332367/Missing+Values",
+    "component_type": "model"
+  },
+
+  "Numeric Conversion":{
+    "id_name": "Numeric Conversion",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"attributes attributes\" \" numeric_type numeric_type \" \" name id_name \" ",
+    "attributes":{"textlist":"", "show_attributes": true, "help":"List of attributes. If left blank, it forces conversion on every attribute. "},
+    "numeric_type": {"select" : ["float", "double", "integer", "long"], "help":"Type of numeric value."},
+    "input_dim": 1,
+    "help":"Performs conversion of attributes in String to Numeric format.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201437/Numeric+Conversion"
+  },
+
+  "String Conversion":{
+    "id_name": "String Conversion",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"attributes attributes\" \" name id_name \" ",
+    "attributes":{"textlist":"", "show_attributes": true, "help":"List of attributes. If left blank, it forces conversion on every attribute. "},
+    "input_dim": 1,
+    "help":"Performs conversion of attributes to string format.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201437/Numeric+Conversion"
+  },
+
+  "Type Inference":{
+    "icon_type": "Data Transformation",
+    "component_type": "",
+    "help": "Infers and converts numeric data with inconsistent values.",
+    "id_name": "Type Inference",
+    "input_dim": 1,
+    "int_difference_percentage": 0.1,
+    "name": "",
+    "null_drop_percentage": 0.1,
+    "type_inference_percentage": 0.7,
+    "attributes":{"textlist":""},
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909752084/Type+Inference"
+  },
+
+  "Geo Conversion" : {
+    "city_attribute": {
+      "required": true,
+      "text": ""
+    },
+    "component_type": "",
+    "country": {
+      "select": [
+        "Brazil"
+      ]
+    },
+    "help": "Converts city and/or state to latitude and longitude.",
+    "icon_type": "Data Transformation",
+    "id_name": "Geo Conversion",
+    "input_dim": 1,
+    "name": "",
+    "state_attribute": "",
+    "suffix" : "",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909719333/Geo+Conversion"
+  },
+
+  "Geo Distance" : {
+    "icon_type": "Data Transformation",
+    "component_type": "",
+    "help": "Calculates the distance between two pairs of latitude and longitude points.",
+    "id_name": "Geo Distance",
+    "input_dim": 1,
+    "latitude_destination": {
+      "required": true,
+      "text": "latitude_destination"
+    },
+    "latitude_source": {
+      "required": true,
+      "text": "latitude_source"
+    },
+    "longitude_destination": {
+      "required": true,
+      "text": "longitude_destination"
+    },
+    "longitude_source": {
+      "required": true,
+      "text": "longitude_source"
+    },
+    "name": "",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909621086/Geo+Distance"
+  },
+
+  "Lat Long Conversion" : {
+    "icon_type": "Data Transformation",
+    "component_type": "",
+    "help": "Converts latitude and longitude to city and state.",
+    "id_name": "Lat Long Conversion",
+    "input_dim": 1,
+    "name": "Lat Long Conversion",
+    "latitude_attribute": "latitude",
+    "longitude_attribute": "longitude",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909752105/Lat+Long+Conversion"
+  },
+
+  "DateTime Conversion":{
+    "id_name": "DateTime Conversion",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"attributes attributes\" \" pattern datetime_type \"  \" custom_pattern custom_pattern \" \" name id_name \" ",
+    "attributes":{"textlist":"", "show_attributes": true,"required": true, "help":"List of attributes."},
+    "pattern": {
+      "select" : [
+        "dd/MM/yyyy",
+        "dd/MM/yyyy hh:mm:ss",
+        "dd/MM/yyyy HH:mm:ss",
+        "dd-MM-yyyy",
+        "dd-MM-yyyy hh:mm:ss",
+        "dd-MM-yyyy HH:mm:ss",
+        "yyyy-MM-dd",
+        "yyyy-MM-dd hh:mm:ss",
+        "yyyy-MM-dd HH:mm:ss"
+        ],
+      "help":"Datetime pattern."
+    },
+    "custom_pattern":{"text":"","help":"Custom datetime pattern."},
+    "datetime_type" : {"select" : ["default", "utc", "unix"]},
+    "input_dim": 1,
+    "help":"Performs conversion of attributes in String format to DataTime.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191365133/DateTime+Conversion"
+  },
+
+  "Features Assembly":{
+    "id_name": "Features Assembly",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"target_attributes target_attributes\" \" scaler keep_scaled \" \" name id_name \" ",
+    "target_attributes":{"textlist":"", "show_attributes": true, "help":"Attributes target for Machine Learning components."},
+    "scaler": {"select" : ["none", "minmax", "standard"], "help":"Normalizer type."},
+    "keep_scaled": {"select" : [false, true], "help":"Keep normalized values ​​in dataset."},
+    "input_dim": 1,
+    "help":"Generates a number of attributes that aim to transform a dataset: (1) Transforms categorical attributes into numeric. (2) Performs normalization. (3) Transforms data into a feature set for Machine Learning components. (4) Separates an attribute to be learned in a target label.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201444/Features+Assembly"
+  },
+
+  "Categorical Encoder":{
+    "id_name": "Categorical Encoder",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"ignore_attributes ignore_attributes\" \" name id_name \" ",
+    "ignore_attributes":{"textlist":"","show_attributes": true, "help":"Attributes to ignore in enconder."},
+    "input_dim": 1,
+    "help":"Transforms categorical attributes into numeric.",
+    "component_type": "model",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/685703651/Categorical+Encoder"
+  },
+
+  "Normalizer":{
+    "id_name": "Normalizer",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"ignore_attributes ignore_attributes\" \" scaler scaler \" \" name id_name \" ",
+    "ignore_attributes":{"textlist":"", "show_attributes": true, "help":"Attributes to ignore in normalizer."},
+    "scaler": {"select" : ["minmax", "standard"], "help":"Normalizer type."},
+    "input_dim": 1,
+    "help":"Performs normalization in a dataset.",
+    "component_type": "model",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/685769267/Normalizer"
+  },
+
+  "Extract Image":{
+    "id_name": "Extract Image",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"attributes attributes\" \" channels normalized \" \" name id_name \" ",
+    "attributes":{"textlist":"content", "show_attributes": true, "help":"Input attributes in binary type."},
+    "channels": {"select" : ["RGBA", "RGB", "grayscale"], "help":"Output image channels."},
+    "normalized": {"select" : [true, false], "help":"Normalize each pixel value, where the max value is equal to 255."},
+    "input_dim": 1,
+    "help":"Extract image content from binary attributes.",
+    "component_type": "process",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1977679873/Extract+Image"
+  },
+
+  "Extract Text":{
+    "id_name": "Extract Text",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "grid_config": " \"attributes attributes\" \" name id_name \" ",
+    "attributes":{"textlist":"content", "show_attributes": true, "help":"Input attributes in binary type."},
+    "input_dim": 1,
+    "help":"Extract text content from binary attributes.",
+    "component_type": "process",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1978138625/Extract+Text"
+  },
+
+  "AES Encrypt Decrypt":{
+    "id_name": "AES Encrypt Decrypt",
+    "icon_type": "Data Transformation",
+    "name":"",
+    "attributes":{"textlist":"", "show_attributes": true, "help":"Input attributes to encrypt or decrypt."},
+    "process":{"select" : ["encrypt", "decrypt"], "help":"Process type: encrypt or decrypt."},
+    "base64":{"select" : [true, false], "help":"If true, apply a base64 after encrypt or before decrypt."},
+    "generate_keys":{"select" : [true, false], "help":"If true, the component generate the key and IV."},
+    "input_dim": 2,
+    "help":"Data Encrypt and Decrypt with AES (Advanced Encryption Standard - Rijndael).",
+    "component_type": "process",
+    "help_link": ""
+  }
+
+}

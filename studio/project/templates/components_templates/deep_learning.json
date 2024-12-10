@@ -1,0 +1,18 @@
+{
+  "Simple Convolution Network":{
+    "id_name": "Simple Convolution Network",
+    "name":"",
+    "component_type": "model",
+    "target_attribute": {"text":"", "required": true, "help":"The target class."},
+    "eval_measure": {"select" : ["f1", "acc"], "help":"Evaluation measure (f1 or accuracy)."},
+    "p_train": {"text":0.8, "required": true, "help":"Fraction of the training data. The remainder is assigned to the validation data."},
+    "min_acc_stop": {"text":98, "required": true, "help":"Minimum accuracy to stop training."},
+    "max_epochs": {"text":100, "required": true, "help":"Maximum number of epochs."},
+    "n_exp":{"text":1, "required": true, "help":"Number of training repetitions resampling the dataset."},
+    "attribute_in": {"text":"text_word2vec", "required": true, "help":"Input attribute in two-dimensional tensor format (arrays)."},
+    "state": {"select" : ["from stream", "learning", "apply"], "help":"Considers or not the state coming from the stream."},
+    "input_dim": 1,
+    "help":"Neural Network with one convolution layer, one max pooling and 3 feedforwards. This neural network is suitable for classification of texts transformed from Word Embeddings."
+  }
+
+}

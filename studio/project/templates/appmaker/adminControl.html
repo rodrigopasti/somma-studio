@@ -1,0 +1,2998 @@
+<style>
+    .admin-label {
+        display: inline;
+        text-align: center;
+        padding: 7px;
+        border: 1px solid black;
+        background-color: white;
+    }
+
+    .instances-table {
+        background-color: white;
+        width: 100%;
+        margin-bottom: 15px;
+        text-align: center;
+        border: none;
+    }
+
+    .instances-table tr th {
+        border: none;
+    }
+
+    .instances-table tr td {
+        border: none;
+    }
+
+    .add-servers-field {
+        border: 1px solid black;
+        color: #333333;
+        background-color: white;
+        cursor: pointer;
+        display: inline;
+        height: 35px;
+    }
+
+    .add-servers-name-field {
+        border: 1px solid black;
+        height: 35px;
+    }
+
+    .cards-row {
+        margin: 0 -5px;
+    }
+
+    .cards-row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .cards-column {
+        padding: 15px;
+        float: left;
+        width: 24%;
+        max-width: 310px;
+        height: 400px;
+    }
+
+    .credential-card {
+        position: relative;
+        height: 100%;
+        overflow-y: auto;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        text-align: center;
+        background-color: white;
+    }
+
+    .card-modal {
+        position: absolute;
+        text-align: center;
+        left: 50%;
+        overflow-y: auto;
+        border-radius: 5px;
+        top: 40%;
+        border: 2px solid #d3d3d3;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        width: 500px;
+        max-height: 400px;
+        z-index: 999;
+        display: block;
+        transition: all 0.3s;
+    }
+
+    .close-modal-btn {
+        border: none;
+        background: transparent;
+        color: black;
+        position: absolute;
+        top: 5px;
+        font-weight: 600;
+        font-size: 20px;
+        left: 5px;
+    }
+
+    .close-modal-btn:hover {
+        opacity: 0.5;
+    }
+
+    .card-modal-labels {
+        background-color: #232323;
+        border-radius: 3px;
+        color: #fff;
+        width: max-content;
+        display: block;
+        padding: 4px 14px;
+        margin: auto;
+        margin-bottom: 5px;
+    }
+
+    .card-modal-labels:nth-child(2) {
+        margin-top: 30px;
+    }
+
+    @-moz-document url-prefix() {
+        .add-servers-field {
+            height: 36px;
+        }
+
+        .add-servers-name-field {
+            height: 36px;
+        }
+    }
+</style>
+
+<script>
+    var currentOption = ""; //Armazena opção aberta atualmente
+    var currentContent = "";
+    var currentUser = {};
+    var awsInstances = [];
+    var oracleInstances = [];
+    var instancesInfo = [];
+    var empInstances = [];
+    var empUsers = [];
+    var usedServers = [];
+    var credentialsObj = {};
+    var allOrders = [];
+    var newCredential = {
+        credentialName: "",
+        users: [],
+        component: "",
+        credentials: {},
+    };
+
+    const allowedAdmins = [
+        "matheus.moreira@somma.ai",
+        "matheus.duccigne@gmail.com",
+        "rodrigo.pasti@axondata.com.br",
+    ];
+
+    var currentCredentialName = "";
+
+    function getEncryptedFields(component) {
+        var fields = [];
+        var componentTemplates = getComponentsTemplates();
+        for (var p in componentTemplates[component]) {
+            if (typeof componentTemplates[component][p] == "object") {
+                if ("encrypted" in componentTemplates[component][p]) {
+                    fields.push(p);
+                }
+            }
+        }
+        return fields;
+    }
+
+    function renderAdminBtn() {
+        //Render do botão
+        var btn = document.createElement("div");
+        btn.setAttribute("id", "sidebar_admin_option");
+        btn.setAttribute("onclick", "openAdmin();");
+        btn.setAttribute("class", "icon-wrapper");
+        btn.setAttribute("style", "display: block;");
+
+        var selectedIcon = document.createElement("img");
+        selectedIcon.setAttribute("id", "admin_option_icon");
+        selectedIcon.setAttribute("class", "selected-label");
+        selectedIcon.setAttribute(
+            "src",
+            "../../static/icons/selected_option_icon.svg"
+        );
+
+        var img = document.createElement("img");
+        img.setAttribute("class", "svg-icon");
+        img.setAttribute("src", "../../static/icons/admin_icon.svg");
+
+        btn.appendChild(selectedIcon);
+        btn.appendChild(img);
+
+        var sideBar = document.getElementById("sidebar_icons");
+        var helpButton = document.getElementById("sidebar_help_option");
+        sideBar.insertBefore(btn, helpButton);
+    }
+
+    function renderAdminContent(currentUserEmail) {
+        var options = ["servers", "usage monitoring", "credentials", "users"];
+
+        //Render do conteúdo da tela
+        var adminTab = document.createElement("div");
+        adminTab.setAttribute("id", "admin_tab");
+        adminTab.setAttribute(
+            "style",
+            "background-color: white; width: 100%; height: 100%; display: none; margin-left: 80px;"
+        );
+
+        var adminLoader = document.createElement("div");
+        adminLoader.setAttribute("class", "refresh_loader_app");
+        adminLoader.setAttribute("id", "admin-loader");
+
+        adminTab.appendChild(adminLoader);
+        var optionTitle = document.createElement("p");
+        optionTitle.setAttribute("id", "option_title");
+        optionTitle.setAttribute(
+            "style",
+            "font-size: 25px; margin-top: 35px; text-align: center;"
+        );
+        adminTab.appendChild(optionTitle);
+
+        var adminSideMenu = document.createElement("div");
+        adminSideMenu.setAttribute("id", "admin_side_menu");
+        adminSideMenu.setAttribute("class", "admin_side_menu");
+        adminTab.appendChild(adminSideMenu);
+        for (var op in options) {
+            var option = document.createElement("a");
+            option.setAttribute(
+                "id",
+                "admin_" + options[op].replace(/ /g, "_") + "_option"
+            );
+            option.innerHTML =
+                options[op].charAt(0).toUpperCase() + options[op].slice(1);
+            option.setAttribute("onclick", "openMenu('" + options[op] + "')");
+            adminSideMenu.appendChild(option);
+        }
+
+        if (allowedAdmins.indexOf(currentUserEmail) !== -1) {
+            const adminOptions = ["companies", "orders"];
+
+            for (let option of adminOptions) {
+                let optionTab = document.createElement("a");
+                optionTab.setAttribute("id", "admin_" + option + "_option");
+                optionTab.innerHTML = option;
+                optionTab.setAttribute("onclick", "openMenu('" + option + "')");
+                adminSideMenu.appendChild(optionTab);
+            }
+        }
+        var content = document.createElement("div");
+        content.setAttribute("id", "wrapper_admin_content");
+        content.setAttribute("class", "admin_option_content");
+        adminTab.appendChild(content);
+
+        document.getElementById("main-page").appendChild(adminTab);
+    }
+
+    function closeCurrentOption(currentOption) {
+        if (currentOption != "") {
+            document.getElementById(currentOption).style.borderBottom =
+                "transparent";
+            if (currentOption == "admin_servers_option") {
+                document.getElementById("wrapper_server_op").style.display =
+                    "none";
+            } else if (currentOption == "admin_usage_monitoring_option") {
+                document.getElementById("wrapper_billing_op").style.display =
+                    "none";
+            } else if (currentOption == "admin_credentials_option") {
+                document.getElementById(
+                    "wrapper_credentials_op"
+                ).style.display = "none";
+            } else if (currentOption == "admin_companies_option") {
+                document.getElementById("wrapper_companies_op").style.display =
+                    "none";
+            } else if (currentOption == "admin_users_option") {
+                document.getElementById("wrapper_users_op").style.display =
+                    "none";
+            } else if (currentOption == "admin_orders_option") {
+                document.getElementById("wrapper_orders_op").style.display =
+                    "none";
+            }
+        }
+    }
+
+    function openMenu(menu) {
+        closeCurrentOption(currentOption);
+
+        if (menu == "servers") {
+            document.getElementById("wrapper_admin_content").style.display =
+                "block";
+            if (document.getElementById("wrapper_server_op")) {
+                document.getElementById("wrapper_server_op").style.display =
+                    "block";
+            }
+
+            document.getElementById("option_title").innerHTML =
+                "Servers Management";
+            currentOption = "admin_servers_option";
+            document.getElementById("admin_servers_option").style.borderBottom =
+                "1px solid black";
+            document.getElementById("admin_servers_option").style.borderRadius =
+                "0px";
+            renderOptionContent(menu);
+        } else if (menu == "usage monitoring") {
+            document.getElementById("wrapper_admin_content").style.display =
+                "block";
+            document.getElementById("option_title").innerHTML =
+                "Usage Monitoring";
+            currentOption = "admin_usage_monitoring_option";
+            document.getElementById(
+                "admin_usage_monitoring_option"
+            ).style.borderBottom = "1px solid black";
+            document.getElementById(
+                "admin_usage_monitoring_option"
+            ).style.borderRadius = "0px";
+            renderOptionContent(menu);
+            selectTableOption("used_servers");
+        } else if (menu == "credentials") {
+            document.getElementById("wrapper_admin_content").style.display =
+                "block";
+            document.getElementById("option_title").innerHTML =
+                "Credentials Management";
+            currentOption = "admin_credentials_option";
+            document.getElementById(
+                "admin_credentials_option"
+            ).style.borderBottom = "1px solid black";
+            document.getElementById(
+                "admin_credentials_option"
+            ).style.borderRadius = "0px";
+
+            renderOptionContent(menu);
+        } else if (menu == "companies") {
+            document.getElementById("wrapper_admin_content").style.display =
+                "block";
+            document.getElementById("option_title").innerHTML =
+                "Companies Management";
+            currentOption = "admin_companies_option";
+            document.getElementById(
+                "admin_companies_option"
+            ).style.borderBottom = "1px solid black";
+            document.getElementById(
+                "admin_companies_option"
+            ).style.borderRadius = "0px";
+            renderOptionContent(menu);
+        } else if (menu == "orders") {
+            document.getElementById("wrapper_admin_content").style.display =
+                "block";
+            document.getElementById("option_title").innerHTML = "Orders";
+            currentOption = "admin_orders_option";
+            document.getElementById("admin_orders_option").style.borderBottom =
+                "1px solid black";
+            document.getElementById("admin_orders_option").style.borderRadius =
+                "0px";
+            renderOptionContent(menu);
+        } else if (menu == "users") {
+            document.getElementById("wrapper_admin_content").style.display =
+                "block";
+            document.getElementById("option_title").innerHTML =
+                "Users Management";
+            currentOption = "admin_users_option";
+            document.getElementById("admin_users_option").style.borderBottom =
+                "1px solid black";
+            document.getElementById("admin_users_option").style.borderRadius =
+                "0px";
+            renderOptionContent(menu);
+        }
+    }
+
+    function renderTable(option, header, tableFields, action) {
+
+        var tableDiv = document.createElement("div");
+        tableDiv.setAttribute(
+            "style",
+            "overflow-y: auto; width: 100%; top: 200px; height: 65%; position: absolute;"
+        );
+
+        var table = document.createElement("table");
+        table.setAttribute("border", "1");
+        table.setAttribute("class", "instances-table");
+        table.setAttribute("id", "admin_table_of_" + option);
+
+        var trHeader = document.createElement("tr");
+        trHeader.setAttribute("id", "table_of_" + option + "_tr_header");
+
+        for (var h in header) {
+            var th = document.createElement("th");
+            th.setAttribute("id", "header_" + header[h]);
+            th.textContent = header[h];
+            trHeader.appendChild(th);
+        }
+        if(action) {
+            const actionTh = document.createElement("th")
+            actionTh.setAttribute("id", "header_", action)
+            actionTh.textContent = action["title"]
+
+
+            trHeader.appendChild(actionTh)
+        }
+        table.appendChild(trHeader);
+
+        var tableContent;
+        
+        if (option == "instances") tableContent = empInstances;
+        else if (option == "users") tableContent = empUsers;
+        else if (option == "orders") tableContent = allOrders;
+
+        for (var content of tableContent) {
+            const obj = content
+            var fields = Object.keys(content);
+            var hoverInfo = "";
+            var newRow = document.createElement("tr");
+
+            var objectId = content["id"] ? content["id"] : content["_id"];
+            option == "instances"
+                ? newRow.setAttribute("id", "instance_" + objectId)
+                : null;
+
+            for (var tf of tableFields) {
+                var index = tableFields.indexOf(tf);
+                var field = document.createElement("td");
+                if (index != -1) {
+                    let id = option == "instances" ? "instance_" : "user_";
+                    field.setAttribute("id", id + tf + "_" + objectId);
+
+                    if (
+                        option == "instances" &&
+                        tf == "ip" &&
+                        content[tf] == undefined
+                    ) {
+                        field.textContent = "---";
+                    } else {
+                        if (
+                            option == "users" &&
+                            loggedInUser != content["email"] &&
+                            tf == "status"
+                        ) {
+                            const userEmail = content["email"];
+                            const userId = objectId;
+
+                            var statusOptions = ["active", "inactive"];
+                            var statusSelect = document.createElement("select");
+                            statusSelect.setAttribute(
+                                "style",
+                                " border: none; background-color: inherit; outline: none;"
+                            );
+                            statusSelect.setAttribute(
+                                "id",
+                                "user_status_select_" + objectId
+                            );
+
+                            statusSelect.style.color =
+                                content[tf] == "active" ? "green" : "red";
+                            statusSelect.addEventListener(
+                                "change",
+                                function () {
+                                    activeOrInactiveUser(
+                                        this.value,
+                                        userEmail,
+                                        userId
+                                    );
+                                }
+                            );
+
+                            for (var status of statusOptions) {
+                                var statusOption =
+                                    document.createElement("option");
+                                statusOption.setAttribute("value", status);
+
+                                statusOption.textContent = status;
+                                statusOption.style.color =
+                                    status == "active" ? "green" : "red";
+                                if (content[tf] == statusOption.value)
+                                    statusOption.selected = "selected";
+
+                                statusSelect.appendChild(statusOption);
+                            }
+
+                            field.appendChild(statusSelect);
+                        } else if (tf == "created_at") {
+                            var createdAt = new Date(content[tf]);
+                            var handledDate = createdAt
+                                .toISOString()
+                                .split("T")[0];
+                            field.textContent = handledDate;
+                        } else field.textContent = content[tf];
+                        if (option == "users" && tf == status) {
+                            tf == "status"
+                                ? (field.style.color = "green")
+                                : null;
+                        }
+                    }
+                    newRow.appendChild(field);
+                }
+            }
+            if(action) {
+                let conditionField = Object.keys(action["buttonCondition"])[0]
+                let conditionValue = action['buttonCondition'][conditionField]
+
+                if(obj[conditionField] == conditionValue) {
+                    var btnWrapper = document.createElement('div')
+                    btnWrapper.setAttribute("class", 'applicationsActionsBtnWrapper')
+                    var actionButton = document.createElement('button')
+                    actionButton.textContent = action.title
+                    actionButton.setAttribute("id", "btn_action_" + content["_id"])
+                    actionButton.setAttribute("style", "padding-top: 0; width: 100px; margin: 3px auto; height: 30px;")
+                    actionButton.addEventListener('click', function() {
+                        action.actionFunc(obj)
+                    })
+                    btnWrapper.appendChild(actionButton)
+                    var actionField = document.createElement("td");
+                    actionField.appendChild(btnWrapper)
+
+                    newRow.appendChild(actionField)
+                }
+                
+            }
+            newRow.setAttribute("title", hoverInfo);
+
+            if (option == "instances") {
+                var checkbox_field = document.createElement("td");
+                var checkbox = document.createElement("input");
+                if (option == "instances") {
+                    if (content["status"] == "occupied") {
+                        checkbox.setAttribute(
+                            "onclick",
+                            "handleTerminateButton('" +
+                                content["status"] +
+                                "');"
+                        );
+                        checkbox.disabled = "disabled";
+                    } else
+                        checkbox.setAttribute(
+                            "onclick",
+                            "handleTerminateButton('" +
+                                content["status"] +
+                                "');"
+                        );
+                }
+                checkbox.setAttribute("id", "instance_checkbox_" + objectId);
+                checkbox.type = "checkbox";
+
+                checkbox_field.appendChild(checkbox);
+                newRow.appendChild(checkbox_field);
+            }
+
+            table.appendChild(newRow);
+        }
+        tableDiv.appendChild(table);
+
+        return tableDiv;
+    }
+
+    function refreshTable(option) {
+    
+        if(option == 'orders') {
+            getOrders().then((data) =>{
+                let optionWrapper = document.getElementById("wrapper_" + option + "_op")
+                optionWrapper.remove();
+                renderOptionContent('orders')
+                document.getElementById("screen-app-loader-app").style.display =
+                "none";
+            }).catch((error) => {
+                messagesLog(error)
+            })
+            
+        }
+    }
+
+    function updateTableOfInstances() {
+        getInstances();
+
+        var table = document.getElementById("admin_table_of_instances");
+        var tableRows = table.getElementsByTagName("tr");
+        var rowCount = tableRows.length;
+        var tableFields = [
+            "name",
+            "cloud_provider",
+            "instance_type",
+            "ip",
+            "start_time",
+            "user",
+            "status",
+        ];
+
+        sleep(1000).then(() => {
+            for (var i = rowCount - 1; i > 0; i--) {
+                table.removeChild(tableRows[i]);
+            }
+
+            for (var i = 0; i < empInstances.length; i++) {
+                var instance_fields = Object.keys(empInstances[i]);
+                var hoverInfo = "";
+
+                var newRow = document.createElement("tr");
+                newRow.setAttribute("id", "instance_" + empInstances[i]["id"]);
+
+                for (iField = 0; iField < instance_fields.length; iField++) {
+                    if (instance_fields[iField] != "id") {
+                        hoverInfo +=
+                            instance_fields[iField] +
+                            ": " +
+                            empInstances[i][instance_fields[iField]] +
+                            "\n";
+                    }
+                }
+
+                for (var j = 0; j < tableFields.length; j++) {
+                    var index = tableFields.indexOf(tableFields[j]);
+                    var field = document.createElement("td");
+
+                    if (index != -1) {
+                        field.setAttribute(
+                            "id",
+                            "instance_" +
+                                tableFields[j] +
+                                "_" +
+                                empInstances[i]["id"]
+                        );
+
+                        if (
+                            tableFields[j] == "ip" &&
+                            empInstances[i][tableFields[index]] == undefined
+                        ) {
+                            field.textContent = "---";
+                        } else {
+                            field.textContent =
+                                empInstances[i][tableFields[index]];
+                        }
+
+                        newRow.appendChild(field);
+                    }
+                }
+
+                newRow.setAttribute("title", hoverInfo);
+                var checkbox_field = document.createElement("td");
+
+                checkbox = document.createElement("input");
+                if (empInstances[i]["status"] == "occupied") {
+                    checkbox.setAttribute(
+                        "onclick",
+                        "handleTerminateButton('" +
+                            empInstances[i]["status"] +
+                            "');"
+                    );
+                    checkbox.disabled = "disabled";
+                } else
+                    checkbox.setAttribute(
+                        "onclick",
+                        "handleTerminateButton('" +
+                            empInstances[i]["status"] +
+                            "');"
+                    );
+
+                checkbox.setAttribute(
+                    "id",
+                    "instance_checkbox_" + empInstances[i]["id"]
+                );
+                checkbox.type = "checkbox";
+                checkbox_field.appendChild(checkbox);
+                newRow.appendChild(checkbox_field);
+                table.appendChild(newRow);
+            }
+        });
+    }
+
+    function renderOptionContent(menu) {
+        if (menu == "servers") {
+            var mainDiv = document.createElement("div");
+            mainDiv.setAttribute("id", "wrapper_server_op");
+            mainDiv.setAttribute(
+                "style",
+                "width: 100%; height: 100%; text-align: center;"
+            );
+
+            var buttonsWrapper = document.createElement("div");
+            buttonsWrapper.setAttribute("id", "admin_server_buttons_wrapper");
+            buttonsWrapper.setAttribute(
+                "style",
+                "display: inline-block; margin-top: 20px; position: relative;"
+            );
+
+            mainDiv.appendChild(buttonsWrapper);
+            var newBtn = document.createElement("button");
+            newBtn.setAttribute("id", "open_combobox_server_btn");
+            newBtn.setAttribute("class", "button_applications admin_buttons");
+            newBtn.setAttribute("onclick", "generateCombobox('instances');");
+            newBtn.innerHTML = "New";
+            buttonsWrapper.appendChild(newBtn);
+
+            var updateButton = document.createElement("button");
+            updateButton.setAttribute("id", "update_instances_table_btn");
+            updateButton.setAttribute(
+                "class",
+                "button_applications admin_buttons"
+            );
+            updateButton.setAttribute("onclick", "updateTableOfInstances();");
+            updateButton.innerHTML = "Update";
+            buttonsWrapper.appendChild(updateButton);
+
+            var terminateButton = document.createElement("button");
+            terminateButton.setAttribute("id", "terminate_instance_btn");
+            terminateButton.setAttribute(
+                "class",
+                "button_applications admin_buttons"
+            );
+            terminateButton.setAttribute(
+                "style",
+                "display: none; position: relative; margin-top: 5px;"
+            );
+            terminateButton.setAttribute("onclick", "terminateInstances();");
+            terminateButton.innerHTML = "Terminate";
+            buttonsWrapper.appendChild(terminateButton);
+
+            var forceTerminateWrapper = document.createElement("div");
+            forceTerminateWrapper.setAttribute(
+                "id",
+                "servers_force_terminate_wrapper"
+            );
+            forceTerminateWrapper.setAttribute(
+                "style",
+                "margin-top: 5px; border-radius: 3px; background-color: #585858; color: white; display: block; position: absolute; width: max-content; left: 30px;"
+            );
+            var forceTerminateCheckbox = document.createElement("input");
+            forceTerminateCheckbox.setAttribute("style", "margin-left: 10px;");
+            forceTerminateCheckbox.setAttribute(
+                "id",
+                "force_terminate_checkbox"
+            );
+            forceTerminateCheckbox.setAttribute("type", "checkbox");
+            forceTerminateCheckbox.setAttribute(
+                "onclick",
+                "handleForceCheckbox();"
+            );
+            forceTerminateWrapper.appendChild(forceTerminateCheckbox);
+
+            var label = document.createElement("label");
+            label.textContent = "Force terminate";
+            label.setAttribute("style", "margin: 0");
+            forceTerminateWrapper.appendChild(label);
+
+            buttonsWrapper.appendChild(forceTerminateWrapper);
+
+            if (!document.getElementById("admin_table_of_instances")) {
+                var header = [
+                    "Name",
+                    "Cloud",
+                    "Instance",
+                    "IP",
+                    "Start time",
+                    "User",
+                    "Status",
+                    "Terminate",
+                ];
+                var tableFields = [
+                    "name",
+                    "cloud_provider",
+                    "instance_type",
+                    "ip",
+                    "start_time",
+                    "user",
+                    "status",
+                ];
+                var table = renderTable("instances", header, tableFields);
+                mainDiv.appendChild(table);
+                document
+                    .getElementById("wrapper_admin_content")
+                    .appendChild(mainDiv);
+            }
+        } else if (menu == "usage monitoring") {
+            var dates = [];
+            for (var us in usedServers) {
+                var date = usedServers[us]["end"].split("-")[1];
+                switch (date) {
+                    case "01":
+                        if (
+                            !dates.includes(
+                                "JAN/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "JAN/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "02":
+                        if (
+                            !dates.includes(
+                                "FEV/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "FEV/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "03":
+                        if (
+                            !dates.includes(
+                                "MAR/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "MAR/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "04":
+                        if (
+                            !dates.includes(
+                                "ABR/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "ABR/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "05":
+                        if (
+                            !dates.includes(
+                                "MAI/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "MAI/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "06":
+                        if (
+                            !dates.includes(
+                                "JUN/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "JUN/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "07":
+                        if (
+                            !dates.includes(
+                                "JUL/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "JUL/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "08":
+                        if (
+                            !dates.includes(
+                                "AGO/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "AGO/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "09":
+                        if (
+                            !dates.includes(
+                                "SET/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "SET/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "10":
+                        if (
+                            !dates.includes(
+                                "OUT/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "OUT/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "11":
+                        if (
+                            !dates.includes(
+                                "NOV/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "NOV/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                    case "12":
+                        if (
+                            !dates.includes(
+                                "DEZ/" + usedServers[us]["end"].split("-")[0]
+                            )
+                        )
+                            dates.push(
+                                "DEZ/" + usedServers[us]["end"].split("-")[0]
+                            );
+                        break;
+                }
+            }
+
+            if (!document.getElementById("wrapper_billing_op")) {
+                var mainDiv = document.createElement("div");
+                mainDiv.setAttribute("id", "wrapper_billing_op");
+                mainDiv.setAttribute(
+                    "style",
+                    "width: 100%; height: 100%; text-align: center;"
+                );
+
+                var buttonsWrapper = document.createElement("div");
+                buttonsWrapper.setAttribute(
+                    "style",
+                    "display: block; margin-top: 20px; height: 50px;"
+                );
+                mainDiv.appendChild(buttonsWrapper);
+                document
+                    .getElementById("wrapper_admin_content")
+                    .appendChild(mainDiv);
+
+                var usedServerButton = document.createElement("button");
+                usedServerButton.setAttribute("id", "user_servers_button");
+                usedServerButton.setAttribute(
+                    "class",
+                    "button_applications admin_buttons"
+                );
+                usedServerButton.style.width = "max-content";
+                usedServerButton.setAttribute(
+                    "onclick",
+                    "selectTableOption('used_servers');"
+                );
+                usedServerButton.innerHTML = "Used Servers";
+                buttonsWrapper.appendChild(usedServerButton);
+
+                // var processingButton = document.createElement('button')
+                // processingButton.setAttribute("id", "processing_by_user_button")
+                // processingButton.setAttribute("class", "button_applications admin_buttons")
+                // processingButton.style.width = "max-content"
+                // processingButton.setAttribute("onclick", "selectTableOption('processing_by_user');")
+                // processingButton.innerHTML = "Processing By User"
+                // buttonsWrapper.appendChild(processingButton)
+
+                var dateFilter = document.createElement("select");
+                dateFilter.setAttribute("id", "date_filter_by_date");
+                dateFilter.setAttribute("onchange", "renderTableByDate();");
+                dateFilter.setAttribute(
+                    "style",
+                    "color: rgb(85, 85, 85); vertical-align: middle; display: none; border: 2px solid #555555; text-align: center; background-color: white; font-size: 16px; margin: 4px 2px; height: 40px;"
+                );
+
+                for (var d in dates) {
+                    var option = document.createElement("option");
+                    option.setAttribute("value", dates[d]);
+                    option.innerHTML = dates[d];
+                    dateFilter.appendChild(option);
+                }
+                var consolidatedOption = document.createElement("option");
+                consolidatedOption.setAttribute("value", "consolidado");
+                consolidatedOption.innerHTML = "Consolidated";
+                dateFilter.appendChild(consolidatedOption);
+                dateFilter.value = "consolidado";
+
+                buttonsWrapper.appendChild(dateFilter);
+            } else {
+                document.getElementById("wrapper_billing_op").style.display =
+                    "block";
+            }
+        } else if (menu == "credentials") {
+            if (!document.getElementById("wrapper_credentials_op")) {
+                mainDiv = document.createElement("div");
+                mainDiv.setAttribute("id", "wrapper_credentials_op");
+                mainDiv.setAttribute(
+                    "style",
+                    "width: 100%; height: 100%; text-align: center; display: block; overflow-y: auto; overflow-x: hidden;"
+                );
+                renderCredentialsCards(mainDiv, null, false);
+            } else
+                document.getElementById(
+                    "wrapper_credentials_op"
+                ).style.display = "block";
+        } else if (menu == "companies") {
+            if (!document.getElementById("wrapper_companies_op")) {
+                mainDiv = document.createElement("div");
+                mainDiv.setAttribute("id", "wrapper_companies_op");
+                mainDiv.setAttribute(
+                    "style",
+                    "width: 100%; height: 100%; text-align: center; display: block; overflow-y: auto; overflow-x: hidden;"
+                );
+
+                var createCompanyModal = document.createElement("div");
+                createCompanyModal.setAttribute(
+                    "style",
+                    "border-radius: 5px; background-color: white; box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);  height: 300px; width: 50%; margin: 0 auto; margin-top: 50px;"
+                );
+                mainDiv.appendChild(createCompanyModal);
+
+                var fieldsWrapper = document.createElement("div");
+                fieldsWrapper.setAttribute(
+                    "style",
+                    "position: relative; top: 30px;"
+                );
+                var companyName = document.createElement("div");
+                companyName.setAttribute(
+                    "style",
+                    "display: block; margin: 0 auto; margin-top: 20px; position: relative; font-size: 14px; height: 40px;"
+                );
+
+                var companyNameLabel = document.createElement("div");
+                companyNameLabel.setAttribute("class", "admin-label");
+                companyNameLabel.textContent = "Company Name";
+                companyName.appendChild(companyNameLabel);
+
+                var companyNameField = document.createElement("input");
+                // companyNameField.textContent = "teste_empresa"
+                // companyNameField.value = "teste_empresa"
+                companyNameField.setAttribute("id", "company_name_field");
+                companyNameField.setAttribute(
+                    "class",
+                    "add-servers-name-field"
+                );
+                companyName.appendChild(companyNameField);
+                createCompanyModal.appendChild(companyName);
+                fieldsWrapper.appendChild(companyName);
+
+                var numberOfUsers = document.createElement("div");
+                numberOfUsers.setAttribute(
+                    "style",
+                    "display: block; margin: 0 auto; margin-top: 20px; position: relative; font-size: 14px; height: 40px;"
+                );
+
+                var numberOfUsersLabel = document.createElement("div");
+                numberOfUsersLabel.setAttribute("class", "admin-label");
+                numberOfUsersLabel.textContent = "Number of users";
+                numberOfUsers.appendChild(numberOfUsersLabel);
+
+                var numberOfUsersField = document.createElement("input");
+                numberOfUsersField.setAttribute("id", "number_of_users_field");
+                numberOfUsersField.setAttribute(
+                    "class",
+                    "add-servers-name-field"
+                );
+                numberOfUsersField.style.width = "50px";
+                numberOfUsers.appendChild(numberOfUsersField);
+                createCompanyModal.appendChild(numberOfUsers);
+
+                fieldsWrapper.appendChild(numberOfUsers);
+
+                var adminUser = document.createElement("div");
+                adminUser.setAttribute(
+                    "style",
+                    "display: block; margin: 0 auto; margin-top: 20px; position: relative; font-size: 14px; height: 40px;"
+                );
+
+                var adminUserLabel = document.createElement("div");
+                adminUserLabel.setAttribute("class", "admin-label");
+                adminUserLabel.textContent = "User email";
+                adminUser.appendChild(adminUserLabel);
+
+                var adminUserField = document.createElement("input");
+                adminUserField.setAttribute("id", "company_admin_user_field");
+                adminUserField.setAttribute("class", "add-servers-name-field");
+                adminUser.appendChild(adminUserField);
+
+                var ssoWrapper = document.createElement("div");
+                ssoWrapper.setAttribute("id", "is_sso_field_wrapper");
+                ssoWrapper.setAttribute(
+                    "style",
+                    "margin-top: 5px; border-radius: 3px; color: black; display: block; width: max-content; margin: 0 auto;"
+                );
+                var ssoCheckbox = document.createElement("input");
+                ssoCheckbox.setAttribute("style", "margin-left: 10px;");
+                ssoCheckbox.setAttribute("id", "is_sso_field");
+                ssoCheckbox.setAttribute("type", "checkbox");
+                ssoWrapper.appendChild(ssoCheckbox);
+
+                var ssoLabel = document.createElement("label");
+                ssoLabel.textContent = "SSO Company";
+                ssoLabel.setAttribute("style", "margin: 0");
+                ssoWrapper.appendChild(ssoLabel);
+
+                adminUser.appendChild(ssoWrapper);
+
+                fieldsWrapper.appendChild(adminUser);
+
+                createCompanyModal.appendChild(fieldsWrapper);
+
+                var createCompanyBtn = document.createElement("button");
+                createCompanyBtn.setAttribute("id", "create_company_button");
+                createCompanyBtn.setAttribute("class", "button_applications");
+                createCompanyBtn.setAttribute(
+                    "style",
+                    "display: block; position: relative; margin: 0 auto; margin-top: 60px;"
+                );
+                createCompanyBtn.setAttribute("onclick", "createCompany();");
+                createCompanyBtn.innerHTML = "Create Company";
+                createCompanyModal.appendChild(createCompanyBtn);
+
+                document
+                    .getElementById("wrapper_admin_content")
+                    .appendChild(mainDiv);
+            } else
+                document.getElementById("wrapper_companies_op").style.display =
+                    "block";
+        } else if (menu == "orders") {
+            
+            if (!document.getElementById("wrapper_orders_op")) {
+                mainDiv = document.createElement("div");
+                mainDiv.setAttribute("id", "wrapper_orders_op");
+                mainDiv.setAttribute(
+                    "style",
+                    "width: 100%; height: 100%; text-align: center; display: block; overflow-y: auto; overflow-x: hidden;"
+                );
+
+                if (!document.getElementById("admin_table_of_orders")) {
+                    
+                    var header = [
+                        "Email",
+                        "Amount",
+                        "Created at",
+                        "Status",
+                    ];
+                    var tableFields = [
+                        "email",
+                        "amount",
+                        "created_at",
+                        "status",
+                    ];
+
+                    const action = {
+                        title: "Conclude",
+                        actionFunc: (order) => concludeOrder(order),
+                        buttonCondition: {
+                            'status': 'pending'
+                        }
+                    }
+                    var table = renderTable("orders", header, tableFields, action);
+                    mainDiv.appendChild(table);
+                    document
+                        .getElementById("wrapper_admin_content")
+                        .appendChild(mainDiv);
+                }
+                document
+                    .getElementById("wrapper_admin_content")
+                    .appendChild(mainDiv);
+            } else {
+                document.getElementById("wrapper_orders_op").style.display =
+                    "block";
+            }
+        } else if (menu == "users") {
+            if (!document.getElementById("wrapper_users_op")) {
+                mainDiv = document.createElement("div");
+                mainDiv.setAttribute("id", "wrapper_users_op");
+                mainDiv.setAttribute(
+                    "style",
+                    "width: 100%; height: 100%; text-align: center; display: block; overflow-y: auto; overflow-x: hidden;"
+                );
+
+                var userCombobox = document.createElement("div");
+                userCombobox.setAttribute(
+                    "style",
+                    "width: max-content; display: inline-block; margin-top: 20px; position: relative;"
+                );
+
+                var roles = {
+                    data_scientist: "Cientista de Dados",
+                    developer: "Desenvolvedor",
+                    it_director: "Diretor de TI",
+                };
+
+                let rolesKeys = Object.keys(roles);
+
+                if (!document.getElementById("admin_table_of_users")) {
+                    var header = ["Status", "User", "Created at"];
+                    var tableFields = ["status", "email", "created_at"];
+                    var table = renderTable("users", header, tableFields);
+                    mainDiv.appendChild(table);
+                    document
+                        .getElementById("wrapper_admin_content")
+                        .appendChild(mainDiv);
+                }
+                generateCombobox("users");
+            } else
+                document.getElementById("wrapper_users_op").style.display =
+                    "block";
+        }
+    }
+
+    var modalIsOpen = false;
+    function createModal() {
+        var modal = document.createElement("div");
+        modal.setAttribute("id", "create_or_edit_credentials_modal");
+        modal.setAttribute("class", "card-modal");
+
+        var close = document.createElement("button");
+        close.textContent = "x";
+        close.setAttribute("class", "close-modal-btn");
+        close.addEventListener("click", function (event) {
+            document.getElementById(
+                "create_or_edit_credentials_modal"
+            ).style.display = "none";
+            modalIsOpen = false;
+        });
+        modal.appendChild(close);
+        document.getElementById("wrapper_credentials_op").appendChild(modal);
+    }
+
+    function concludeOrder(order) {
+        if(confirm("Complete user " + order["email"] + " order?")) {
+            
+            document.getElementById("screen-app-loader-app").style.display =
+            "block";
+            $.ajax({
+                url: "/conclude-order",
+                type: "POST",
+                data: order,
+                success: function (data) {
+                    messagesLog(data["msg"]);
+                    refreshTable('orders')
+
+                },
+                error: function (xhr) {
+                    messagesLog(xhr.responseText)
+                },
+            });
+        }
+    }
+
+    function showCredentialsModal(credential, comp) {
+        if (document.getElementById("create_or_edit_credentials_modal")) {
+            document
+                .getElementById("create_or_edit_credentials_modal")
+                .remove();
+        }
+
+        var fieldsLabel = ["name", "component", "users"];
+        var ioComponents = ["Big Query Input", "Big Query Output"];
+
+        if (credential) {
+            createModal();
+            document.getElementById(
+                "create_or_edit_credentials_modal"
+            ).style.display = "block";
+            modalIsOpen = true;
+            credential = JSON.parse(credential);
+
+            for (var f in fieldsLabel) {
+                if (
+                    !document.getElementById(
+                        "credential_label_" + fieldsLabel[f]
+                    )
+                ) {
+                    var label = document.createElement("span");
+                    label.setAttribute(
+                        "id",
+                        "credential_label_" + fieldsLabel[f]
+                    );
+                    label.textContent = fieldsLabel[f];
+                    label.setAttribute("class", "card-modal-labels");
+                    label.setAttribute("style", "margin-top: 5px;");
+                    document
+                        .getElementById("create_or_edit_credentials_modal")
+                        .appendChild(label);
+                    var input;
+
+                    if (fieldsLabel[f] == "component") {
+                        input = document.createElement("select");
+                        input.setAttribute(
+                            "id",
+                            "credential_" +
+                                credential["name"].replace(/ /g, "_") +
+                                "_" +
+                                "field_" +
+                                fieldsLabel[f]
+                        );
+                        input.setAttribute(
+                            "style",
+                            "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                        );
+                        for (var c in ioComponents) {
+                            var option = document.createElement("option");
+                            option.value = ioComponents[c];
+                            option.textContent = ioComponents[c];
+                            input.appendChild(option);
+                            if (ioComponents[c] == comp)
+                                option.setAttribute("selected", "selected");
+                        }
+
+                        document
+                            .getElementById("create_or_edit_credentials_modal")
+                            .appendChild(input);
+                    } else if (fieldsLabel[f] == "users") {
+                        input = document.createElement("select");
+                        input.setAttribute(
+                            "id",
+                            "credential_" +
+                                credential["name"].replace(/ /g, "_") +
+                                "_" +
+                                "field_" +
+                                fieldsLabel[f] +
+                                "_select2"
+                        );
+                        input.setAttribute(
+                            "style",
+                            "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                        );
+                        input.setAttribute("name", "users[]");
+                        input.setAttribute("multiple", "multiple");
+                        input.setAttribute(
+                            "onchange",
+                            "verifyUsersSelect('" + input.id + "')"
+                        );
+
+                        if (credential["all_users"] == true) {
+                            var allOpt = document.createElement("option");
+                            allOpt.value = "all";
+                            allOpt.textContent = "All users";
+                            allOpt.setAttribute("selected", "selected");
+                            input.appendChild(allOpt);
+
+                            for (var user of empUsers) {
+                                var option = document.createElement("option");
+                                option.value = user.email;
+                                option.textContent = user.email;
+                                input.appendChild(option);
+                            }
+                        } else {
+                            for (var user of empUsers) {
+                                var option = document.createElement("option");
+                                option.value = user.email;
+                                option.textContent = user.email;
+                                if (
+                                    credential[fieldsLabel[f]].includes(
+                                        user.email
+                                    )
+                                )
+                                    option.setAttribute("selected", "selected");
+                                input.appendChild(option);
+                            }
+
+                            var allOpt = document.createElement("option");
+                            allOpt.value = "all";
+                            allOpt.textContent = "All users";
+                            input.appendChild(allOpt);
+                        }
+
+                        document
+                            .getElementById("create_or_edit_credentials_modal")
+                            .appendChild(input);
+
+                        $(
+                            "#credential_" +
+                                credential["name"].replace(/ /g, "_") +
+                                "_" +
+                                "field_" +
+                                fieldsLabel[f] +
+                                "_select2"
+                        ).select2({
+                            closeOnSelect: false,
+                        });
+                    } else {
+                        input = document.createElement("input");
+                        input.setAttribute(
+                            "id",
+                            "credential_" +
+                                credential["name"].replace(/ /g, "_") +
+                                "_" +
+                                "field_" +
+                                fieldsLabel[f]
+                        );
+                        input.setAttribute(
+                            "style",
+                            "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                        );
+                        input.value = credential[fieldsLabel[f]];
+                        document
+                            .getElementById("create_or_edit_credentials_modal")
+                            .appendChild(input);
+                    }
+                }
+            }
+            var credentialFields = getEncryptedFields(comp);
+            for (var cf in credentialFields) {
+                componentTemplates = getComponentsTemplates();
+                var label = document.createElement("label");
+                label.setAttribute(
+                    "id",
+                    "credential_label_" + credentialFields[cf]
+                );
+                label.textContent = credentialFields[cf];
+                label.setAttribute("class", "card-modal-labels");
+                label.setAttribute("style", "margin-top: 5px;");
+                document
+                    .getElementById("create_or_edit_credentials_modal")
+                    .appendChild(label);
+
+                if (
+                    "textarea" in componentTemplates[comp][credentialFields[cf]]
+                ) {
+                    input = document.createElement("textarea");
+                    input.setAttribute(
+                        "id",
+                        "credential_" +
+                            credential["name"] +
+                            "_" +
+                            "field_" +
+                            credentialFields[cf]
+                    );
+                    input.setAttribute(
+                        "style",
+                        "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px; height: 300px; width: 100%;"
+                    );
+                    input.value =
+                        credential["credentials"][credentialFields[cf]];
+                    lastEncrypt[id_encryption] = input.value;
+                    input.setAttribute(
+                        "onblur",
+                        "encryptTextAreaBQ(this, " + id_encryption++ + ")"
+                    );
+                } else {
+                    input = document.createElement("input");
+                    iinput.setAttribute(
+                        "id",
+                        "credential_" +
+                            credential["name"] +
+                            "_" +
+                            "field_" +
+                            credentialFields[cf]
+                    );
+                    input.setAttribute(
+                        "style",
+                        "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                    );
+                    input.value =
+                        credential["credentials"][credentialFields[cf]];
+                }
+                document
+                    .getElementById("create_or_edit_credentials_modal")
+                    .appendChild(input);
+            }
+            var saveBtn = document.createElement("button");
+            saveBtn.setAttribute("class", "button_applications");
+            saveBtn.setAttribute("style", "border-radius: 5px;");
+            saveBtn.setAttribute(
+                "onclick",
+                "updateCredential('" + credential["name"] + "', '" + comp + "')"
+            );
+            saveBtn.textContent = "Save";
+            document
+                .getElementById("create_or_edit_credentials_modal")
+                .appendChild(saveBtn);
+        } else {
+            if (document.getElementById("create_or_edit_credentials_modal")) {
+                document
+                    .getElementById("create_or_edit_credentials_modal")
+                    .remove();
+            }
+            createModal();
+            document.getElementById(
+                "create_or_edit_credentials_modal"
+            ).style.display = "block";
+
+            for (var f in fieldsLabel) {
+                var label = document.createElement("span");
+                label.setAttribute("id", "credential_label_" + fieldsLabel[f]);
+                label.textContent = fieldsLabel[f];
+                label.setAttribute("class", "card-modal-labels");
+                label.setAttribute("style", "margin-top: 5px;");
+                document
+                    .getElementById("create_or_edit_credentials_modal")
+                    .appendChild(label);
+
+                if (fieldsLabel[f] == "component") {
+                    input = document.createElement("select");
+                    input.setAttribute(
+                        "id",
+                        "new_credential_field_" + fieldsLabel[f]
+                    );
+                    input.setAttribute(
+                        "onchange",
+                        "changeFieldsOption('" + null + "')"
+                    );
+                    input.setAttribute(
+                        "style",
+                        "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                    );
+                    for (var comp in ioComponents) {
+                        var option = document.createElement("option");
+                        option.value = ioComponents[comp];
+                        option.textContent = ioComponents[comp];
+                        input.appendChild(option);
+                    }
+                    document
+                        .getElementById("create_or_edit_credentials_modal")
+                        .appendChild(input);
+                } else if (fieldsLabel[f] == "users") {
+                    input = document.createElement("select");
+                    input.setAttribute(
+                        "id",
+                        "new_credential_field_" + fieldsLabel[f]
+                    );
+                    input.setAttribute(
+                        "style",
+                        "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                    );
+                    input.setAttribute("name", "users[]");
+                    input.setAttribute("multiple", "multiple");
+                    input.setAttribute(
+                        "onchange",
+                        "verifyUsersSelect('" + input.id + "')"
+                    );
+
+                    for (var user of empUsers) {
+                        var option = document.createElement("option");
+                        option.value = user.email;
+                        option.textContent = user.email;
+                        option.setAttribute("selected", "selected");
+                        input.appendChild(option);
+                    }
+                    var allUsersOption = document.createElement("option");
+                    allUsersOption.value = "all";
+                    allUsersOption.textContent = "All users";
+                    input.appendChild(allUsersOption);
+                    document
+                        .getElementById("create_or_edit_credentials_modal")
+                        .appendChild(input);
+                    $("#new_credential_field_" + fieldsLabel[f]).select2({
+                        closeOnSelect: false,
+                    });
+                } else {
+                    input = document.createElement("input");
+                    input.setAttribute(
+                        "id",
+                        "new_credential_" + "field_" + fieldsLabel[f]
+                    );
+                    input.setAttribute(
+                        "style",
+                        "border-radius: 5px; border: 1px solid #D3D3D3; margin-bottom: 4px;"
+                    );
+                    document
+                        .getElementById("create_or_edit_credentials_modal")
+                        .appendChild(input);
+                }
+            }
+            changeFieldsOption();
+        }
+    }
+
+    function verifyUsersSelect(selectId) {
+        values = $("#" + selectId).val();
+        options = document.getElementById(selectId).childNodes;
+        if (values.includes("all") && values.length > 1) {
+            for (var op in options) {
+                if (
+                    document.querySelector(
+                        '[title="' + options[op]["value"] + '"]'
+                    )
+                )
+                    document
+                        .querySelector('[title="' + options[op]["value"] + '"]')
+                        .remove();
+            }
+        }
+    }
+
+    var oldSelectedComp;
+    function changeFieldsOption() {
+        var componentTemplates = getComponentsTemplates();
+        if (oldSelectedComp != undefined) {
+            var oldFields = getEncryptedFields(oldSelectedComp);
+            for (var f in oldFields) {
+                document.getElementById("credential_label_" + oldFields[f])
+                    ? document
+                          .getElementById("credential_label_" + oldFields[f])
+                          .remove()
+                    : null;
+                document.getElementById("input_credential_" + oldFields[f])
+                    ? document
+                          .getElementById("input_credential_" + oldFields[f])
+                          .remove()
+                    : null;
+            }
+            document.getElementById("create_credential_button")
+                ? document.getElementById("create_credential_button").remove()
+                : null;
+        }
+        componentStr = document.getElementById(
+            "new_credential_field_component"
+        ).value;
+        component = componentStr.toLowerCase().replace(/ /g, "_");
+
+        fields = getEncryptedFields(componentStr);
+
+        for (var f in fields) {
+            var label = document.createElement("span");
+            label.setAttribute("id", "credential_label_" + fields[f]);
+            label.textContent = fields[f];
+            label.setAttribute("class", "card-modal-labels");
+            label.setAttribute("style", "margin-top: 5px;");
+            document
+                .getElementById("create_or_edit_credentials_modal")
+                .appendChild(label);
+
+            var input;
+            if ("textarea" in componentTemplates[componentStr][fields[f]]) {
+                input = document.createElement("textarea");
+                input.setAttribute("id", "input_credential_" + fields[f]);
+                input.setAttribute(
+                    "style",
+                    "border-radius: 5px; border: 1px solid #D3D3D3; height: 300px; width: 80%;"
+                );
+                value = input.value;
+                lastEncrypt[id_encryption] = value;
+                input.setAttribute(
+                    "onblur",
+                    "encryptTextAreaBQ(this, " + id_encryption++ + ")"
+                );
+            } else {
+                input = document.createElement("input");
+                input.setAttribute("id", "input_credential_" + fields[f]);
+                input.setAttribute(
+                    "style",
+                    "border-radius: 5px; border: 1px solid #D3D3D3;"
+                );
+            }
+            document
+                .getElementById("create_or_edit_credentials_modal")
+                .appendChild(input);
+        }
+
+        var createBtn = document.createElement("button");
+        createBtn.textContent = "Create";
+        createBtn.setAttribute("class", "button_applications");
+        createBtn.setAttribute("id", "create_credential_button");
+        createBtn.setAttribute(
+            "style",
+            "border-radius: 5px; display: block; margin: auto; margin-top: 10px; margin-bottom: 10px;"
+        );
+        createBtn.setAttribute("onclick", "createCredential('" + fields + "')");
+        document
+            .getElementById("create_or_edit_credentials_modal")
+            .appendChild(createBtn);
+
+        oldSelectedComp = componentStr;
+    }
+
+    function renderCredentialsCards(mainDiv, isCreate, isUpdated) {
+        var componentTemplates = getComponentsTemplates();
+        var createBtn = document.createElement("button");
+        if (isCreate != true) {
+            createBtn.setAttribute("class", "button_applications");
+            createBtn.setAttribute(
+                "style",
+                "margin-top: 15px; border-radius: 5px;"
+            );
+            createBtn.setAttribute("onclick", "showCredentialsModal()");
+            createBtn.textContent = "Create credential";
+            mainDiv.appendChild(createBtn);
+        }
+
+        if (!document.getElementById("credential_cards_row")) {
+            row = document.createElement("div");
+            row.setAttribute("class", "cards-row");
+            row.setAttribute("id", "credential_cards_row");
+        }
+        if (isUpdated == true) {
+            $("#credential_cards_row").empty();
+        }
+
+        for (var comp in credentialsObj) {
+            for (var cred in credentialsObj[comp]) {
+                if (
+                    !document.getElementById(
+                        "credential_card_" +
+                            comp +
+                            "_" +
+                            credentialsObj[comp][cred]["name"]
+                    )
+                ) {
+                    var currentCredential = credentialsObj[comp][cred]["name"];
+                    var cardColumn = document.createElement("div");
+                    cardColumn.setAttribute("class", "cards-column");
+
+                    var card = document.createElement("div");
+                    card.setAttribute("class", "credential-card");
+                    card.setAttribute(
+                        "id",
+                        "credential_card_" +
+                            comp +
+                            "_" +
+                            credentialsObj[comp][cred]["name"]
+                    );
+
+                    var name = document.createElement("h3");
+                    name.setAttribute(
+                        "style",
+                        "font-size: 20px; font-weight: 600"
+                    );
+                    name.textContent =
+                        "Credential - " + credentialsObj[comp][cred]["name"];
+
+                    var component = document.createElement("h2");
+                    component.setAttribute("style", "font-size: 16px;");
+                    component.textContent = "Component - " + comp;
+
+                    var hr = document.createElement("hr");
+                    hr.setAttribute(
+                        "style",
+                        "border-top: 3px solid rgba(0,0,0,.1)"
+                    );
+                    var usersDiv = document.createElement("div");
+
+                    var usersTitle = document.createElement("h2");
+                    usersTitle.setAttribute(
+                        "style",
+                        "font-size: 18px; font-weight: 600"
+                    );
+                    usersTitle.textContent = "Users";
+
+                    var usersList = document.createElement("div");
+                    usersList.setAttribute(
+                        "style",
+                        "border: 1px solid lightgray; border-radius: 5px; max-height: 100px; overflow-y: auto;"
+                    );
+                    if (credentialsObj[comp][cred]["all_users"] == true) {
+                        var allOpt = document.createElement("a");
+                        allOpt.textContent = "All users";
+                        allOpt.setAttribute(
+                            "style",
+                            "display: block; margin-bottom: 5px;"
+                        );
+                        usersList.appendChild(allOpt);
+                    } else {
+                        for (var u in credentialsObj[comp][cred]["users"]) {
+                            var userEmail = document.createElement("a");
+                            userEmail.setAttribute(
+                                "style",
+                                "display: block; margin-bottom: 5px;"
+                            );
+                            userEmail.textContent =
+                                credentialsObj[comp][cred]["users"][u];
+                            usersList.appendChild(userEmail);
+                        }
+                    }
+
+                    usersDiv.appendChild(usersTitle);
+                    usersDiv.appendChild(usersList);
+                    card.appendChild(name);
+                    card.appendChild(component);
+                    card.appendChild(hr);
+                    card.appendChild(usersDiv);
+
+                    var fields = getEncryptedFields(comp);
+
+                    for (var f in fields) {
+                        var fieldDiv = document.createElement("div");
+                        var fieldTitle = document.createElement("h2");
+                        var field;
+                        fieldTitle.setAttribute(
+                            "style",
+                            "margin-top: 20px; font-size: 18px; font-weight: 600"
+                        );
+                        fieldTitle.textContent = fields[f];
+
+                        if ("textarea" in componentTemplates[comp][fields[f]]) {
+                            field = document.createElement("textarea");
+                            field.setAttribute(
+                                "style",
+                                "border-radius: 5px; border: 1px solid #D3D3D3; height: 300px; width: 100%;"
+                            );
+                            field.textContent =
+                                credentialsObj[comp][cred]["credentials"][
+                                    fields[f]
+                                ];
+                            field.readOnly = true;
+                        } else {
+                            field = document.createElement("input");
+                            field.setAttribute(
+                                "style",
+                                "border-radius: 5px; border: 1px solid #D3D3D3;"
+                            );
+                            field.textContent =
+                                credentialsObj[comp][cred]["credentials"][
+                                    fields[f]
+                                ];
+                        }
+
+                        card.appendChild(fieldDiv);
+                        card.appendChild(fieldTitle);
+                        card.appendChild(field);
+                    }
+
+                    var editBtn = document.createElement("button");
+                    editBtn.setAttribute("class", "button_applications");
+                    editBtn.style.width = "";
+                    editBtn.style.marginRight = "";
+                    editBtn.style.borderRadius = "5px";
+                    editBtn.textContent = "Edit Credential";
+                    editBtn.setAttribute(
+                        "onclick",
+                        "showCredentialsModal('" +
+                            JSON.stringify(credentialsObj[comp][cred]) +
+                            "', '" +
+                            comp +
+                            "');"
+                    );
+                    card.appendChild(editBtn);
+
+                    var deleteBtn = document.createElement("button");
+                    deleteBtn.setAttribute("class", "button_applications");
+                    deleteBtn.style.width = "";
+                    deleteBtn.style.marginRight = "";
+                    deleteBtn.style.borderRadius = "5px";
+                    deleteBtn.textContent = "Delete Credential";
+                    deleteBtn.setAttribute(
+                        "onclick",
+                        "deleteCredential('" +
+                            credentialsObj[comp][cred]["name"] +
+                            "', '" +
+                            comp +
+                            "');"
+                    );
+                    card.appendChild(deleteBtn);
+
+                    cardColumn.appendChild(card);
+
+                    row.appendChild(cardColumn);
+                }
+            }
+        }
+        mainDiv.appendChild(row);
+        document.getElementById("wrapper_admin_content").appendChild(mainDiv);
+    }
+
+    function renderTableByDate() {
+        var mainDiv = document.getElementById("admin_billing_table_wrapper");
+        var table = document.getElementById(
+            "admin_billing_table_of_used_servers"
+        );
+        var date = document.getElementById("date_filter_by_date").value;
+
+        date = date.split("/");
+        var month = date[0];
+        var year = date[1];
+        var str = "";
+        var filteredUsedServers = [];
+
+        switch (month) {
+            case "JAN":
+                str = year + "-01";
+                break;
+            case "FEV":
+                str = year + "-02";
+                break;
+            case "MAR":
+                str = year + "-03";
+                break;
+            case "ABR":
+                str = year + "-04";
+                break;
+            case "MAI":
+                str = year + "-05";
+                break;
+            case "JUN":
+                str = year + "-06";
+                break;
+            case "JUL":
+                str = year + "-07";
+                break;
+            case "AGO":
+                str = year + "-08";
+                break;
+            case "SET":
+                str = year + "-09";
+                break;
+            case "OUT":
+                str = year + "-10";
+                break;
+            case "NOV":
+                str = year + "-11";
+                break;
+            case "DEZ":
+                str = year + "-12";
+                break;
+        }
+
+        for (var us in usedServers) {
+            if (usedServers[us]["end"].startsWith(str)) {
+                filteredUsedServers.push(usedServers[us]);
+            }
+        }
+
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+            $("#admin_billing_table_of_used_servers td").remove();
+        }
+
+        tableOfUsedServers = document.getElementById(
+            "admin_billing_table_of_used_servers"
+        );
+
+        var fields = [
+            "resource",
+            "cloud_provider",
+            "quantity",
+            "cost",
+            "currency",
+        ];
+        var costArr = [];
+
+        for (var us in filteredUsedServers) {
+            var newRow = document.createElement("tr");
+            for (var f in fields) {
+                var td = document.createElement("td");
+                td.textContent = filteredUsedServers[us][fields[f]];
+                if (fields[f] == "cost") {
+                    var cost = Number(filteredUsedServers[us][fields[f]]);
+                    td.textContent = cost.toFixed(2);
+                    costArr.push(cost);
+                } else if (fields[f] == "quantity") {
+                    td.textContent =
+                        filteredUsedServers[us][fields[f]].toFixed(2);
+                }
+                newRow.appendChild(td);
+            }
+            tableOfUsedServers.appendChild(newRow);
+        }
+        var totalRow = document.createElement("tr");
+        tableOfUsedServers.appendChild(totalRow);
+
+        var total = sumValuesInArray(costArr);
+
+        var td1 = document.createElement("td");
+        td1.textContent = "Total";
+        td1.style.fontWeight = "800";
+        var td2 = document.createElement("td");
+        total = total.toFixed(2);
+        td2.textContent = total;
+
+        td1.setAttribute("style", "border: none");
+        td2.setAttribute("style", "border: none");
+        td1.setAttribute("colspan", "3");
+        tableOfUsedServers.appendChild(td1);
+        tableOfUsedServers.appendChild(td2);
+    }
+    function selectTableOption(option) {
+        if (!document.getElementById("admin_billing_table_wrapper")) {
+            var tableDiv = document.createElement("div");
+            tableDiv.setAttribute(
+                "style",
+                "overflow-x: hidden; overflow-y: auto; width: 75%; margin-left: 14%; top: 120px; height: 65%; position: absolute;"
+            );
+            tableDiv.setAttribute("id", "admin_billing_table_wrapper");
+            document.getElementById("wrapper_billing_op").appendChild(tableDiv);
+        }
+
+        if (option == "used_servers") {
+            if (document.getElementById("date_filter_by_date")) {
+                document.getElementById("date_filter_by_date").style.display =
+                    "inline-block";
+            }
+            document.getElementById(
+                "user_servers_button"
+            ).style.backgroundColor = "#555555";
+            document.getElementById("user_servers_button").style.color =
+                "white";
+
+            // document.getElementById("processing_by_user_button").style.backgroundColor = "white"
+            // document.getElementById("processing_by_user_button").style.color = "#555555"
+
+            if (document.getElementById("admin_biling_table_of_processing")) {
+                document.getElementById(
+                    "admin_biling_table_of_processing"
+                ).style.visibility = "hidden";
+            }
+            if (
+                !document.getElementById("admin_billing_table_of_used_servers")
+            ) {
+                var tableOfUsedServers = document.createElement("table");
+                tableOfUsedServers.setAttribute("class", "instances-table");
+                tableOfUsedServers.setAttribute(
+                    "id",
+                    "admin_billing_table_of_used_servers"
+                );
+                tableOfUsedServers.setAttribute("border", "1");
+                var header = [
+                    "Service",
+                    "Cloud",
+                    "Quantity",
+                    "Cost",
+                    "Currency",
+                ];
+                var trHeader = document.createElement("tr");
+
+                for (var h in header) {
+                    var th = document.createElement("th");
+                    th.textContent = header[h];
+                    trHeader.appendChild(th);
+                }
+
+                tableOfUsedServers.appendChild(trHeader);
+
+                var fields = [
+                    "resource",
+                    "cloud_provider",
+                    "quantity",
+                    "cost",
+                    "currency",
+                ];
+                var costArr = [];
+
+                for (var us in usedServers) {
+                    var newRow = document.createElement("tr");
+                    for (var f in fields) {
+                        var td = document.createElement("td");
+                        td.textContent = usedServers[us][fields[f]];
+                        if (fields[f] == "cost") {
+                            var cost = Number(usedServers[us][fields[f]]);
+                            td.textContent = cost.toFixed(2);
+                            costArr.push(cost);
+                        } else if (fields[f] == "quantity") {
+                            td.textContent =
+                                usedServers[us][fields[f]].toFixed(2);
+                        }
+                        newRow.appendChild(td);
+                    }
+                    tableOfUsedServers.appendChild(newRow);
+                }
+                var totalRow = document.createElement("tr");
+                tableOfUsedServers.appendChild(totalRow);
+
+                var total = sumValuesInArray(costArr);
+
+                var td1 = document.createElement("td");
+                td1.textContent = "Total";
+                td1.style.fontWeight = "800";
+                var td2 = document.createElement("td");
+                total = total.toFixed(2);
+                td2.textContent = total;
+
+                td1.setAttribute("style", "border: none");
+                td2.setAttribute("style", "border: none");
+                td1.setAttribute("colspan", "3");
+                tableOfUsedServers.appendChild(td1);
+
+                tableOfUsedServers.appendChild(td2);
+
+                document
+                    .getElementById("admin_billing_table_wrapper")
+                    .appendChild(tableOfUsedServers);
+            } else
+                document.getElementById(
+                    "admin_billing_table_of_used_servers"
+                ).style.display = "table";
+        } else if (option == "processing_by_user") {
+            if (document.getElementById("date_filter_by_date")) {
+                document.getElementById("date_filter_by_date").style.display =
+                    "none";
+            }
+            // document.getElementById("processing_by_user_button").style.backgroundColor = "#555555"
+            // document.getElementById("processing_by_user_button").style.color = "white"
+
+            document.getElementById(
+                "user_servers_button"
+            ).style.backgroundColor = "white";
+            document.getElementById("user_servers_button").style.color =
+                "#555555";
+
+            if (
+                document.getElementById("admin_billing_table_of_used_servers")
+            ) {
+                document.getElementById(
+                    "admin_billing_table_of_used_servers"
+                ).style.display = "none";
+            }
+            if (!document.getElementById("admin_biling_table_of_processing")) {
+                var tableOfProcessing = document.createElement("table");
+                tableOfProcessing.setAttribute("border", "1");
+                tableOfProcessing.setAttribute("class", "instances-table");
+                tableOfProcessing.setAttribute(
+                    "id",
+                    "admin_biling_table_of_processing"
+                );
+
+                var header = ["User", "Usage Time"];
+                var trHeader = document.createElement("tr");
+                for (var h in header) {
+                    var th = document.createElement("th");
+                    th.textContent = header[h];
+                    trHeader.appendChild(th);
+                }
+
+                tableOfProcessing.appendChild(trHeader);
+                document
+                    .getElementById("admin_billing_table_wrapper")
+                    .appendChild(tableOfProcessing);
+            } else
+                document.getElementById(
+                    "admin_biling_table_of_processing"
+                ).style.visibility = "visible";
+        }
+    }
+
+    function generateCombobox(type) {
+        var cloudOptions = ["AWS"].concat(
+            oracleInstances.length > 0 ? ["Oracle"] : []
+        );
+        userRoles = {
+            data_scientist: "Cientista de Dados",
+            developer: "Desenvolvedor",
+            it_director: "Diretor de TI",
+        };
+        var fields = {};
+        if (type == "instances") {
+            fields = {
+                Cloud: cloudOptions,
+                Instance: awsInstances,
+                Name: "Name",
+                User: empUsers,
+            };
+        } else if ((type = "users")) {
+            fields = {
+                Email: "Email",
+                Name: "Name",
+                Phone: "Phone",
+                Role: userRoles,
+            };
+        }
+
+        if (document.getElementById(type + "_combobox_div")) {
+            if (
+                document.getElementById(type + "_combobox_div").style.display ==
+                "block"
+            ) {
+                document.getElementById(type + "_combobox_div").style.display =
+                    "none";
+            } else if (
+                document.getElementById(type + "_combobox_div").style.display ==
+                "none"
+            ) {
+                document.getElementById(type + "_combobox_div").style.display =
+                    "block";
+            }
+        } else {
+            var comboBoxWrapper = document.createElement("div");
+            comboBoxWrapper.setAttribute("id", type + "_combobox_div");
+            comboBoxWrapper.setAttribute(
+                "style",
+                "height: 35px; display: block; margin-top: 45px;"
+            );
+
+            var fieldKeys = Object.keys(fields);
+
+            for (var key of fieldKeys) {
+                var container = document.createElement("div");
+                container.setAttribute("id", key.toLowerCase() + "_div");
+                container.setAttribute(
+                    "style",
+                    "display: inline-block; margin-right: 15px; height: 40px; font-size: 14px; position: relative;"
+                );
+
+                var label = document.createElement("div");
+                label.setAttribute("class", "admin-label");
+                label.textContent = key;
+                container.appendChild(label);
+
+                if (typeof fields[key] == "object") {
+                    var select = document.createElement("select");
+                    select.setAttribute(
+                        "id",
+                        key.toLowerCase() + "_select_box"
+                    );
+                    select.setAttribute("class", "add-servers-field");
+
+                    if (key == "Cloud") {
+                        for (var cloud of cloudOptions) {
+                            select.setAttribute("onclick", "setOptions();");
+                            var op = document.createElement("option");
+                            op.setAttribute("class", "admin_dropdown_option");
+                            op.setAttribute("id", "cloud_option_" + cloud);
+                            op.setAttribute("value", cloud);
+                            op.textContent = cloud;
+                            select.appendChild(op);
+                        }
+                    } else if (key == "Instance") {
+                        for (var instance in awsInstances) {
+                            var title =
+                                "CPU: " +
+                                instancesInfo[awsInstances[instance]]["cpu"] +
+                                "\n" +
+                                "Memory: " +
+                                instancesInfo[awsInstances[instance]]["memory"];
+                            var op = document.createElement("option");
+                            op.setAttribute("class", "admin_dropdown_option");
+                            op.setAttribute(
+                                "id",
+                                "instance_option" + awsInstances[instance]
+                            );
+                            op.setAttribute("value", awsInstances[instance]);
+                            op.setAttribute("title", title);
+                            op.textContent = awsInstances[instance];
+
+                            select.appendChild(op);
+                        }
+                    } else if (key == "User") {
+                        for (var user of empUsers) {
+                            var op = document.createElement("option");
+                            op.setAttribute("class", "admin_dropdown_option");
+                            op.setAttribute(
+                                "id",
+                                "user_option" + user["email"]
+                            );
+                            op.setAttribute("value", user["email"]);
+                            op.textContent = user["email"];
+
+                            select.appendChild(op);
+                        }
+                        var allUsersOption = document.createElement("option");
+                        allUsersOption.setAttribute(
+                            "class",
+                            "admin_dropdown_option"
+                        );
+                        allUsersOption.setAttribute("id", "all_users_option");
+                        allUsersOption.setAttribute("value", "all_users");
+                        allUsersOption.textContent = "All users";
+                        select.appendChild(allUsersOption);
+                    } else if (key == "Role") {
+                        var rolesKeys = Object.keys(userRoles);
+                        for (var role of rolesKeys) {
+                            var op = document.createElement("option");
+                            op.setAttribute("class", "admin_dropdown_option");
+                            op.setAttribute("id", "role_option" + role);
+                            op.setAttribute("value", role);
+                            op.textContent = userRoles[role];
+
+                            select.appendChild(op);
+                        }
+                    }
+                    container.appendChild(select);
+                } else {
+                    var input = document.createElement("input");
+                    input.setAttribute("id", key.toLowerCase() + "_field");
+                    input.setAttribute("class", "add-servers-name-field");
+
+                    container.appendChild(input);
+
+                    if (key == "Phone") {
+                        setTimeout(function () {
+                            var $phone = $("#phone_field");
+                            $phone.mask("(00)00000-0000");
+                        }, 100);
+                    }
+                }
+                comboBoxWrapper.appendChild(container);
+            }
+
+            var addButton = document.createElement("button");
+            addButton.setAttribute("id", "add_server_btn");
+            addButton.setAttribute(
+                "class",
+                "button_applications admin_buttons"
+            );
+            addButton.setAttribute(
+                "style",
+                "display: inline-block; width: 90px; height: 35px; position: relative; margin-right: 15px;"
+            );
+
+            type == "instances"
+                ? addButton.setAttribute("onclick", "launchInstance();")
+                : addButton.setAttribute("onclick", "adminCreateUser();");
+
+            addButton.innerHTML = "Add";
+
+            comboBoxWrapper.appendChild(addButton);
+
+            if (type == "instances") {
+                document
+                    .getElementById("wrapper_server_op")
+                    .appendChild(comboBoxWrapper);
+            } else if (type == "users") {
+                document
+                    .getElementById("wrapper_users_op")
+                    .appendChild(comboBoxWrapper);
+            }
+        }
+    }
+
+    function setTitleInSelect() {
+        var value = document.getElementById("instance_select_box").value;
+        var title =
+            "CPU: " +
+            instancesInfo[value]["cpu"] +
+            "\n" +
+            "Memory: " +
+            instancesInfo[value]["memory"];
+        document
+            .getElementById("instance_select_box")
+            .setAttribute("title", title);
+    }
+
+    function setOptions() {
+        var cloud = document.getElementById("cloud_select_box").value;
+
+        if (cloud == "AWS") {
+            var $el = $("#instance_select_box");
+
+            $el.empty();
+            $.each(awsInstances, function (key, value) {
+                var title =
+                    "CPU: " +
+                    instancesInfo[value]["cpu"] +
+                    "\n" +
+                    "Memory: " +
+                    instancesInfo[value]["memory"];
+                $el.append(
+                    $("<option></option>")
+                        .attr("value", value)
+                        .text(value)
+                        .attr("title", title)
+                );
+            });
+            setTitleInSelect();
+        } else if (cloud == "Oracle") {
+            var $el = $("#instance_select_box");
+            $el.empty();
+            $.each(oracleInstances, function (key, value) {
+                var title =
+                    "CPU: " +
+                    instancesInfo[value]["cpu"] +
+                    "\n" +
+                    "Memory: " +
+                    instancesInfo[value]["memory"];
+                $el.append(
+                    $("<option></option>")
+                        .attr("value", value)
+                        .text(value)
+                        .attr("title", title)
+                );
+            });
+            setTitleInSelect();
+        }
+    }
+
+    function handleForceCheckbox() {
+        if (document.getElementById("force_terminate_checkbox").checked) {
+            for (var i = 0; i < empInstances.length; i++) {
+                var instance_fields = Object.keys(empInstances[i]);
+                document.getElementById(
+                    "instance_checkbox_" + empInstances[i]["id"]
+                ).checked = false;
+
+                if (empInstances[i]["status"] == "occupied") {
+                    document.getElementById(
+                        "instance_checkbox_" + empInstances[i]["id"]
+                    ).disabled = false;
+                }
+                if (empInstances[i]["status"] == "running") {
+                    document.getElementById(
+                        "instance_checkbox_" + empInstances[i]["id"]
+                    ).disabled = true;
+                }
+            }
+        } else {
+            for (var i = 0; i < empInstances.length; i++) {
+                var instance_fields = Object.keys(empInstances[i]);
+                document.getElementById(
+                    "instance_checkbox_" + empInstances[i]["id"]
+                ).checked = false;
+                if (empInstances[i]["status"] == "occupied") {
+                    document.getElementById(
+                        "instance_checkbox_" + empInstances[i]["id"]
+                    ).disabled = true;
+                }
+                if (empInstances[i]["status"] == "running") {
+                    document.getElementById(
+                        "instance_checkbox_" + empInstances[i]["id"]
+                    ).disabled = false;
+                }
+            }
+        }
+    }
+    //Função para tratar se exibe ou não o botão de terminate
+    function handleTerminateButton() {
+        var forceTerminateDivLeft;
+
+        var terminateBtn = document.getElementById("terminate_instance_btn");
+        var count = 0;
+        for (var i = 0; i < empInstances.length; i++) {
+            var input = document.getElementById(
+                "instance_checkbox_" + empInstances[i]["id"]
+            );
+            if (input.checked == true) count++;
+        }
+
+        if (count > 0) {
+            terminateBtn.style.display = "inline-block";
+            forceTerminateDivLeft = document.getElementById(
+                "admin_server_buttons_wrapper"
+            ).offsetWidth;
+            document.getElementById(
+                "servers_force_terminate_wrapper"
+            ).style.left = forceTerminateDivLeft / 2 - 92 + "px";
+        } else {
+            terminateBtn.style.display = "none";
+            forceTerminateDivLeft = document.getElementById(
+                "admin_server_buttons_wrapper"
+            ).offsetWidth;
+            document.getElementById(
+                "servers_force_terminate_wrapper"
+            ).style.left = forceTerminateDivLeft / 2 - 92 + "px";
+        }
+    }
+
+    function addElementTable(tableId, fields) {
+        var usersTable = document.getElementById(tableId);
+        var tableFields = ["status", "email", "created_at"];
+        newRow = document.createElement("tr");
+
+        for (var field of tableFields) {
+            if (field == "status") {
+                var statusOptions = ["active", "inactive"];
+                var statusSelect = document.createElement("select");
+                statusSelect.setAttribute(
+                    "style",
+                    " border: none; background-color: inherit; outline: none;"
+                );
+                statusSelect.setAttribute(
+                    "id",
+                    "user_status_select_" + fields["_id"]
+                );
+
+                statusSelect.style.color = "green";
+                statusSelect.addEventListener("change", function () {
+                    activeOrInactiveUser(
+                        this.value,
+                        fields["email"],
+                        fields["_id"]
+                    );
+                });
+                for (var status of statusOptions) {
+                    var statusOption = document.createElement("option");
+                    statusOption.setAttribute("value", status);
+
+                    statusOption.textContent = status;
+                    statusOption.style.color =
+                        status == "active" ? "green" : "red";
+                    statusSelect.appendChild(statusOption);
+                }
+                newRow.appendChild(statusSelect);
+            } else if (field == "created_at") {
+                var fieldElement = document.createElement("td");
+                var createdAt = new Date(fields[field]);
+                var handledDate = createdAt.toISOString().split("T")[0];
+                fieldElement.textContent = handledDate;
+                newRow.appendChild(fieldElement);
+            } else {
+                var fieldElement = document.createElement("td");
+                fieldElement.textContent = fields[field];
+                newRow.appendChild(fieldElement);
+            }
+        }
+
+        usersTable.appendChild(newRow);
+    }
+
+    function activeOrInactiveUser(status, user, id) {
+        var currentStatus = status == "active" ? "inactive" : "active";
+        if (confirm(status + " " + user + " ?")) {
+            var select = document.getElementById("user_status_select_" + id);
+            $.ajax({
+                url: "/update-status",
+                type: "POST",
+                data: {
+                    user: user,
+                    status: status,
+                },
+                success: function (data) {
+                    messagesLog(data);
+                    if (data == "User limit exceeded")
+                        document.getElementById(
+                            "user_status_select_" + id
+                        ).value = currentStatus;
+                    else
+                        select.style.color =
+                            status == "active" ? "green" : "red";
+                },
+                error: function (xhr) {
+                    messagesLog(xhr.responseText);
+                },
+            });
+        } else {
+            document.getElementById("user_status_select_" + id).value =
+                currentStatus;
+        }
+    }
+    //Função responsável por pegar os IDs das máquinas selecionadas para o usuário finalizar
+    function getSelectedInstances() {
+        var IDs = [];
+        for (var i = 0; i < empInstances.length; i++) {
+            var input = document.getElementById(
+                "instance_checkbox_" + empInstances[i]["id"]
+            );
+            if (input.checked == true) {
+                IDs.push(empInstances[i]["id"]);
+            }
+        }
+        return IDs;
+    }
+
+    function getInstances() {
+        data = {
+            update_ips: true,
+        };
+        $.ajax({
+            url: "/get-emp-machines",
+            type: "GET",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                empInstances = data;
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function getAllPlans() {
+        $.ajax({
+            url: "/get-all-plans",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                awsInstances = data["plans"]["aws"];
+                instancesInfo = data["info"];
+                oracleInstances = data["plans"]["oracle"];
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function getOrders() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "/get-orders",
+                type: "GET",
+                beforeSend: function() {
+                    document.getElementById("screen-app-loader-app").style.display = "block";
+                },
+                dataType: "json",
+                success: function (data) {
+                    resolve(data)
+                    document.getElementById("admin-loader").style.display = "none";
+                    document.getElementById("screen-app-loader-app").style.display =
+                        "none";
+
+                    document.getElementById("main-page").style.opacity = "1";
+                    document.getElementById("main-page").style.pointerEvents =
+                        "auto";
+
+                    allOrders = data;
+                },
+                error: function (xhr) {
+                    reject(xhr.responseText)
+                    document.getElementById("admin-loader").style.display = "none";
+                    document.getElementById("screen-app-loader-app").style.display =
+                        "none";
+                    document.getElementById("main-page").style.opacity = "1";
+                    document.getElementById("main-page").style.pointerEvents =
+                        "auto";
+                    messagesLog(xhr.responseText);
+                },
+            });
+        })
+    }
+
+    function getUsersByCompany() {
+        $.ajax({
+            url: "/get_emp_users",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                document.getElementById("admin-loader").style.display = "none";
+                document.getElementById("main-page").style.opacity = "1";
+                document.getElementById("main-page").style.pointerEvents =
+                    "auto";
+                empUsers = data;
+            },
+            error: function (xhr) {
+                document.getElementById("admin-loader").style.display = "none";
+                document.getElementById("main-page").style.opacity = "1";
+                document.getElementById("main-page").style.pointerEvents =
+                    "auto";
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function createCompany() {
+        var data = {
+            company_name: $("#company_name_field").val(),
+            users_limit: $("#number_of_users_field").val(),
+            admin_email: $("#company_admin_user_field").val(),
+            is_sso: document.getElementById("is_sso_field").checked,
+        };
+
+        $.ajax({
+            url: "/create-company",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                messagesLog(data.msg);
+            },
+            error: function (xhr) {
+                console.log("xhrrrr", xhr);
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function adminCreateUser() {
+        userData = {
+            email: $("#email_field").val(),
+            name: $("#name_field").val(),
+            phone: $("#phone_field").val(),
+            role: $("#role_select_box").val(),
+        };
+
+        $.ajax({
+            url: "/create-user",
+            type: "POST",
+            data: userData,
+            dataType: "json",
+            success: function (data) {
+                messagesLog("User created");
+                addElementTable("admin_table_of_users", data);
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+    function launchInstance() {
+        document.getElementById("user_select_box").value == "all_users"
+            ? (shared_machine = true)
+            : (shared_machine = false);
+        var equalName = false;
+        for (var ei in empInstances) {
+            if (
+                document.getElementById("name_field").value ==
+                empInstances[ei]["name"]
+            ) {
+                equalName = true;
+            }
+        }
+
+        if (
+            document.getElementById("name_field").value != "" &&
+            equalName != true &&
+            validateIntegrity(
+                document.getElementById("name_field").value,
+                "server_name"
+            ) == true
+        ) {
+            var data = {
+                plan: document.getElementById("instance_select_box").value,
+                name: document.getElementById("name_field").value.trim(),
+                user: document.getElementById("user_select_box").value,
+                shared_machine: shared_machine,
+            };
+            $.ajax({
+                url: "/create-machine",
+                type: "POST",
+                dataType: "json",
+                data: data,
+                success: function (data) {
+                    messagesLog("Instance launched");
+                    updateTableOfInstances();
+                    document.getElementById(
+                        "instances_combobox_div"
+                    ).style.display = "none";
+                    document.getElementById("name_field").value = "";
+                },
+                error: function (xhr) {
+                    messagesLog(xhr.responseText);
+                },
+            });
+        } else {
+            if (equalName == true)
+                messagesLog("You already have a server with that name");
+            else if (document.getElementById("name_field").value == "")
+                messagesLog("Server name cannot be empty");
+        }
+    }
+
+    function terminateInstances() {
+        var removeInDD = false;
+        var ids = getSelectedInstances();
+        var schemas = getSchemas();
+        var ids_ = Object.values(ids);
+
+        var serverNames = [];
+        var selectedInstancesInDD = [];
+        var instancesNames = [];
+
+        var terminateUrl;
+        for (var s in schemas) {
+            for (var i in ids_) {
+                for (var ui in userInstances) {
+                    if (userInstances[ui]["id"] == ids_[i]) {
+                        if (!serverNames.includes(userInstances[ui]["name"]))
+                            serverNames.push(userInstances[ui]["name"]);
+                    }
+                }
+            }
+            if (document.getElementById("ddl_plan_" + s)) {
+                selectedInstancesInDD.push(
+                    document.getElementById("ddl_plan_" + s).textContent
+                );
+            }
+        }
+
+        document.getElementById("force_terminate_checkbox").checked
+            ? (terminateUrl = "/force-terminate-instance")
+            : (terminateUrl = "/terminate-instance");
+
+        $.ajax({
+            url: terminateUrl,
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({ ids: ids }),
+
+            success: function (data) {
+                messagesLog("Instance terminated");
+                updateTableOfInstances();
+                removeOptionInDropDown(serverNames);
+                document.getElementById(
+                    "terminate_instance_btn"
+                ).style.display = "none";
+                forceTerminateDivLeft = document.getElementById(
+                    "admin_server_buttons_wrapper"
+                ).offsetWidth;
+                document.getElementById(
+                    "servers_force_terminate_wrapper"
+                ).style.left = forceTerminateDivLeft / 2 - 92 + "px";
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function getUsedServers() {
+        $.ajax({
+            url: "/get-used-servers",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                usedServers = data;
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function createCredential(fields, updatedCredential, oldName) {
+        if (fields) {
+            var names = [];
+            var credentials = {};
+            newCredential["credentialName"] = document.getElementById(
+                "new_credential_field_name"
+            ).value;
+            newCredential["component"] = document.getElementById(
+                "new_credential_field_component"
+            ).value;
+            newCredential["users"] = $("#new_credential_field_users").val();
+            if (newCredential["users"].includes("all"))
+                newCredential["users"] = "all";
+
+            fields = fields.split(",");
+
+            for (var f in fields) {
+                credentials[fields[f]] = encodeURIComponent(
+                    document.getElementById("input_credential_" + fields[f])
+                        .value
+                );
+            }
+
+            newCredential["credentials"] = credentials;
+            if (oldName != newCredential["credentialName"]) {
+                for (var cred in credentialsObj[newCredential["component"]]) {
+                    names.push(
+                        credentialsObj[newCredential["component"]][cred]["name"]
+                    );
+                }
+            }
+
+            if (newCredential["credentialName"] == "") {
+                messagesLog("Credential name cannot be empty");
+                return false;
+            }
+
+            if (
+                names.length > 0 &&
+                names.includes(newCredential["credentialName"])
+            ) {
+                if (
+                    confirm(
+                        "Already have a credential with the name " +
+                            newCredential["credentialName"] +
+                            " do you want to overwrite it? "
+                    )
+                ) {
+                    deleteData = {
+                        credentialName: newCredential["credentialName"],
+                        component: newCredential["component"],
+                    };
+
+                    $.ajax({
+                        url: "/delete-credential",
+                        type: "POST",
+                        dataType: "text",
+                        data: JSON.stringify(deleteData),
+                        success: function (data) {
+                            document
+                                .getElementById(
+                                    "credential_card_" +
+                                        newCredential["component"] +
+                                        "_" +
+                                        newCredential["credentialName"]
+                                )
+                                .parentNode.remove();
+                        },
+                    });
+                } else return false;
+            }
+        } else if (updatedCredential) {
+            newCredential = JSON.parse(updatedCredential);
+        }
+
+        $.ajax({
+            url: "/save-credentials",
+            type: "POST",
+            dataType: "text",
+            data: JSON.stringify(newCredential),
+            success: function (data) {
+                credentialsObj = JSON.parse(data);
+                updatedCredential
+                    ? messagesLog("Credential updated")
+                    : messagesLog("Credential created");
+                div = document.getElementById("wrapper_credentials_op");
+                document.getElementById(
+                    "create_or_edit_credentials_modal"
+                ).style.display = "none";
+                updatedCredential
+                    ? renderCredentialsCards(div, true, true)
+                    : renderCredentialsCards(div, true, false);
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+
+    function deleteCredential(credentialName, component) {
+        var data = {
+            credentialName: credentialName,
+            component: component,
+        };
+
+        if (confirm("Delete credential " + credentialName + " ?")) {
+            $.ajax({
+                url: "/delete-credential",
+                type: "POST",
+                dataType: "text",
+                data: JSON.stringify(data),
+                success: function (data) {
+                    messagesLog("Credential deleted");
+                    getCredentials();
+                    document
+                        .getElementById(
+                            "credential_card_" +
+                                component +
+                                "_" +
+                                credentialName
+                        )
+                        .parentNode.remove();
+                },
+                error: function (xhr) {
+                    messagesLog(xhr.responseText);
+                },
+            });
+        }
+    }
+
+    function updateCredential(credentialName, oldComp) {
+        oldName = credentialName;
+        var names = [];
+        deleteData = {
+            credentialName: oldName,
+            component: oldComp,
+        };
+
+        var credential = {};
+        var credentials = {};
+        currentName = credentialName;
+        var fields = ["name", "component", "users"];
+        var encryptedFields = getEncryptedFields(
+            document.getElementById(
+                "credential_" + currentName + "_field_component"
+            ).value
+        );
+
+        credential["credentialName"] = document.getElementById(
+            "credential_" + currentName + "_field_name"
+        ).value;
+        credential["component"] = document.getElementById(
+            "credential_" + currentName + "_field_component"
+        ).value;
+        credential["users"] = $(
+            "#credential_" + currentName + "_field_" + "users_select2"
+        ).val();
+        if (credential["users"].includes("all")) credential["users"] = "all";
+
+        for (var f in encryptedFields) {
+            credentials[encryptedFields[f]] = encodeURIComponent(
+                document.getElementById(
+                    "credential_" + currentName + "_field_" + encryptedFields[f]
+                ).value
+            );
+        }
+        credential["credentials"] = credentials;
+
+        if (oldName != credential["credentialName"]) {
+            for (var cred in credentialsObj[credential["component"]]) {
+                names.push(
+                    credentialsObj[credential["component"]][cred]["name"]
+                );
+            }
+        }
+
+        if (credential["credentialName"] != "") {
+            if (
+                names.length > 0 &&
+                names.includes(credential["credentialName"])
+            ) {
+                if (
+                    confirm(
+                        "Already have a credential with the name " +
+                            credential["credentialName"] +
+                            " do you want to overwrite it? "
+                    )
+                ) {
+                    createCredential(null, JSON.stringify(credential), oldName);
+                    $.ajax({
+                        url: "/delete-credential",
+                        type: "POST",
+                        dataType: "text",
+                        data: JSON.stringify(deleteData),
+                        success: function (data) {
+                            document
+                                .getElementById(
+                                    "credential_card_" + oldComp + "_" + oldName
+                                )
+                                .parentNode.remove();
+                        },
+                    });
+                }
+            } else {
+                createCredential(null, JSON.stringify(credential), oldName);
+                $.ajax({
+                    url: "/delete-credential",
+                    type: "POST",
+                    dataType: "text",
+                    data: JSON.stringify(deleteData),
+                    success: function (data) {
+                        document
+                            .getElementById(
+                                "credential_card_" + oldComp + "_" + oldName
+                            )
+                            .parentNode.remove();
+                    },
+                });
+            }
+        } else {
+            messagesLog("Credential name cannot be empty");
+            return false;
+        }
+    }
+
+    function getCredentials() {
+        $.ajax({
+            url: "/get-credentials",
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                credentialsObj = JSON.parse(data);
+            },
+            error: function (xhr) {
+                messagesLog(xhr.responseText);
+            },
+        });
+    }
+</script>

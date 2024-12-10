@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+/*----- Estilo da janela de análise -------------------*/
+
+.app_analysis_nav {
+  height:0px;
+  width: 285px;
+  position: fixed;
+  z-index: 11;
+  /*top: 70%;  */
+  /*left: 79%;*/
+  right: 0%;
+  bottom: 30px;
+  background-color: #4c4c4c;
+  overflow-x: hidden;
+  padding-top: 0px;
+  transition: 0.1s;
+  border-left-style: solid;
+  border-left-width: 20px;
+  border-left-color: #111;
+}
+
+.app_analysis_row_1{
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Estilo tabela logger */
+
+.schema_logger_row{
+  color: white;
+  font-size: 14px;
+}
+
+.app_analysis_row_2{
+  color: white;
+  font-size: 12px;
+}
+
+
+</style>
+
+
+
+
+<body>
+  <div id="analysis_window" class="app_analysis_nav">
+    <table id="analysis_table" class="app_analysis_table" style="width:100%"> </table>
+  </div>
+
+</body>
+
+
+<script>
+  mainMenuClosed = true;
+  function openCloseAppAnalysis(btn){
+    if (mainMenuClosed == true){
+      document.getElementById("analysis_window").style.height = "375px";
+      btn.style.opacity = "0.5"
+      mainMenuClosed = false;
+    }
+    else{
+      document.getElementById("analysis_window").style.height = "0px";
+      btn.style.opacity = "1"
+      mainMenuClosed = true;
+      var menuTextElements = document.getElementsByClassName("app_analysis_text")
+      for (var i = 0; i < menuTextElements.length; i++) {
+        menuTextElements[i].style.display = "none";
+      }
+    }
+  }
+
+
+</script>
+
+
+</html>

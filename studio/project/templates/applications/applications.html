@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+  function closeMyAccount() {
+    document.getElementById("modal_applications").style.display = "none"
+    // document.getElementById("window_my_account_content").style.display = "none"
+  }
+</script>
+<style>
+  /* The window_app (background) */
+  .window_app {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 4;
+    /* Sit on top */
+    left: 0;
+    top: -10%;
+    width: 100%;
+    /* Full width */
+    height: 110%;
+    /* Full height */
+    overflow: hidden;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+  }
+
+  .window_app-header {
+    width: 100%;
+    height: 5px;
+    font-size: 5px;
+    padding: 0px 8px;
+    background-color: white;
+    color: white;
+  }
+
+  .new-app-button {
+    width: 100px;
+    color: #4C4C49;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    border: 2px solid #4C4C49;
+    border-radius: 5px
+  }
+
+  .new-app-button:hover {
+    background-color: #4C4C49;
+    color: white;
+  }
+
+
+  /* window_app Content/Box */
+  .window_app-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 0px 0px;
+    /*border: 0px solid #888;*/
+    width: 95%;
+    /* Could be more or less, depending on screen size */
+    height: 85%;
+    top: -15%;
+  }
+
+  /* window_app Body */
+  .window_app-body {
+    position: absolute;
+    padding: 0px 8px;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Add Animation*/
+  @keyframes animatetop {
+    from {
+      top: -20%;
+      opacity: 0
+    }
+
+    to {
+      top: -15%;
+      opacity: 1
+    }
+  }
+
+  .tab {
+    overflow: hidden;
+    margin-top: 20px;
+    border: 0px solid #ccc;
+    background-color: #f1f1f1;
+    height: 30px;
+    font-size: 30px;
+  }
+
+  /* Style the buttons that are used to open the tab content */
+  .tab button {
+    background-color: inherit;
+    height: 30px;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    /*padding: 7px 7px;*/
+    transition: 0.3s;
+    font-size: 8px;
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #ddd;
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: #ccc;
+  }
+
+  .tablinks {
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+    position: relative;
+    display: none;
+    padding: 3px 3px;
+    border: 0px solid #ccc;
+    border-top: none;
+    width: 100%;
+    height: 90%;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    left: 0;
+    top: 2px;
+    z-index: 1;
+    position: absolute;
+    font-size: 19px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /*Estilos do conteúdo de requests*/
+  .tab_app_table {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    border-collapse: collapse;
+    text-align: left;
+    position: relative;
+    top: 0%;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .tab_app_table_narrow {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+    max-height: 95%;
+    border-collapse: collapse;
+    text-align: left;
+    position: relative;
+    display: block;
+    top: 0%;
+    overflow-y: auto;
+  }
+
+  .link_applications {
+    text-decoration: none;
+    font-size: 14px;
+    color: #000000;
+    /*#4c4c4c  #818181*/
+    display: inline-block;
+    position: relative;
+  }
+
+  .link_applications:link {
+    text-decoration: none;
+    color: #000000;
+  }
+
+  .link_applications:hover {
+    color: #1e628c;
+  }
+
+  /* selected link */
+  .link_applications:active {
+    color: #0e631f;
+  }
+
+  /*
+  .components_labels_link{
+    text-decoration: none;
+    font-size: 12px;
+    color: #000000;
+    display: inline-block;
+    position: relative;
+  }
+  */
+  .options_labels {
+    text-decoration: none;
+    font-size: 12px;
+    height: 28px;
+    color: #000000;
+    /*#4c4c4c  #818181*/
+    background-color: #818181;
+    border-radius: 0;
+  }
+
+  .checkbox {
+    position: relative;
+    display: inline-block;
+  }
+
+
+
+  .div-table-wrapper {
+    width: 12%;
+    height: 100%;
+    display: inline-block;
+    position: absolute;
+    top: 0%;
+    z-index: 1;
+  }
+
+  .my-account-label {
+    background-color: #232323;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 7px;
+    padding: 4px 14px;
+  }
+
+  .my-account-info-input {
+    width: 60%;
+    font-size: 15px;
+  }
+
+  .my-account-password-input {
+    /* width: 300px; */
+    font-size: 15px;
+  }
+
+  .card-label {
+    position: absolute;
+    left: 20px;
+    font-weight: 600;
+    font-size: 20px;
+    top: 20px;
+  }
+
+  .form-btn {
+    border: none;
+    position: absolute;
+    width: 150px;
+    border-radius: 5px;
+    height: 40px;
+    bottom: 20px;
+    left: 26px;
+  }
+
+  .form-btn:hover {
+    opacity: 0.5;
+  }
+
+  .eye_slash {
+    width: 25px;
+    position: absolute;
+    height: 25px;
+    right: 25px;
+    top: 10px;
+    opacity: 0.5;
+  }
+
+  .close_message_bar {
+    position: absolute;
+    top: -2px;
+    left: 5px;
+    cursor: pointer;
+  }
+
+  .close_message_bar:hover {
+    color: black;
+  }
+
+  .eye_slash:hover {
+    opacity: 1;
+  }
+
+
+  @media (max-width: 1366px) {
+    .div-table-wrapper {
+      width: 15%;
+    }
+
+    .tab_app_table_narrow {
+      max-height: 90%;
+    }
+  }
+
+  /*--------------------------------------------------*/
+</style>
+
+
+<script src="../../static/js/applications.js?v=0.11" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+<script>
+  //Trecho para forçar a máscara no campo de telefone (com DDD)
+  $(document).ready(function () {
+    var $phone_input = $("#my_account_phone");
+    $phone_input.mask("(00)00000-0000");
+  });
+
+  var alreadyLoaded;
+  var alreadyRenderedInfo = false;
+
+  function openTab(evt, tabName) {
+    if (tabName == "shared_application_def_tab") {
+      if (alreadyLoaded) { //Caso tenha sido carregado pela primeira vez, apenas renderize para evitar duplicidade de requests
+        renderSharedApplicationNames();
+      }
+      else {
+        document.getElementById("screen-app-loader-app").style.display = "block"
+        alreadyLoaded = true
+        sleep(500).then(() => {
+          // readSharedApplications(true);
+          renderSharedApplicationNames();
+        });
+      }
+    }
+
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+  }
+
+</script>
+
+
+
+<body>
+  <!-- The window_app-->
+  <div id="modal_applications" class="window_app" style="overflow-y: hidden; z-index: 999;">
+    <!-- window_app content -->
+    <div id="window_app_content" class="window_app-content">
+
+      <div id="screen-app-loader-app" class="refresh_loader_app"></div>
+
+      <span id="close_app_modal" class="close">&times;</span>
+
+      <div id="window_app_container" class="window_app-body">
+        <div id="navigation_tab" class="tab">
+          <button id="application_def_button" class="tablinks" onclick="openTab(event, 'application_def_tab')"
+            style="font-size: 12px;">Applications</button>
+          <button id="shared_application_def_button" class="tablinks"
+            onclick="openTab(event, 'shared_application_def_tab')" style="font-size: 12px;">Shared Applications</button>
+          <!-- <button id="my_account_def_button" class="tablinks" onclick="openTab(event, 'my_account_def_tab')" style="font-size: 12px;">My Account</button> -->
+          <!--<button class="tablinks" onclick="openTab(event, 'git_tab')">Git</button>
+        <button class="tablinks" onclick="openTab(event, 'import_tab')">Import</button>
+        -->
+        </div>
+        <!-- Tab content -->
+        <div id="application_def_tab" class="tabcontent">
+          <!--<div style="display: inline-block;">-->
+          <div class="div-table-wrapper">
+            <div class="new-app-button" onclick="newApplication()">New App</div>
+            <table id="applications_names" class="tab_app_table_narrow" style="position: relative"></table>
+          </div>
+          <div style="left: 16%; top:0%; width: 84.5%; height: 100%; position: absolute; display: inline-block;">
+            <table id="application_parameters" class="tab_app_table" style="position: relative; font-size: 12px;">
+            </table>
+          </div>
+        </div>
+
+        <div id="shared_application_def_tab" class="tabcontent">
+          <div class="div-table-wrapper">
+            <div class="new-app-button" onclick="refreshSharedApplications();">Refresh list</div>
+            <table id="shared_applications_names" class="tab_app_table_narrow" style="position: relative"></table>
+          </div>
+          <div style="left: 16%; top:0%; width: 84.5%; height: 100%; position: absolute; display: inline-block;">
+            <table id="shared_application_parameters" class="tab_app_table"
+              style="position: relative; font-size: 12px;"> </table>
+          </div>
+        </div>
+
+        <div id="git_tab" class="tabcontent">
+          <h3>Git</h3>
+          <p>Git options...</p>
+        </div>
+
+        <div id="import_tab" class="tabcontent">
+          <h3>Import</h3>
+          <p>Import and share.</p>
+        </div>
+
+      </div>
+
+
+      <!--
+    <div class="window_app-footer">
+      <h3>window_app Footer</h3>
+    </div>
+  -->
+    </div>
+    <div id="window_my_account_content" class="window_app-content">
+
+      <div id="screen-app-loader-app" class="refresh_loader_app"></div>
+
+      <span id="close_my_account_modal" onclick="closeMyAccount()" class="close">&times;</span>
+
+      <div id="window_my_account_container" class="window_app-body">
+        <div id="my_account_navigation_tab" class="tab">
+          <button id="my_account_def_button" class="tablinks active" onclick="openTab(event, 'my_account_def_tab')"
+            style="background-color: #ccc; font-size: 12px;">My Account</button>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+    <script>
+      /*
+      Script relativo ao controle do window_app
+      */
+
+      // Get the window_app
+      var modal_applications = document.getElementById('modal_applications');
+
+      // Get the <span> element that closes the window_app
+      var span_applications = document.getElementById('close_app_modal');
+
+
+      // When the user clicks on <span> (x), close the window_app
+      span_applications.onclick = function () {
+        modal_applications.style.display = "none";
+        //Forçar as divs que contém o readme serem escondidas, devido ao efeito
+        //do position ser fixed nelas
+        readmeDiv = document.getElementById('readme_div')
+        readmeArea = document.getElementById('readme_area')
+        if (readmeDiv != null) {
+          readmeDiv.style.display = "none";
+        }
+        if (readmeArea != null) {
+          readmeArea.style.display = "none";
+        }
+        //document.getElementById('application_parameters_div').style.display = "none";
+      }
+
+
+    </script>
+    <!-- Fim do código de todo window_app The window_app------------------------------------------------------->
+
+</body>
+
+</html>

@@ -1,0 +1,261 @@
+{
+    "Clustering": {
+        "id_name": "Clustering",
+        "icon_type": "Machine Learning",
+        "name": "",
+        "n_groups": {
+            "textlist": "2,3,4,5",
+            "required": true,
+            "help": "Number of groups to be generated, defined by a list of integer numeric values."
+        },
+        "algorithms": {
+            "required": true,
+            "multiselect": ["K-Means", "Bisecting K-Means", "Gaussian Mixture"],
+            "help": "algorithms"
+        },
+
+        "grid_config": " \"algorithms algorithms\" \" id_name name \" \" show_cluster_centers show_objects_by_cluster \" \" n_groups n_groups \"",
+        "input_dim": 1,
+        "show_cluster_centers": { "select": [true, false] },
+        "show_objects_by_cluster": { "select": [true, false] },
+        "help": "Performs automatic data clustering, searching for the best model and number of groups.",
+        "component_type": "",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191430709/Clustering"
+    },
+
+    "Classification": {
+        "id_name": "Classification",
+        "icon_type": "Machine Learning",
+        "name": "",
+        "grid_config": " \"algorithms algorithms\" \" target_attribute target_attribute \" \" dataset_partition show_class_metrics \" \" show_confusion_matrix show_global_metrics  \" \"validation_metric test_partition \"  \" id_name name \" ",
+        "algorithms": {
+            "multiselect": [
+                "Naive Bayes",
+                "Decision Tree",
+                "Random Forest",
+                "Gradient Boost",
+                "Multilayer Perceptron",
+                "Support Vector Machine"
+            ],
+            "required": true,
+            "help": "Algorithms."
+        },
+        "target_attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Target attribute (label) for learning."
+        },
+        "dataset_partition": {
+            "text": 0.8,
+            "help": "Partition Strategy.\nIf < 1, uses Train/Validation Split with this parameter for training and the complement for validation.\nIf >= 2, uses K-Fold with this parameter as number of folds."
+        },
+        "validation_metric": {
+            "select": ["f1", "weightedPrecision", "weightedRecall", "accuracy"]
+        },
+        "show_confusion_matrix": { "select": [true, false] },
+        "show_global_metrics": { "select": [true, false] },
+        "show_class_metrics": { "select": [true, false] },
+        "test_partition": {
+            "text": 0,
+            "help": "Defines the percentage to an additional test partition. If 0, all data will be used to train and validate."
+        },
+        "input_dim": 1,
+        "help": "Performs automatic classification, searching for the best model in a process of hyper-parameterization and k-folders, where k = 10.",
+        "component_type": "model",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191168623/Classification"
+    },
+
+    "Collaborative Filtering": {
+        "component_type": "model",
+        "dataset_partition": {
+            "help": "Partition Strategy.\nIf < 1, uses Train/Validation Split with this parameter for training and the complement for validation.\nIf >= 2, uses K-Fold with this parameter as number of folds.",
+            "text": 0.8
+        },
+        "help": "Collaborative filtering is a technique used by recommendation systems to generate collaborative recommendations.",
+        "id_name": "Collaborative Filtering",
+        "icon_type": "Machine Learning",
+        "input_dim": 1,
+        "item_col": "item",
+        "name": "",
+        "rating_col": "rating",
+        "show_global_metrics": { "select": [true, false] },
+        "user_col": "user",
+        "validation_metric": { "select": ["rmse", "mse", "r2", "mae"] },
+        "index_user_col": { "select": [true, false] },
+        "index_item_col": { "select": [true, false] },
+        "limit_of_recommendations": 10,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/620363825/Collaborative+Filtering"
+    },
+
+    "Association Rules": {
+        "component_type": "model",
+        "icon_type": "Machine Learning",
+        "confidence": 0.1,
+        "delete_duplicate_items": {
+            "select": [true, false]
+        },
+        "help": "Apply association rules on a transactional basis.",
+        "id_name": "Association Rules",
+        "input_dim": 1,
+        "items_col": "items",
+        "name": "",
+        "print_association_rules": {
+            "select": [true, false]
+        },
+        "print_frequent_items": {
+            "select": [true, false]
+        },
+        "support": 0.01,
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909621095/Association+Rules"
+    },
+
+    "Regression": {
+        "id_name": "Regression",
+        "icon_type": "Machine Learning",
+        "name": "",
+        "algorithms": {
+            "multiselect": [
+                "Linear Regression",
+                "Generalized Linear Regression",
+                "Random Forest",
+                "Decision Tree",
+                "Gradient Boost",
+                "Isotonic",
+                "Factorization Machines"
+            ],
+            "required": true,
+            "help": "Algorithms."
+        },
+        "target_attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Target attribute (label) for learning."
+        },
+        "grid_config": " \"algorithms algorithms\" \" target_attribute target_attribute \" \" algorithms_parameters algorithms_parameters \" \" dataset_partition show_global_metrics \"  \" target_normalizer target_normalizer \" \" test_partition validation_metric \" \"id_name name\" ",
+        "dataset_partition": {
+            "text": 0.8,
+            "help": "Partition Strategy.\nIf < 1, uses Train/Validation Split with this parameter for training and the complement for validation.\nIf >= 2, uses K-Fold with this parameter as number of folds."
+        },
+        "test_partition": {
+            "text": 0,
+            "help": "Defines the percentage to an additional test partition. If 0, all data will be used to train and validate."
+        },
+        "target_normalizer": { "select": ["none", "minmax", "standard"] },
+        "validation_metric": { "select": ["rmse", "mse", "r2", "mae"] },
+        "show_global_metrics": { "select": [true, false] },
+        "algorithms_parameters": {
+            "subform": [{ "algorithm": "", "parameter": "", "values": "" }],
+            "max_entries": 20,
+            "help": "Set of algorithms parameters."
+        },
+        "input_dim": 1,
+        "help": "Performs automatic regression, searching for the best model in a process of hyper-parameterization and k-folders.",
+        "component_type": "model",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191397936/Regression"
+    },
+
+    "Nearest Neighbors": {
+        "component_type": "process",
+        "help": "Calculates the most similar objects between data streams.",
+        "id_name": "Nearest Neighbors",
+        "input_dim": 2,
+        "icon_type": "Machine Learning",
+        "name": "",
+        "grid_config": " \"distance id_col\" \" left_suffix right_suffix \" \" match_condition k_nearest_neighbors \" \" output_cols output_cols \" \" name id_name \" ",
+        "distance": {
+            "text": 2,
+            "required": true,
+            "help": "Maximum distance to be considered when using euclidean distance"
+        },
+        "id_col": "",
+        "output_cols": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Selects what columns will be outputted"
+        },
+        "left_suffix": "a",
+        "right_suffix": "b",
+        "match_condition": { "select": ["cosine", "euclidian_distance"] },
+        "k_nearest_neighbors": {
+            "text": 0,
+            "help": "Defines the number of k nearest neighbors per item. If 0, it returns all"
+        },
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909719364/Nearest+Neighbors"
+    },
+
+    "Geo Nearest Neighbors": {
+        "component_type": "process",
+        "help": "Calculates the most similar objects between data streams from geographic distance.",
+        "id_name": "Geo Nearest Neighbors",
+        "input_dim": 2,
+        "icon_type": "Machine Learning",
+        "name": "",
+        "max_distance": {
+            "text": 100,
+            "required": true,
+            "help": "Maximum distance in kilometers to filter. Zero returns all results"
+        },
+        "left_suffix": "a",
+        "right_suffix": "b",
+        "latitude_attribute": { "text": "latitude", "required": true },
+        "longitude_attribute": { "text": "longitude", "required": true },
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909719371/Geo+Nearest+Neighbors"
+    },
+
+    "Deep Neural Network": {
+        "id_name": "Deep Neural Network",
+        "icon_type": "Machine Learning",
+        "name": "",
+        "optimizer": {
+            "select": ["Adam", "NAdam", "RMSprop", "Adadelta"],
+            "required": true,
+            "help": ""
+        },
+        "max_epochs": { "text": 10, "required": true, "help": "" },
+        "validation_split": { "text": 0.2, "required": false, "help": "" },
+        "batch_size": { "text": 4, "required": true, "help": "" },
+        "grid_config": " \"optimizers_parameters optimizers_parameters\" \" id_name batch_size \" \" max_epochs name \" \" optimizer use_arrow_pandas \" \" validation_split layers \"",
+        "layers": { "nn_schema": "", "required": false, "help": "" },
+        "optimizers_parameters": {
+            "subform": [{ "parameter": "", "value": "" }],
+            "max_entries": 20,
+            "help": "Set of optimizers parameters."
+        },
+        "use_arrow_pandas": { "select": [true, false] },
+        "component_type": "model",
+        "input_dim": 1,
+        "help": "Deep Neural Network."
+    },
+
+    "Evaluation": {
+        "id_name": "Evaluation",
+        "icon_type": "Machine Learning",
+        "name": "",
+        "grid_config": " \"attribute attribute\" \"prediction prediction\" \"type target_normalizer\" \"id_name name \" ",
+        "type": {
+            "select": ["classification", "regression"],
+            "required": true,
+            "help": ""
+        },
+        "target_normalizer": { "select": ["none", "minmax", "standard"] },
+        "attribute": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Original attribute."
+        },
+        "prediction": {
+            "textlist": "",
+            "show_attributes": true,
+            "required": true,
+            "help": "Prediction attribute."
+        },
+        "component_type": "process",
+        "input_dim": 1,
+        "help": "Evaluates a Classifier or Regressor Model based on a test dataset.",
+        "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1935573028/Evaluation"
+    }
+}

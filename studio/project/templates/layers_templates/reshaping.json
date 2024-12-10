@@ -1,0 +1,12 @@
+{
+  "Reshape":{
+    "id_name": {"text":"Reshape"},
+    "target_shape": {"text":""}
+  },
+
+  "Flatten":{
+    "id_name": {"text":"Flatten"},
+    "data_format":{"select":["channels_last", "channels_first"]}
+  }
+
+}

@@ -1,0 +1,220 @@
+{
+  "User Input":{
+    "id_name": "User Input",
+    "icon_type": "Data Input",
+    "name":"",
+    "component_type": "input",
+    "attributes_set":{"subform": [{"attribute":"", "value":""}], "max_entries":50, "help": "Set of attributes and values ​​to be defined as a data objetc."},
+    "grid_config": " \"attributes_set attributes_set\" \" id_name name \"",
+    "help":"Allows creating a dataset with a data object defined as a component parameter (user input).",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/190775314/Load+Data+Objects"
+	},
+
+  "Load Data Objects":{
+    "id_name": "Load Data Objects",
+    "icon_type": "Data Input",
+    "name":"",
+    "component_type": "input",
+    "grid_config": " \"dataset dataset_learning\" \" query query \" \" id_name name \" ",
+    "dataset": {"select" : [], "required": true, "help":"Dataset to read when in state equal to apply."},
+    "dataset_learning": {"select" : [], "help":"Dataset to read when in state equal to learning."},
+    "query": {"text":"", "help":"Queries in MongoDB format."},
+    "help":"Reads data objects stored in SOMMA.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/190775314/Load+Data+Objects"
+	},
+
+
+  "Save Data Objects":{
+    "id_name": "Save Data Objects",
+    "icon_type": "Data Output",
+    "name":"",
+    "component_type": "output",
+    "dataset": {"text":"", "required": true, "help":"Name of the dataset to save."},
+    "save_mode": {"select" : ["overwrite", "append", "ignore"], "help":"Append: saves to the end of an existing dataset / Overwrite: erases the dataset if exists / Ignore: ignores duplicates."},
+    "help":"Saves data objects in SOMMA.",
+    "input_dim": 1,
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/190742554/Save+Data+Objects"
+  },
+
+  "AWS S3 Input":{
+    "id_name" : "AWS S3 Input",
+    "icon_type": "Data Input",
+    "grid_config": " \"access_key access_secret\" \" path path \" \" file_type csv_delimiter \" \" encoding encoding \" \" root_tag row_tag \" \" name id_name \" ",
+    "access_key": {"password": "", "required": true, "help":"Access key."},
+    "access_secret": {"password": "", "required": true, "help":"Access secret."},
+    "file_type": {"select": ["csv","json","xml", "binary"], "help":"File type to be read."},
+    "name": "AWS S3 Input",
+    "component_type": "input",
+    "path": {"text":"s3a://", "required": true, "help":"s3a:// file path. Type /** for folders and subfolders."},
+    "root_tag": {"text":"", "help":"root_tag if XML file type."},
+    "row_tag": {"text":"", "help":"row_tag if XML file type."},
+    "help":"Reads data from AWS S3 storage to the application stream.",
+    "csv_delimiter" : {"select" : ["comma", "semicolon", "tab"]},
+    "encoding" : {"select" : ["utf-8", "latin-1"]},
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909620881/AWS+S3+Input"
+  },
+
+  "AWS S3 Output": {
+    "id_name": "AWS S3 Output",
+    "icon_type": "Data Output",
+    "grid_config": " \"access_key access_secret\" \" path path \" \" file_type save_mode \" \" name id_name \" ",
+    "access_key": {"password": "", "required": true, "help":"Access key."},
+    "access_secret": {"password": "", "required": true, "help":"Access secret."},
+    "file_type": {"select": ["csv","json"], "help":"File type to save."},
+    "save_mode": {"select" : ["overwrite", "append", "ignore"], "help":"Append: saves to the end of an existing dataset / Overwrite: erases the dataset if exists / Ignore: ignores duplicates."},
+    "name": "AWS S3 Output",
+    "component_type": "output",
+    "path": {"text":"s3a://", "required": true, "help":"s3a:// file path."},
+    "help":"Saves data to AWS S3 storage.",
+    "input_dim": 1,
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909751931/AWS+S3+Output"
+  },
+
+  "Google Drive Input":{
+    "id_name" : "Google Drive Input",
+    "icon_type": "Data Input",
+    "name": "Google Drive Input",
+    "component_type": "input",
+    "id_folder": {"text": "", "required": true, "help":"Google Drive folder ID."},
+    "credentials": {"password": "", "required": true, "help":"JSON Credentials."},
+    "file_type": {"select": ["csv", "excel", "json", "binary"], "help":"File type to load."},
+    "help":"Reads data from Google Drive storage."
+  },
+
+  "Google Drive Output":{
+    "id_name" : "Google Drive Output",
+    "icon_type": "Data Output",
+    "name": "Google Drive Output",
+    "component_type": "output",
+    "id_folder": {"text": "", "required": true, "help":"Google Drive folder ID."},
+    "credentials": {"password": "", "required": true, "help":"JSON Credentials."},
+    "file_type": {"select": ["csv","excel"], "help":"File type to save."},
+    "file_name": {"text": "", "required": true, "help":"File name to save as a dataset."},
+    "help":"Save data to Google Drive storage."
+  },
+
+  "Twitter":{
+    "id_name": "Twitter",
+    "icon_type": "Data Input",
+    "name":"Twitter",
+    "component_type": "input",
+    "help":"Reads data from Twitter.",
+    "consumer_key":{"password": "", "required": true},
+    "consumer_secret":{"password": "", "required": true},
+    "access_token_secret":{"password": "", "required": true},
+    "access_token":{"password": "", "required": true},
+    "query":{"text": "", "required": true},
+    "language":{"select": ["pt-br","en"], "help":""},
+    "tweets_number":{"text": "", "required": true},
+    "grid_config": " \" Options Options \" \" access_token access_token_secret \" \" consumer_key consumer_secret \" \" id_name name \" \" language tweets_number \" \" query query \" ",
+    "Options":{"multiselect":["display_name", "user", "entities", "data", "localization", "geolocalization"],"help":"Tweet content."},
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/741244929/Twitter"
+  },
+
+
+  "Database Output":{
+    "id_name": "Database Output",
+    "icon_type": "Data Output",
+    "name":"",
+    "component_type": "output",
+    "DBMS":{"select" : ["MongoDB", "MongoDB Atlas", "MongoDB Cosmos", "MySQL", "Postgre"], "help":"Database Manager (DBMS) Type."},
+    "host":{"text":"", "required": true, "help":"Database IP or URL address."},
+    "port":{"text":"", "help":"Port."},
+    "user":{"text":"", "help":"Database user."},
+    "password":{"password":"", "help":"Database user password."},
+    "database": {"text":"", "required": true, "help":"Database name."},
+    "dataset": {"text":"", "required": true, "help":"Dataset/Table/Collection."},
+    "save_mode": {"select" : ["overwrite", "append", "ignore"], "help":"Append: saves to the end of an existing dataset / Overwrite: erases the dataset if exists / Ignore: ignores duplicates."},
+    "help":"Saves data from an application stream to a remote database.",
+    "input_dim": 1,
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191201295/Database+Output"
+  },
+
+  "Database Input":{
+    "id_name": "Database Input",
+    "icon_type": "Data Input",
+    "name":"",
+    "component_type": "input",
+    "DBMS":{"select" : ["MongoDB","MongoDB Atlas", "MongoDB Cosmos", "MySQL", "Postgre"], "help":"Database Manager (DBMS) Type."},
+    "host":{"text":"", "required": true, "help":"Database IP or URL address."},
+    "port":{"text":"", "help":"Port."},
+    "user":{"text":"", "help":"Database user."},
+    "password":{"password":"", "help":"Database user password."},
+    "database": {"text":"", "required": true, "help":"Database name."},
+    "dataset": {"text":"", "required": true, "help":"Dataset/Table/Collection."},
+    "query": {"text":"", "help":"Database query."},
+    "help":"Reads data from a remote database to the application stream.",
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/191135746/Database+Input"
+  },
+
+  "Kafka Input":{
+    "id_name": "Kafka Input",
+    "icon_type": "Data Input",
+    "name":"",
+    "component_type": "input",
+    "attributes":{"textlist":"", "help":"Attributes to output to Kafka server."},
+    "server":{"text":"", "required": true, "help":"Kafka IP and port."},
+    "topic":{"text":"", "required": true, "help":"Kafka topic."},
+    "help":"Kafka."
+  },
+
+  "Kafka Output":{
+    "id_name": "Kafka Output",
+    "icon_type": "Data Output",
+    "name":"",
+    "component_type": "output",
+    "attributes":{"textlist":"", "help":"Attributes to output to Kafka server."},
+    "server":{"text":"", "required": true, "help":"Kafka IP and port."},
+    "topic":{"text":"", "required": true, "help":"Kafka topic."},
+    "help":"Kafka."
+  },
+
+  "Web API Input":{
+    "id_name": "Web API Input",
+    "icon_type": "Data Input",
+    "name":"",
+    "component_type": "input",
+    "attributes":{"textlist":"", "help":"Attributes and types (att:type) expected."},
+    "topic":{"text":"", "required": true, "help":"Input topic."},
+    "help":"Web API Input."
+  },
+
+  "Web API Output":{
+    "id_name": "Web API Output",
+    "icon_type": "Data Output",
+    "name":"",
+    "component_type": "output",
+    "topic":{"text":"", "required": false, "help":"Output topic."},
+    "help":"Web API Output."
+  },
+
+  "Big Query Input":{
+    "id_name": "Big Query Input",
+    "icon_type": "Data Input",
+    "name":"",
+    "component_type": "input",
+    "grid_config": "\" credentials id_name \" \" name name \" \" query query \" \" service_account_info service_account_info \"",
+    "service_account_info": {"textarea":"", "help":"Your Google service account JSON (https://cloud.google.com/docs/authentication/getting-started)", "encrypted" : true},
+    "query": {"textarea":"", "help":"Query to retrieve data from Big Query"},
+    "help":"Reads data objects stored in Big Query.",
+    "credentials": {"select" : [], "required": true, "help":"Credential"},
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909653747/Big+Query+Input"
+  },
+
+  "Big Query Output":{
+    "id_name": "Big Query Output",
+    "icon_type": "Data Output",
+    "name":"",
+    "component_type": "output",
+    "grid_config": "\" credentials id_name \" \" name name \" \" project_name save_mode \" \" table table \" \" service_account_info service_account_info \" ",
+    "service_account_info": {"textarea":"", "help":"Your Google service account JSON (https://cloud.google.com/docs/authentication/getting-started)", "encrypted" : true},
+    "database" : {"required" : true, "text" : ""} ,
+    "table" : {"required" : true, "text" : ""} ,
+    "project_name" : {"text" : ""} ,
+    "save_mode": {"select" : ["overwrite", "append"], "help":"Append: saves to the end of an existing dataset / Overwrite: erases the dataset if exists"},
+    "help":"Writes data objects to Big Query.",
+    "credentials": {"select" : [], "required": true, "help":"Credential"},
+    "help_link": "https://axondata.atlassian.net/wiki/spaces/wiki/pages/1909653757/Big+Query+Ouput"
+	}
+
+}

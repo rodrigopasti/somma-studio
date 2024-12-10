@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8081:8081"
+      - "8082:8082"
+    environment:
+      - REDIS_URL=redis://cache
+      - PYTHONUNBUFFERED=1
+      - OPENAI_ORG=YOUR_OPENAI_ORG
+      - OPENAI_KEY=YOUR_OPENAI_KEY
+      - ADM_DATABASE=8c75c8037996b6632deea33e2e9112e66466be
+    volumes:
+      - /var:/var
+      - /sfiles:/sfiles
+      - /var/run/docker.sock:/var/run/docker.sock
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+  mongo:
+    image: mongodb/mongodb-community-server:4.4.22-ubi8-20230619T062738Z
+    volumes: 
+      - /home/matheus/workspace/somma-studio/data:/data/db
+    container_name: somma_mongodb
+    expose:
+      - 27017
+    ports:
+      - 27017:27017

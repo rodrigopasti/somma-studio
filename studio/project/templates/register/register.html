@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+     <link rel="stylesheet" href="static/css/login.css">
+</head>
+
+<body>
+
+<script src="../../static/js/jquery-3.3.1.min.js"></script>
+<script src="../../static/js/Util.js"></script>
+
+<script>
+    function validateEmail(email) {
+        var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(regex.test(email.toLowerCase())) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    function createUser() {
+        var form_data = new FormData($('#create-user')[0]);
+        p1 = document.getElementById("pwd1");
+        p2 = document.getElementById("pwd2");
+        email = document.getElementById("email");
+        if (p1.value == p2.value && validateEmail(email.value)){
+          $.ajax({
+              type: 'POST',
+              url: '/register',
+              data: form_data,
+              contentType: false,
+              cache: false,
+              processData: false,
+              success: function (data) {
+                  if (data){
+                      document.getElementById("label_status_register").style.display = "block";
+                      document.getElementById("label_status_register").style.backgroundColor = "green";
+                      document.getElementById("label_status_register").textContent = "Your account was created";
+                      //alert("User created with success");
+                  }
+                  else{
+                      document.getElementById("label_status_register").style.display = "block";
+                      document.getElementById("label_status_register").style.backgroundColor = "#E23B3E";
+                      document.getElementById("label_status_register").textContent = "Unable to create your account";
+                      //alert("User not created");
+                  }
+              },
+              error: function () {
+                document.getElementById("label_status_register").style.display = "block";
+                document.getElementById("label_status_register").style.backgroundColor = "#E23B3E";
+                document.getElementById("label_status_register").textContent = "Unable to create your account";
+              },
+          });
+        }
+        else if(!validateEmail(email.value)){
+          document.getElementById("label_status_register").style.display = "block";
+          document.getElementById("label_status_register").style.backgroundColor = "#E23B3E";
+          document.getElementById("label_status_register").textContent = "The placed email is invalid";
+        }
+        else{
+          document.getElementById("label_status_register").style.display = "block";
+          document.getElementById("label_status_register").style.backgroundColor = "#E23B3E";
+          document.getElementById("label_status_register").textContent = "Passwords does not match";
+          //alert("Password does not match");
+        }
+    }
+
+</script>
+
+<!--<span href="#" class="button" id="toggle-login">SOMMA Studio</span>-->
+
+<div id="login">
+    <div id="triangle"></div>
+    <h1>Somma.ai Account</h1>
+    <form id = "create-user" action="/register" method="post" onsubmit="return false">
+        <input type="username" name="company" placeholder="Company">
+        <input id="email" name="email" type="email" placeholder="E-mail"/>
+        <div id="passwords-wrapper" style="position: relative;">
+            <img class="eye_slash" src = "../../static/img/eye_slash_icon.png" onclick="togglePasswordsVisibility('pwd1', 'pwd2');" title="Show/Hide password"/>
+            <input id= "pwd1" name="password" type="password" placeholder="Password"/>
+            <input id= "pwd2" name="password" type="password" placeholder="Confirm Password"/>
+        </div>
+        <input type="username" name="request_code" placeholder="Register Code">
+
+        <input type="submit" value="Register" onclick="createUser();"/>
+    </form>
+    <span href="#" class="button" id="label_status_register" style="display: none; left: 122px;"> </span>
+</div>
+
+</body>
+</html>

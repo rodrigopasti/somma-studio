@@ -1,0 +1,476 @@
+/*Estilos comuns a vários*/
+.img_highlight {
+    display: inline-block;
+}
+
+.img_highlight img:hover {
+    opacity: 0.5;
+}
+
+.readme_tr {
+}
+@media (max-height: 720px) {
+    .readme_tr {
+        display: none;
+    }
+}
+/*Estilos de form de parâmetro de componentes*/
+.param_input {
+    background-color: white;
+    border-radius: 4px;
+    border-color: transparent;
+    height: 25px;
+    font-size: 10px;
+    vertical-align: middle;
+}
+.param_input:focus,
+.param_input:active {
+    border-color: #1c87c9;
+}
+
+.param_label {
+    font-size: 10px;
+    height: 25px;
+    color: white;
+    background-color: #4c4c49;
+    vertical-align: middle;
+}
+
+.list-models {
+    position: absolute;
+    top: 0px;
+}
+
+.buttons {
+    cursor: pointer;
+    border: transparent;
+    width: 100px;
+    background-color: #999999;
+    height: 35px;
+    position: absolute;
+    display: block;
+}
+.buttons.models-button {
+    right: 10px;
+    top: 17px;
+}
+
+.buttons.save-button {
+    right: 130px;
+    top: 17px;
+}
+
+.models-button:hover {
+    opacity: 0.5;
+}
+.save-button:hover {
+    opacity: 0.5;
+}
+
+.param_select {
+    background-color: white;
+    font-size: 10px;
+    height: 25px;
+    border-radius: 4px;
+    border-color: transparent;
+    vertical-align: middle;
+}
+
+.param_select:focus,
+.param_select:active {
+    border-color: #1c87c9;
+}
+
+/*Fim dos estilos de form de parâmetro de componentes*/
+
+/*Estilos de form de run de aplicação*/
+.button_run_menu {
+    display: inline-block;
+    opacity: 1;
+}
+.button_run_menu:hover {
+    opacity: 0.5;
+}
+
+.run_label {
+    font-size: 12px;
+    color: black;
+    background-color: transparent;
+    text-align: left;
+    vertical-align: middle;
+    display: inline;
+    position: relative;
+    border-radius: 4px;
+}
+
+.run_select:disabled {
+    background-color: grey;
+    color: black;
+    cursor: not-allowed;
+}
+
+.log_window_close {
+    color: black;
+    font-size: 30px;
+    position: relative;
+    top: -8px;
+    left: 5px;
+    font-weight: bold;
+}
+.log_window_close:hover,
+.log_window_close:focus {
+    color: grey;
+    text-decoration: none;
+    cursor: pointer;
+}
+/*Botão de run*/
+.button_run {
+    background-color: white; /* Green */
+    border: 2px solid #555555;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    height: 35px;
+    position: absolute;
+}
+.input-field {
+    display: flex;
+    width: 200px;
+    z-index: 300;
+    margin: 0 auto;
+    flex-direction: column;
+}
+
+.input-field .span-width {
+    width: 420px;
+}
+
+.select2 {
+    width: unset;
+}
+
+.component-log-window {
+    width: 489px;
+    height: max-content;
+    border: 1px solid #cccccc;
+    border-radius: 12px;
+    position: absolute;
+    display: none;
+    z-index: 100;
+    height: 300px;
+    background-color: white;
+    overflow: visible;
+    animation: 5s;
+}
+.input-field label {
+    margin-left: 10px;
+    background-color: white;
+    height: 20px;
+    z-index: 5;
+    color: #c2343f;
+    text-align: center;
+    width: max-content;
+    min-width: 60px;
+}
+
+.parametersGrid {
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 20px;
+}
+.input-field label .label-style {
+    background-color: #fff;
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.form-multiselect {
+    margin-top: -10px;
+    padding: 10px 10px;
+    border-radius: 10px !important;
+    border: 1px solid #dad7d7 !important;
+}
+.input-field input,
+select,
+textarea,
+.subformDiv {
+    height: 40px;
+    margin-top: -10px;
+    background-color: #ffffff;
+    border: 1px solid #dad7d7;
+    z-index: -1;
+    padding: 10px 10px;
+    border-radius: 10px;
+}
+
+.input-field .subformDiv {
+    height: max-content;
+    width: 100%;
+}
+
+.subInputRow {
+    height: max-content;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.subInputRow label .label-style {
+    background-color: #fff;
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.subInput-field {
+    display: flex;
+    width: 160px;
+    z-index: 300;
+    margin-left: 10px;
+    flex-direction: column;
+}
+
+.subInput-field input {
+    height: 30px;
+}
+.subform-add-btn {
+    width: 48px;
+    cursor: pointer;
+    height: 48px;
+    display: inline-block;
+    background-repeat: no-repeat;
+}
+
+.subform-buttons {
+    width: 48px;
+    cursor: pointer;
+    height: 48px;
+    display: inline-block;
+    background-repeat: no-repeat;
+}
+
+.add-btn {
+    background-image: url("../icons/create_schema_icon.svg");
+}
+
+.delete-btn {
+    margin-top: 12px;
+    margin-left: 10px;
+    background-image: url("../icons/delete_schema_icon.svg");
+}
+.subform-buttons:hover {
+    opacity: 0.5;
+}
+
+.checkbox:checked {
+    background-color: #c11c3f;
+}
+.modelsButton {
+    background-color: #c11c3f;
+    width: 100px;
+    height: 40px;
+    border-radius: 12px;
+    outline: none !important;
+    border: none;
+    margin: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.modelsButton:hover {
+    opacity: 0.5;
+}
+
+.parametersMenu {
+    width: 489px;
+    height: max-content;
+    border: 1px solid #cccccc;
+    border-radius: 12px;
+    position: absolute !important;
+    display: none;
+    background-color: white;
+    overflow: visible;
+    -webkit-animation: fadein 0.2s;
+    animation: fadein 0.2s;
+}
+
+.textarea_input {
+    resize: none;
+    vertical-align: top;
+    font-size: 14px;
+    height: 190px;
+    display: block;
+}
+
+.parametersMenu p {
+    color: black;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 20px;
+}
+.closeParametersButton {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 25px;
+    height: 25px;
+    background-color: #c2343f;
+    border-radius: 50%;
+}
+.button_run:hover {
+    background-color: #555555;
+    color: white;
+}
+.button_run:active {
+    background-color: #1e628c;
+    color: grey;
+}
+.button_run:disabled {
+    background-color: grey;
+    color: black;
+    cursor: not-allowed;
+}
+
+/*spinner de running*/
+.running_spinner {
+    display: inline-block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 7px;
+    right: 25px;
+    display: none;
+}
+.running_spinner div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    margin: 3px;
+    border: 3px solid #c11c3f;
+    border-radius: 50%;
+    animation: running_spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #c11c3f transparent transparent transparent;
+}
+.running_spinner div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.running_spinner div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.running_spinner div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes running_spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*Fim dos estilos de form de run de aplicação*/
+
+/*Estilos da tela de aplicações*/
+/*Botão de aplicação*/
+.button_applications {
+    outline: none;
+    background-color: white; /* Green */
+    border: 2px solid #555555;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    height: 35px;
+    position: relative;
+    vertical-align: middle;
+}
+.button_applications:hover {
+    background-color: #555555;
+    color: white;
+}
+.button_applications:disabled {
+    background-color: grey;
+    color: black;
+    cursor: not-allowed;
+}
+
+.app_param_input {
+    background-color: white;
+    border-radius: 4px;
+    height: 31px;
+    font-size: 14px;
+    vertical-align: middle;
+    top: 1px;
+    position: relative;
+}
+.app_param_input:focus,
+.app_param_input:active {
+    border-color: #1c87c9;
+}
+
+.app_param_label {
+    font-size: 14px;
+    height: 30px;
+    color: white;
+    background-color: #4c4c49;
+    text-align: bottom;
+    vertical-align: middle;
+    border-radius: 4px;
+    position: relative;
+}
+
+.save_button_NN {
+    margin-top: 10px;
+    width: 30px;
+    height: 30px;
+    top: 25px;
+    position: absolute;
+    z-index: 1;
+}
+.save_button_NN:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+/*
+  background: url("../../static/img/arrow.j") no-repeat right #ddd;
+.param_select:after {
+-webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+  content: "▼"
+}
+
+.param_select:after {
+  content: "\25bc";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 60%;
+  line-height: 30px;
+  padding: 0 7px;
+  background: #bbb;
+  color: white;
+
+  pointer-events:none;
+
+  -webkit-border-radius: 0 6px 6px 0;
+  -moz-border-radius: 0 6px 6px 0;
+  border-radius: 0 6px 6px 0;
+}
+*/
