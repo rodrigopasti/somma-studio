@@ -1,5 +1,29 @@
 # Projeto Somma
-Descrição
+Somma é uma ferramenta No Code/Low Code para o desenvolvimento de aplicações de dados e Machine Learning. 
+- Permite construir qualquer aplicação de dados e IA.
+- Pmbiente único de desenvolvimento.
+- No Code ou Low Code de acordo com a necessidade.
+- Economia de tempo e custo de desenvolvimento.
+- Rápida prototipação e construção de provas de conceito.
+- Rápida integração com outras aplicações
+
+Para que serve a Somma?
+- Transportar e organizar dados.
+- Tratar dados.
+- Explorar dados e extrair conhecimento.
+- Criar e treinar modelos deIA.
+- Integrar aplicações com outros sistemase dashboards.
+- Aprender Ciência deDados.
+
+# Documentação
+
+Disponível em:
+
+https://axondata.atlassian.net/wiki/spaces/wiki/overview
+
+# README English version
+
+Coming soon. 
 
 # Setup Somma Free (Linux)
 
