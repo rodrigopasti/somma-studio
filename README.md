@@ -1,7 +1,7 @@
 # Projeto Somma
 Somma é uma ferramenta No Code/Low Code para o desenvolvimento de aplicações de dados e Machine Learning. 
-- Permite construir qualquer aplicação de dados e IA.
-- Pmbiente único de desenvolvimento.
+- Permite construir qualquer aplicação de dados.
+- Ambiente único de desenvolvimento.
 - No Code ou Low Code de acordo com a necessidade.
 - Economia de tempo e custo de desenvolvimento.
 - Rápida prototipação e construção de provas de conceito.
@@ -21,7 +21,7 @@ Disponível em:
 
 https://axondata.atlassian.net/wiki/spaces/wiki/overview
 
-# README English version
+# README and Documention - English version
 
 Coming soon. 
 
@@ -33,17 +33,17 @@ Este documento técnico descreve o processo de download e configuração da vers
 
 Certifique-se de que os seguintes requisitos estão atendidos antes de iniciar o setup:
 
-1. **Python 3.7**
+1. **Python 3.7 (versões > 3.7 podem funcionar, mas precisa de teste)**
 2. **Docker**
-   - Versão: `26.1.3` (build `b72abbb`)
+   - Versão testada: `26.1.3` (build `b72abbb`)
    - Pós-instalação do Docker para evitar uso do comando `sudo`:
      [Post-installation steps for Linux](https://docs.docker.com/engine/install/linux-postinstall/)
      ![image](https://github.com/user-attachments/assets/2e2706b7-d274-45df-84ed-1f4827da0de7)
 
 3. **Docker Compose**
-   - Versão: `v2.27.0`
-4. **Miniconda**
-   - Última versão: [Miniconda — Anaconda documentation](https://docs.conda.io/en/latest/miniconda.html)
+   - Versão testada: `v2.27.0`
+4. **Miniconda ou Anaconda**
+   - Miniconda última versão: [Miniconda — Anaconda documentation](https://docs.conda.io/en/latest/miniconda.html)
 
 ---
 
