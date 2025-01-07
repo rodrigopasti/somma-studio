@@ -27,7 +27,7 @@ https://axondata.atlassian.net/wiki/spaces/wiki/overview
 
 Coming soon. 
 
-# Setup Somma Free (Linux)
+# Setup Somma Free - Linux ou Windows
 
 Este documento técnico descreve o processo de download e configuração da versão free da Somma, que é uma solução dockerizada.  
 
@@ -80,10 +80,10 @@ docker pull rodrigopasti/somma-core-local
 
 1. Dentro da pasta do somma-studio, executar o comando mkdir data/ para criar a pasta referência do container MongoDB em seguida executar o seguinte comando para liberação de permissão
 da pasta para ser lida pelo container
-```bash
+```bash (somente Linux)
    mkdir data/
 ```
-```bash
+```bash (somente Linux)
    sudo chmod -R go+w data/
 ```
 
